@@ -1,0 +1,64 @@
+name: "Deployment"
+on:
+  release:
+    types:
+      - created
+env:
+    FRONT_ARTIFACT: build-frontend #Name of front artifact
+    PREPARED_FOLDER: gamerhub #Temp folder in server VPS
+    DESTINATION_FOLDER: /var/gamerhub #Folder where app is in server VPS
+    FRONTEND_URL: https://gamerhub.fr
+    BACKEND_URL: https://api.gamerhub.fr
+    FALLBACK_LOCALE: en
+    LOCALE: fr
+jobs:
+  build-front:
+    name: Build Front
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm install
+        name: npm  install
+      - run: npm run build --mode production
+        name: npm run build
+      - run: npm run test:unit --passWithNoTests
+        name: npm run test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.FRONT_ARTIFACT }}
+          path: ./${{ env.PREPARED_FOLDER }}/FrontEnd
+  dev:
+    runs-on: dev-server
+    environment: Development
+    needs: [
+      build-front
+    ]
+    steps:
+    - uses: actions/download-artifact@v3
+      name: Download frontend build
+      with:
+        name: ${{ env.FRONT_ARTIFACT }}
+        path: ${{ env.PREPARED_FOLDER }}/FrontEnd
+    - uses: cschleiden/replace-tokens@v1.1
+      name: Replace tokens in frontend
+      with:
+        files: '["**/*.js","**/*.html"]'
+      env:
+        BACKEND_URL: ${{ env.BACK_END_URL }}
+        FRONTEND_URL: ${{ env.FRONTEND_URL }}
+        FALLBACK_LOCALE: ${{ env.FALLBACK_LOCALE }}
+        LOCALE: ${{ env.LOCALE }}
+        ENVIRONMENT: development
+
+    # A revoir selon l'environnement du serveur 
+    - run: sudo rm -rf ${{ env.DESTINATION_FOLDER }}/*
+      name: Remove files in destination folder
+    - run: mv ${{ env.PREPARED_FOLDER }}/* ${{ env.DESTINATION_FOLDER }}
+      name: Move files to destination folder
+    - run: sudo systemctl restart kestrel-gamerhub.service
+      name: Restart kestrel service
+    - run: sudo systemctl restart apache2.service
+      name: Restart apache service
