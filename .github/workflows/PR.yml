@@ -4,15 +4,15 @@ on:
     branches: [ develop ]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - run: npm install
-        name: npm  install
-      - run: npm run build --mode production
-        name: npm run build
-      - run: npm run test:unit --passWithNoTests
-        name: npm run test
+          node-version: 18
+      - run: yarn
+        name: yarn
+      - run: yarn build --mode production
+        name: yarn build
+      - run: yarn test:unit --passWithNoTests
+        name: yarn test

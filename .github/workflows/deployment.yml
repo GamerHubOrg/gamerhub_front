@@ -14,25 +14,22 @@ env:
 jobs:
   build-front:
     name: Build Front
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: npm install
-        name: npm  install
-      - run: npm run build --mode production
-        name: npm run build
-      - run: npm run test:unit --passWithNoTests
-        name: npm run test
+      - run: yarn
+        name: yarn
+      - run: yarn build --mode production
+        name: yarn build
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ env.FRONT_ARTIFACT }}
           path: ./${{ env.PREPARED_FOLDER }}/FrontEnd
-  dev:
-    runs-on: dev-server
-    environment: Development
+  prod:
+    runs-on: self-hosted
     needs: [
       build-front
     ]
@@ -57,8 +54,3 @@ jobs:
     - run: sudo rm -rf ${{ env.DESTINATION_FOLDER }}/*
       name: Remove files in destination folder
     - run: mv ${{ env.PREPARED_FOLDER }}/* ${{ env.DESTINATION_FOLDER }}
-      name: Move files to destination folder
-    - run: sudo systemctl restart kestrel-gamerhub.service
-      name: Restart kestrel service
-    - run: sudo systemctl restart apache2.service
-      name: Restart apache service
