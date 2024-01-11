@@ -1,48 +1,25 @@
 <template>
-  <div v-if="!loading">
-    <button v-if="!authenticated" @click="handleLogin">se connecter</button>
-    <div v-else>
-      <p>{{ userInfo }}</p>
-      <button @click="handleLogout">logout</button>
-    </div>
+  <div>
+    <span>home</span>
+    <button v-if="!authToken" @click="handleConnect">connecter</button>
+    <router-link v-else to="/games">access games</router-link>
   </div>
-  <span v-else>loading...</span>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
-import Keycloak from 'keycloak-js'
+import { computed } from "vue";
+import { useAuthStore } from "../modules/auth/auth.store";
+import { keycloak } from '../services/keycloak'
 
-const options = {
-  url: 'https://gamerhubauth.duckdns.org:8443/',
-  realm: 'gamerhub',
-  clientId: 'gamerhub_client'
-}
+const store = useAuthStore();
 
-const keycloak = ref(new Keycloak(options));
-const authenticated = ref(false);
-const loading = ref(false);
-const userInfo = computed(() => keycloak.value.idTokenParsed);
+const authToken = computed(() => store.getAuthToken)
 
-async function handleLogin() {
+async function handleConnect() {
   try {
-    await keycloak.value.login();
-  } catch (error) {
-      console.error('Failed to login:', error);
+    await keycloak.login();
+  } catch(err) {
+    console.error(err);
   }
 }
-
-async function handleLogout() {
-  try {
-    await keycloak.value.logout();
-  } catch (error) {
-      console.error('Failed to logout:', error);
-  }
-}
-
-onMounted(async () => {
-  loading.value = true;
-  authenticated.value = await keycloak.value.init({ onLoad: "check-sso", checkLoginIframe: false });
-  loading.value = false
-})
 </script>

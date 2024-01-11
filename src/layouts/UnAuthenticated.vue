@@ -1,21 +1,18 @@
 <template>
-  <div>
-    <span>authenticated layout</span>
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import { useRouter } from "vue-router";
 import { useAuthStore } from "../modules/auth/auth.store";
 import { keycloak, loadUserInfo } from "../services/keycloak";
 
 const store = useAuthStore();
-const router = useRouter();
 
 async function handleSyncUserInfo() {
   try {
+    if (!keycloak.authenticated) return;
+
     const userInfo = await loadUserInfo();
 
     store.setAuthToken(keycloak.token);
@@ -28,7 +25,7 @@ async function handleSyncUserInfo() {
     })
 
   } catch(err) {
-    router.replace('/');
+    console.error(err);
   }
 }
 
