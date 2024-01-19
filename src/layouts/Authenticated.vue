@@ -1,18 +1,20 @@
 <template>
-  <div>
-    <span>authenticated layout</span>
-    <router-view />
+  <div class="antialiased bg-gray-50 dark:bg-gray-900 min-h-screen h-full">
+    <Navbar />
+
+    <main class="p-4 h-full pt-20 3xl:max-w-screen-3xl w-full mx-auto">
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import Navbar from '../components/Navbar.vue';
 import { useAuthStore } from "../modules/auth/auth.store";
 import { keycloak, loadUserInfo } from "../services/keycloak";
 
 const store = useAuthStore();
-const router = useRouter();
 
 async function handleSyncUserInfo() {
   try {
@@ -28,7 +30,8 @@ async function handleSyncUserInfo() {
     })
 
   } catch(err) {
-    router.replace('/');
+    store.setAuthToken(undefined);
+    store.setCurrentUser(undefined);
   }
 }
 
