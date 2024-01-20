@@ -43,7 +43,7 @@
             <span class="sr-only">Open user menu</span>
             <img
               class="w-8 h-8 rounded-full"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
+              :src="currentUser?.picture"
               alt="user photo"
             />
           </button>
@@ -58,11 +58,11 @@
           <div class="py-3 px-4">
             <span
               class="block text-sm font-semibold text-gray-900 dark:text-white"
-              >Neil Sims</span
+              >{{ currentUser?.firstname }} {{ currentUser?.lastname }}</span
             >
             <span
               class="block text-sm text-gray-900 truncate dark:text-white"
-              >name@flowbite.com</span
+              >{{ currentUser?.email }}</span
             >
           </div>
           <ul
@@ -111,10 +111,10 @@
             aria-labelledby="dropdown"
           >
             <li>
-              <a
-                href="#"
-                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Sign out</a
+              <span
+                class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                @click="handleLogout"
+                >Sign out</span
               >
             </li>
           </ul>
@@ -132,11 +132,20 @@ import { keycloak } from '../services/keycloak'
 const store = useAuthStore();
 
 const authToken = computed(() => store.getAuthToken)
+const currentUser = computed(() => store.getCurrentUser)
 const showUserMenu = ref(false);
 
 async function handleConnect() {
   try {
     await keycloak.login();
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+async function handleLogout() {
+  try {
+    await keycloak.logout();
   } catch(err) {
     console.error(err);
   }

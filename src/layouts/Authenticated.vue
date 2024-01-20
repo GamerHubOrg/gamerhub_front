@@ -19,7 +19,7 @@ const store = useAuthStore();
 async function handleSyncUserInfo() {
   try {
     const userInfo = await loadUserInfo();
-
+    console.log(userInfo);
     store.setAuthToken(keycloak.token);
     store.setCurrentUser({
       firstname: userInfo.given_name,
