@@ -125,10 +125,9 @@
 </template>
 
 <script lang="ts" setup>
-import * as oauth from 'oauth4webapi';
 import { computed, ref } from "vue";
 import { useAuthStore } from "../modules/auth/auth.store";
-import { logout } from '../services/keycloak';
+import { keycloak } from '../services/keycloak'
 
 const store = useAuthStore();
 
@@ -136,37 +135,9 @@ const authToken = computed(() => store.getAuthToken)
 const currentUser = computed(() => store.getCurrentUser)
 const showUserMenu = ref(false);
 
-async function handleOIDCAuth() {
-  const issuer = new URL(`${import.meta.env.VITE_KEYCLOAK_URL}/realms/${import.meta.env.VITE_KEYCLOAK_REALM}`);
-  const as = await oauth.discoveryRequest(issuer).then((response) => oauth.processDiscoveryResponse(issuer, response));
-
-  const client = {
-    client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
-    redirect_uri: `${import.meta.env.VITE_APP_URL}/callback`,
-  };
-
-  if (as.code_challenge_methods_supported?.includes('S256') !== true) {
-    throw new Error();
-  }
-
-  const codeVerifier = oauth.generateRandomCodeVerifier();
-  localStorage.setItem('oidc_verifier', codeVerifier);
-  const codeChallenge = await oauth.calculatePKCECodeChallenge(codeVerifier);
-
-  const authorizationUrl = new URL(as.authorization_endpoint);
-  authorizationUrl.searchParams.set('client_id', client.client_id);
-  authorizationUrl.searchParams.set('code_challenge', codeChallenge);
-  authorizationUrl.searchParams.set('code_challenge_method', 'S256');
-  authorizationUrl.searchParams.set('redirect_uri', client.redirect_uri);
-  authorizationUrl.searchParams.set('response_type', 'code');
-  authorizationUrl.searchParams.set('scope', 'openid email profile');
-
-  window.location.assign(authorizationUrl);
-}
-
 async function handleConnect() {
   try {
-    await handleOIDCAuth();
+    await keycloak.login();
   } catch(err) {
     console.error(err);
   }
@@ -174,17 +145,9 @@ async function handleConnect() {
 
 async function handleLogout() {
   try {
-    const access_token = localStorage.getItem('auth_token');
-    const refresh_token = localStorage.getItem('refresh_auth_token');
-
-    await logout(`${access_token}`, `${refresh_token}`);
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_auth_token');
-    store.setAuthToken(undefined);
-    store.setCurrentUser(undefined)
+    await keycloak.logout();
   } catch(err) {
-    console.log(err);
+    console.error(err);
   }
-  showUserMenu.value = false;
 }
 </script>

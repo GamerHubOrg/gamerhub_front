@@ -1,32 +1,15 @@
-import axios from "axios";
+import Keycloak from 'keycloak-js';
 
-function getOIDCApi(token: string) {
-  return axios.create({
-    baseURL: `${import.meta.env.VITE_KEYCLOAK_URL}/realms/gamerhub/protocol/openid-connect`,
-    headers: { 
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-  });
-}
+const keycloak = new Keycloak({
+  url: import.meta.env.VITE_KEYCLOAK_URL,
+  realm: import.meta.env.VITE_KEYCLOAK_REALM,
+  clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
+});
 
-export async function getUser(token: string): Promise<any> {
-  try {
-    const { data } = await getOIDCApi(token).get('/userinfo');
+const loadUserInfo = async () => {
+  const userInfo = await keycloak
+    .loadUserInfo();
+  return userInfo;
+};
 
-    return data;
-  } catch(err) {
-    return undefined;
-  }
-}
-
-export async function logout(token: string, refreshToken: string): Promise<void> {
-  try {
-    await getOIDCApi(token).post('/logout', { 
-      client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
-      refresh_token: refreshToken,
-    });
-  } catch(err) {
-    console.log(err);
-  }
-}
+export { keycloak, loadUserInfo };

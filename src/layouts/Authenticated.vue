@@ -12,25 +12,22 @@
 import { onMounted } from "vue";
 import Navbar from '../components/Navbar.vue';
 import { useAuthStore } from "../modules/auth/auth.store";
-import { getUser } from "../services/keycloak";
+import { keycloak, loadUserInfo } from "../services/keycloak";
 
 const store = useAuthStore();
 
 async function handleSyncUserInfo() {
   try {
-    const access_token = localStorage.getItem('auth_token');
-
-    if (access_token) {
-      const userInfo = await getUser(`${access_token}`);
-      store.setAuthToken(access_token);
-      store.setCurrentUser({
-        firstname: userInfo.given_name,
-        lastname: userInfo.family_name,
-        username: userInfo.preferred_username,
-        email: userInfo.email,
-        roles: userInfo.realm_access.roles,
-      })
-    }
+    const userInfo = await loadUserInfo();
+    console.log(userInfo)
+    store.setAuthToken(keycloak.token);
+    store.setCurrentUser({
+      firstname: userInfo.given_name,
+      lastname: userInfo.family_name,
+      username: userInfo.preferred_username,
+      email: userInfo.email,
+      roles: keycloak.realmAccess!.roles
+    })
 
   } catch(err) {
     store.setAuthToken(undefined);
