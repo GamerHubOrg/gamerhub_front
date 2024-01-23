@@ -2,9 +2,10 @@ import axios from "axios";
 
 function getOIDCApi(token: string) {
   return axios.create({
-    baseURL: `${import.meta.env.VITE_KEYCLOAK_URL}/realms/${import.meta.env.VITE_KEYCLOAK_REALM}/protocol/openid-connect`,
+    baseURL: `${import.meta.env.VITE_KEYCLOAK_URL}/realms/gamerhub/protocol/openid-connect`,
     headers: { 
       Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
   });
 }
@@ -24,9 +25,7 @@ export async function logout(token: string, refreshToken: string): Promise<void>
     await getOIDCApi(token).post('/logout', { 
       client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
       refresh_token: refreshToken,
-    }, { headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    } });
+    });
   } catch(err) {
     console.log(err);
   }
