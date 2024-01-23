@@ -1,4 +1,5 @@
 import axios from "axios";
+import { keycloak } from "./keycloak";
 
 const instance = axios.create({
   withCredentials: true,
@@ -6,13 +7,12 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config: any) => {
-  const token = localStorage.getItem('auth_token');
   const request = {
     ...config,
     method: config.method,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': token,
+      'Authorization': keycloak.token,
     }
   };
 
