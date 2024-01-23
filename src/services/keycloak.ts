@@ -8,7 +8,7 @@ const keycloak = new Keycloak({
 
 const loadUserInfo = async () => {
   const userInfo = await keycloak
-      .loadUserInfo();
+    .loadUserInfo();
   return userInfo;
 };
 

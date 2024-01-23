@@ -19,7 +19,7 @@ const store = useAuthStore();
 async function handleSyncUserInfo() {
   try {
     const userInfo = await loadUserInfo();
-    console.log(userInfo);
+    console.log(userInfo)
     store.setAuthToken(keycloak.token);
     store.setCurrentUser({
       firstname: userInfo.given_name,
@@ -32,6 +32,7 @@ async function handleSyncUserInfo() {
   } catch(err) {
     store.setAuthToken(undefined);
     store.setCurrentUser(undefined);
+    console.log("authenticated.vue", err);
   }
 }
 
