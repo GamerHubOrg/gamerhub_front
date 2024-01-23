@@ -4,16 +4,19 @@ const routes = [
   {
     path: '/',
     name: 'autenticated_layout',
-    meta: { requireAuth: false },
     component: () => import('../layouts/Authenticated.vue'),
     children: [
       {
         path: '',
         name: 'home',
-        meta: { requireAuth: false },
         component: () => import('../views/Home.vue'),
       },
     ]
+  },
+  {
+    path: '/callback',
+    name: 'callback',
+    component: () => import('../views/Callback.vue'),
   },
 ];
 
