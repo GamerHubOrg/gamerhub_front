@@ -13,12 +13,7 @@ app
   .use(store)
 
 keycloak
-  .init({ onLoad: 'check-sso', checkLoginIframe: false })
-  .catch((err) => {
-    if (err.error === 'login_required') {
-      window.location.reload();
-    }
-  })
+  .init({ onLoad: 'check-sso', checkLoginIframe: true })
   .finally(() => {
     app.mount('#app');
   });
