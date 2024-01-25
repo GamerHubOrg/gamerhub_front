@@ -16,4 +16,4 @@ jobs:
         username: ${{ secrets.PI_USERNAME }}
         password: ${{ secrets.PI_PASSWORD }}
         port: ${{ secrets.PI_PORT }}
-        script: ./home/lucas/gamerhub/init-app.sh
+        script: ls -als >> test.txt
