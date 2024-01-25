@@ -4,6 +4,7 @@ import router from './router/index';
 import './style.css'
 import App from './App.vue'
 import { keycloak } from './services/keycloak';
+import 'dotenv/config';
 
 const store = createPinia();
 const app = createApp(App);
