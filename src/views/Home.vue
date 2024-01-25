@@ -7,15 +7,15 @@
         <img src="../assets/games/codenames.png" class="object-cover w-full h-full">
       </div>
       <div
-        class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-64"
+        class="border-2 border-dashed border-red-300 rounded-lg dark:border-red-600 h-64"
       ></div>
       <div
-        class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-64"
+        class="border-2 border-dashed border-red-300 rounded-lg dark:border-red-600 h-64"
       ></div>
       <div
-        class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-64"
+        class="border-2 border-dashed border-red-300 rounded-lg dark:border-red-600 h-64"
       ></div>
     </div>
-    <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-full"></div>
+    <div class="border-2 border-dashed rounded-lg border-red-300 dark:border-red-600 h-full"></div>
   </div>
 </template>
