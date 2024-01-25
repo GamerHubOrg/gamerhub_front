@@ -8,9 +8,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-ENV NODE_ENV=production
-
-RUN yarn build:prod
+RUN yarn build:prod --mode production
 
 FROM node:20-alpine
 
