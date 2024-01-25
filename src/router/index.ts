@@ -13,6 +13,12 @@ const routes = [
         meta: { requireAuth: false },
         component: () => import('../views/Home.vue'),
       },
+      {
+        path: '/lobby',
+        name: 'lobby',
+        meta: { requireAuth: false },
+        component: () => import('../views/Lobby.vue'),
+      },
     ]
   },
 ];
