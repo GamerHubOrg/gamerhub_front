@@ -1,12 +1,12 @@
-import axios from "axios";
+import a from "axios";
 import { keycloak } from "./keycloak";
 
-const instance = axios.create({
+const axios = a.create({
   withCredentials: true,
   baseURL: `${import.meta.env.VITE_API_URL}/api`,
 });
 
-instance.interceptors.request.use((config: any) => {
+axios.interceptors.request.use((config: any) => {
   const request = {
     ...config,
     method: config.method,
@@ -19,4 +19,4 @@ instance.interceptors.request.use((config: any) => {
   return request
 })
 
-export default instance;
+export default axios;
