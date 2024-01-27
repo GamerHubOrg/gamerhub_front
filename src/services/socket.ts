@@ -11,7 +11,7 @@ interface ISocketState {
 export const state = reactive({
   connected: false,
   room: "",
-  data: {}
+  data: {},
 } as ISocketState);
 
 const URL = import.meta.env.VITE_API_URL;
