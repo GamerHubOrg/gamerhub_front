@@ -26,7 +26,8 @@ async function handleSyncUserInfo() {
       lastname: userInfo.family_name,
       username: userInfo.preferred_username,
       email: userInfo.email,
-      roles: keycloak.realmAccess!.roles
+      roles: keycloak.realmAccess!.roles,
+      picture : "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg"
     })
 
   } catch(err) {
