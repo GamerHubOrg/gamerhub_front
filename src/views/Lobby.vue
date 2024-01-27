@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import socket, { state } from "@/services/socket";
-import { onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useAuthStore } from "@/modules/auth/auth.store";
 import { useRoute, useRouter } from "vue-router";
 import { IRoomData, IRoomConfig } from "@/types/interfaces";
@@ -12,18 +12,20 @@ const { gameName } = route.params;
 const { roomId } = route.query
 
 const maxPlayers = ref("");
+const isRoomInit = ref(false);
 
 const getRoomId = () => state.room;
 const getRoomUsers = () => state.data?.users;
-
+const currentUser = computed(() => store.getCurrentUser)
 // Fonction qui envoie un évenement au serveur
 
 const createRoom = () => {
-    socket.emit("room:create", gameName, store.getCurrentUser)
+    console.log("createRoom", currentUser.value)
+    socket.emit("room:create", gameName, currentUser.value)
 }
 
 const joinRoom = () => {
-    socket.emit("room:join", roomId, store.getCurrentUser)
+    socket.emit("room:join", roomId, currentUser.value)
 }
 
 const startGame = () => {
@@ -35,13 +37,19 @@ const startGame = () => {
 function onRoomCreated(roomId: string, data: IRoomData) {
     state.room = roomId;
     state.data = data;
-    console.log(data);
-
+    console.log("onRoomCreated", data);
     router.push({ path: `/games/${gameName}/lobby`, query: { roomId } })
 }
 
 function onRoomJoined(roomId: string, data: IRoomData) {
     console.log("You have joined the room", roomId, data);
+
+    state.room = roomId;
+    state.data = data;
+}
+
+function onRoomLeave(roomId: string, data: IRoomData) {
+    console.log("You have leaved the room", data);
 
     state.room = roomId;
     state.data = data;
@@ -60,6 +68,7 @@ function onUserNotAuth() {
 
 socket.on("room:created", onRoomCreated);
 socket.on("room:joined", onRoomJoined);
+socket.on("room:leave", onRoomLeave);
 socket.on("room:started", onRoomStarted);
 socket.on("room:not-found", (roomId: string) => console.log(`La room ${roomId} n'existe pas`))
 socket.on("user:not-auth", onUserNotAuth)
@@ -68,10 +77,41 @@ socket.on("room:deleted", (roomId: string) => {
     alert(`La room ${roomId} a été supprimée.`);
 })
 
+watch(
+    [() => currentUser.value, () => state.connected],
+    () => {
+        if (!state.connected) return;
+        if (!currentUser.value || isRoomInit.value) return;
+
+        console.log("watch", roomId)
+        if (!roomId) createRoom();
+        else joinRoom();
+
+        isRoomInit.value = true;
+    }
+)
+
+
+function handleDisconnectRoom() {
+    console.log("should leave room")
+    socket.emit("room:leave", roomId);
+}
+
+watch(
+    () => route.query?.roomId,
+    (newRoom, oldRoom) => {
+        if (oldRoom && (!newRoom || newRoom !== oldRoom)) {
+            handleDisconnectRoom()
+        }
+    }
+)
 
 onMounted(() => {
-    if (!roomId) createRoom();
-    else joinRoom();
+    window.addEventListener('beforeunload', handleDisconnectRoom)
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleDisconnectRoom)
 })
 
 </script>
