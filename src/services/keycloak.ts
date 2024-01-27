@@ -6,7 +6,7 @@ const keycloak = new Keycloak({
   clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
 });
 
-const loadUserInfo = async () => {
+const loadUserInfo = async () : Promise<any> => {
   const userInfo = await keycloak
     .loadUserInfo();
   return userInfo;

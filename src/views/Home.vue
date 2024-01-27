@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <router-link to="/lobby">
+      <router-link to="/games/codenames">
         <div
           class="border-2 border-gray-300 rounded-lg dark:border-gray-600 h-64 overflow-hidden"
         >

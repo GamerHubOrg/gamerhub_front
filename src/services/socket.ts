@@ -1,19 +1,22 @@
 import { reactive } from "vue";
 import { io } from "socket.io-client";
-import { keycloak } from "./keycloak";
+import { IRoomData } from "@/types/interfaces";
+
+interface ISocketState {
+  connected: boolean;
+  room: string;
+  data: IRoomData
+}
 
 export const state = reactive({
   connected: false,
   room: "",
-});
+  data: {}
+} as ISocketState);
 
 const URL = import.meta.env.VITE_API_URL;
 
-const socket = io(URL, {
-  extraHeaders: {
-    Authorization: keycloak.token,
-  },
-});
+const socket = io(URL);
 
 function onConnect() {
   console.log("Vous êtes connecté.");
@@ -26,14 +29,8 @@ function onDisconnect() {
   console.log("Vous avez été déconnecté.");
 }
 
-function onRoomCreated(roomId: string) {
-  state.room = roomId;
-  console.log("Vous avez rejoins la room " + roomId);
-}
-
 socket.on("connect", onConnect);
 socket.on("disconnect", onDisconnect);
-socket.on("room:created", onRoomCreated);
 
 socket.on("connect_error", (err) => {
   console.log(`[socket.io] : Error : ${err.message}`);

@@ -1,39 +1,82 @@
 <script setup lang="ts">
 import socket, { state } from "@/services/socket";
-import { ref } from 'vue';
-import axios from '../services/api';
+import { onMounted, ref } from "vue";
+import { useAuthStore } from "@/modules/auth/auth.store";
+import { useRoute, useRouter } from "vue-router";
+import { IRoomData, IRoomConfig } from "@/types/interfaces";
 
-const maxPlayers = ref("")
+const route = useRoute();
+const router = useRouter();
+const store = useAuthStore();
 
-const checkRoomConfig = () => {
-    socket.emit("room:get-config", getRoomId())
-}
+const { gameName } = route.params;
+
+const maxPlayers = ref("");
+
+const getRoomId = () => state.room;
+const getRoomUsers = () => state.data?.users;
+
+// Fonction qui envoie un évenement au serveur
 
 const createRoom = () => {
-    socket.emit("room:create", "codenames", { maxPlayers : maxPlayers.value })
+    socket.emit("room:create", store.getCurrentUser, gameName)
 }
 
-const deleteRoom = () => {
-    socket.emit("room:delete", getRoomId())
+const joinRoom = () => {
+    socket.emit("room:join", store.getCurrentUser, gameName)
 }
 
-socket.on("room:config-sent", (data: any) => console.log("ma conf",JSON.stringify(data)))
-
-const getRoomId = () => {
-    return state.room;
+const startGame = () => {
+    socket.emit("room:start", getRoomId())
 }
 
-axios.get("/games")
+// Fonction qui recoivent un évenement du serveur
 
+function onRoomCreated(roomId: string, data: IRoomData) {
+    state.room = roomId;
+    state.data = data;
+    router.push({ path: `/games/${gameName}/lobby`, query: { roomId } })
+}
+
+function onRoomJoined(roomId: string,data : IRoomData) {
+    state.room = roomId;
+    state.data = data;
+}
+
+function onRoomStarted(config: IRoomConfig) {
+    state.data.config = config;
+    alert("La partie a commencé !")
+}
+
+// Définition des listener du socket
+
+socket.on("room:created", onRoomCreated);
+socket.on("room:joined", onRoomJoined);
+socket.on("room:started", onRoomStarted);
+socket.on("room:not-found", (roomId: string) => console.log(`La room ${roomId} n'existe pas`))
+socket.on("room:deleted", (roomId: string) => {
+    state.room = "";
+    alert(`La room ${roomId} a été supprimée.`);
+})
+
+onMounted(() => {
+    const { roomId } = route.query
+    if (!roomId) createRoom();
+    else joinRoom();
+})
 </script>
 
 <template>
-    <div class="flex flex-col max-w-[600px] mx-auto gap-3">
-        <h1 class="text-3xl">Creation de lobby</h1>
-        <input type="number" v-model="maxPlayers" placeholder="Entrez le nombre maximum de joueurs">
-        <button class="bg-blue-500 text-black" @click="checkRoomConfig">Recup ma config</button>
-        <button class="bg-red-500 text-black" @click="createRoom">Créer un lobby</button>
-        <button class="bg-green-500 text-black" @click="deleteRoom">Suppr la room</button>
-        <p>Votre lobby : {{ getRoomId() }}</p>
+    <div class="flex gap-10 flex-wrap">
+        <div class="flex-1 flex flex-col max-w-[600px] mx-auto gap-3">
+            <h1 class="text-3xl">Configuration</h1>
+            <input type="number" v-model="maxPlayers" placeholder="Entrez le nombre maximum de joueurs">
+            <button class="bg-green-500 text-black" @click="startGame">Lancer la partie</button>
+        </div>
+        <div class="flex-1 flex flex-col">
+            <div v-for="user in getRoomUsers()" class="bg-white text-black w-fit px-4 font-bold">
+                {{ user.username }}
+            </div>
+        </div>
     </div>
 </template>
