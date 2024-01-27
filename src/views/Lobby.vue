@@ -8,8 +8,8 @@ import { IRoomData, IRoomConfig } from "@/types/interfaces";
 const route = useRoute();
 const router = useRouter();
 const store = useAuthStore();
-
 const { gameName } = route.params;
+const { roomId } = route.query
 
 const maxPlayers = ref("");
 
@@ -19,11 +19,11 @@ const getRoomUsers = () => state.data?.users;
 // Fonction qui envoie un évenement au serveur
 
 const createRoom = () => {
-    socket.emit("room:create", store.getCurrentUser, gameName)
+    socket.emit("room:create", gameName, store.getCurrentUser)
 }
 
 const joinRoom = () => {
-    socket.emit("room:join", store.getCurrentUser, gameName)
+    socket.emit("room:join", roomId, store.getCurrentUser)
 }
 
 const startGame = () => {
@@ -35,10 +35,14 @@ const startGame = () => {
 function onRoomCreated(roomId: string, data: IRoomData) {
     state.room = roomId;
     state.data = data;
+    console.log(data);
+
     router.push({ path: `/games/${gameName}/lobby`, query: { roomId } })
 }
 
-function onRoomJoined(roomId: string,data : IRoomData) {
+function onRoomJoined(roomId: string, data: IRoomData) {
+    console.log("You have joined the room", roomId, data);
+
     state.room = roomId;
     state.data = data;
 }
@@ -48,22 +52,28 @@ function onRoomStarted(config: IRoomConfig) {
     alert("La partie a commencé !")
 }
 
+function onUserNotAuth() {
+    console.log("Veuillez vous connecter.")
+}
+
 // Définition des listener du socket
 
 socket.on("room:created", onRoomCreated);
 socket.on("room:joined", onRoomJoined);
 socket.on("room:started", onRoomStarted);
 socket.on("room:not-found", (roomId: string) => console.log(`La room ${roomId} n'existe pas`))
+socket.on("user:not-auth", onUserNotAuth)
 socket.on("room:deleted", (roomId: string) => {
     state.room = "";
     alert(`La room ${roomId} a été supprimée.`);
 })
 
+
 onMounted(() => {
-    const { roomId } = route.query
     if (!roomId) createRoom();
     else joinRoom();
 })
+
 </script>
 
 <template>
