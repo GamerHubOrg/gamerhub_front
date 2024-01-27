@@ -137,10 +137,12 @@ onBeforeUnmount(() => {
             <input type="number" v-model="maxPlayers" placeholder="Entrez le nombre maximum de joueurs">
             <button class="bg-green-500 text-black" @click="handleStartGame">Lancer la partie</button>
         </div>
-        <div class="flex-1 flex flex-col">
-            <div v-for="user in getRoomUsers()" class="bg-white text-black w-fit px-4 font-bold"
-                :class="{ 'bg-red-500': currentUser?.email === user.email }">
-                <p>{{ user.username }} <span v-if="user.isOwner">(Owner)</span></p>
+        <div class="flex-1 flex gap-5 flex-wrap">
+            <div v-for="user in getRoomUsers()"
+                class="bg-white text-black w-[150px] h-[150px] p-4 flex flex-col items-center text-center font-bold rounded shadow-lg"
+                :class="{ '!bg-red-500': currentUser?.email === user.email }">
+                <img class="w-16 h-16 rounded-full" :src="currentUser?.picture" alt="user photo" />
+                <p class="break-words">{{ user.username }} <span v-if="user.isOwner">(Owner)</span></p>
             </div>
         </div>
     </div>
