@@ -21,7 +21,6 @@ const currentUser = computed(() => store.getCurrentUser)
 // Fonction qui envoie un évenement au serveur
 
 const handleCreateRoom = () => {
-    console.log("createRoom", currentUser.value)
     socket.emit("room:create", gameName, currentUser.value)
 }
 
@@ -34,13 +33,29 @@ const handleStartGame = () => {
 }
 
 function handleLeaveRoom() {
-    console.log("should leave room")
+    console.log("room leave")
+    isRoomInit.value = false;
+    state.room = "";
+    state.data = {};
     socket.emit("room:leave", roomId);
+}
+
+function handleRoomInit() {
+    console.log("room init");
+    
+    if (!state.connected) return;
+    if (!currentUser.value || isRoomInit.value) return;
+
+    if (!roomId) handleCreateRoom();
+    else handleJoinRoom();
+
+    isRoomInit.value = true;
 }
 
 // Fonction qui recoivent un évenement du serveur
 
 function onRoomCreated(roomId: string, data: IRoomData) {
+    console.log("Your room has been created", roomId);
     state.room = roomId;
     state.data = data;
     console.log("onRoomCreated", data);
@@ -48,22 +63,16 @@ function onRoomCreated(roomId: string, data: IRoomData) {
 }
 
 function onRoomJoined(roomId: string, data: IRoomData) {
-    console.log("You have joined the room", roomId, data);
+    console.log("Someone has joined the room", roomId);
 
     state.room = roomId;
     state.data = data;
 }
 
 function onRoomUpdate(data: IRoomData) {
+    console.log("The room has been updated", data);
     state.data = data;
 }
-
-function onRoomLeft() {
-    isRoomInit.value = false;
-    state.room = "";
-    state.data = {};
-}
-
 
 function onRoomStarted(config: IRoomConfig) {
     state.data.config = config;
@@ -72,7 +81,6 @@ function onRoomStarted(config: IRoomConfig) {
 
 function onRoomNotFound(roomId: string) {
     console.log(`La room ${roomId} n'existe pas`);
-
 }
 
 function onUserNotAuth() {
@@ -84,7 +92,6 @@ function onUserNotAuth() {
 socket.on("room:created", onRoomCreated);
 socket.on("room:joined", onRoomJoined);
 socket.on("room:update", onRoomUpdate);
-socket.on("room:left", onRoomLeft);
 socket.on("room:started", onRoomStarted);
 socket.on("room:not-found", onRoomNotFound)
 socket.on("user:not-auth", onUserNotAuth)
@@ -97,14 +104,9 @@ socket.on("room:deleted", (roomId: string) => {
 watch(
     [() => currentUser.value, () => state.connected],
     () => {
-        if (!state.connected) return;
-        if (!currentUser.value || isRoomInit.value) return;
-
-        console.log("watch", roomId)
-        if (!roomId) handleCreateRoom();
-        else handleJoinRoom();
-
-        isRoomInit.value = true;
+        console.log("watch");
+        
+        handleRoomInit()
     }
 )
 
@@ -121,10 +123,12 @@ watch(
 )
 
 onMounted(() => {
+    handleRoomInit()
     window.addEventListener('beforeunload', handleLeaveRoom)
 })
 
 onBeforeUnmount(() => {
+    isRoomInit.value = false;
     window.removeEventListener('beforeunload', handleLeaveRoom)
 })
 
