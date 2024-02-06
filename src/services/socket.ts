@@ -5,7 +5,7 @@ import { IRoomData } from "@/types/interfaces";
 interface ISocketState {
   connected: boolean;
   room: string;
-  data: IRoomData
+  data: Partial<IRoomData>;
 }
 
 export const state = reactive({

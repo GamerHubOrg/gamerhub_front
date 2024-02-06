@@ -5,11 +5,20 @@ export interface SocketUser extends User {
     isOwner?: boolean;
 }
 
+export type GameState = "started" | "lobby";
+
+export interface IRoomLog {
+    date: Date;
+    message: string;
+}
+
 export interface IRoomData {
     users: SocketUser[];
     config: IRoomConfig;
+    gameState: GameState;
+    logs: IRoomLog[]
 }
 
 export interface IRoomConfig {
-    maxPlayers: number;
+    maxPlayers?: number;
 }
