@@ -7,7 +7,7 @@ const keycloak = new Keycloak({
 });
 
 const loadUserInfo = async () : Promise<any> => {
-  const userInfo = await keycloak
+  const userInfo : any = await keycloak
     .loadUserInfo();
   return userInfo;
 };
