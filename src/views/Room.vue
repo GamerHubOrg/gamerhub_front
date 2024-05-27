@@ -3,7 +3,9 @@ import socket, { state } from "@/services/socket";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useAuthStore } from "@/modules/auth/auth.store";
 import { useRoute, useRouter } from "vue-router";
-import { IRoomData, IRoomConfig } from "@/types/interfaces";
+import { IRoomData } from "@/types/interfaces";
+import Lobby from "./Lobby.vue";
+import TestGame from "./TestGame.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,6 +51,8 @@ function handleRoomInit() {
 // Fonction qui recoivent un évenement du serveur
 
 function onRoomCreated(roomId: string, data: IRoomData) {
+    console.log("created", roomId, data);
+
     state.room = roomId;
     state.data = data;
     router.push({ path: `/games/${gameName}/lobby`, query: { roomId } })
@@ -63,8 +67,8 @@ function onRoomUpdated(data: IRoomData) {
     state.data = data;
 }
 
-function onRoomStarted(config: IRoomConfig) {
-    state.data.config = config;
+function onRoomStarted(data: IRoomData) {
+    state.data = data;
 }
 
 function onRoomNotFound(roomId: string) {
@@ -119,7 +123,6 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <slot></slot>
     <div v-if="state.room"
         class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg">
         <div class="sticky top-0 left-0 flex p-2 justify-between items-center bg-white">
@@ -133,4 +136,6 @@ onBeforeUnmount(() => {
             </div>
         </div>
     </div>
+    <Lobby v-if="state.data.gameState === 'lobby'" />
+    <TestGame v-if="state.data.gameState === 'started'" />
 </template>

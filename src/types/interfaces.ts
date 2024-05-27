@@ -1,24 +1,38 @@
 import { User } from "@/modules/auth/user";
 
 export interface SocketUser extends User {
-    socket_id: string;
-    isOwner?: boolean;
+  socket_id: string;
+  isOwner?: boolean;
 }
 
-export type GameState = "started" | "lobby";
+export type GameState = "started" | "lobby" | "results";
 
 export interface IRoomLog {
-    date: Date;
-    message: string;
+  date: Date;
+  message: string;
 }
 
 export interface IRoomData {
-    users: SocketUser[];
-    config: IRoomConfig;
-    gameState: GameState;
-    logs: IRoomLog[]
+  users: SocketUser[];
+  config: IRoomConfig;
+  gameState: GameState;
+  gameData?: IGameData;
+  logs: IRoomLog[];
 }
 
 export interface IRoomConfig {
-    maxPlayers?: number;
+  maxPlayers?: number;
+}
+
+export interface IGameData {}
+
+export interface IPlayerData {
+  playerId: number;
+  answer: any;
+  points: number;
+}
+
+export interface ITestGameData extends IGameData {
+  rounds?: number[];
+  playersData?: IPlayerData[];
 }
