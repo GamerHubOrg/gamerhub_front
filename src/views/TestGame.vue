@@ -1,8 +1,10 @@
 <template>
-    <h1>Test game here</h1>
-    <p>Devine un nombre entre 1 et 10 !</p>
-    <input id="maxPlayers" type="number" min="0" max="10" v-model="guess" placeholder="Entrez votre réponse">
-    <button @click="handleSendAnswer" className="bg-blue-500">Envoyer ma réponse !</button>
+    <div>
+        <h1>Test game here</h1>
+        <p>Devine un nombre entre 1 et 10 !</p>
+        <input id="maxPlayers" type="number" min="0" max="10" v-model="guess" placeholder="Entrez votre réponse">
+        <button @click="handleSendAnswer" class="bg-blue-500">Envoyer ma réponse !</button>
+    </div>
 </template>
 
 <script setup lang="ts">

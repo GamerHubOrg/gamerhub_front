@@ -5,7 +5,7 @@ import { useAuthStore } from "@/modules/auth/auth.store";
 import { useRoute, useRouter } from "vue-router";
 import { IRoomData } from "@/types/interfaces";
 import Lobby from "./Lobby.vue";
-import TestGame from "./TestGame.vue";
+import Undercover from "./Undercover.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -137,5 +137,5 @@ onBeforeUnmount(() => {
         </div>
     </div>
     <Lobby v-if="state.data.gameState === 'lobby'" />
-    <TestGame v-if="state.data.gameState === 'started'" />
+    <Undercover v-if="state.data.gameState === 'started'" />
 </template>

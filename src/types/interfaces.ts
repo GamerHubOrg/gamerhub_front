@@ -32,7 +32,17 @@ export interface IPlayerData {
   points: number;
 }
 
+export interface IUndercoverWords {
+  playerId: string;
+  word: string;
+}
+
 export interface ITestGameData extends IGameData {
   rounds?: number[];
   playersData?: IPlayerData[];
+}
+
+export interface IUndercoverGameData extends IGameData {
+  words?: IUndercoverWords[];
+  playerTurn?: string;
 }

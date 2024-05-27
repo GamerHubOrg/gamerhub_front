@@ -25,12 +25,6 @@ const routes = [
         meta: { requireAuth: false },
         component: () => import('../views/Room.vue'),
       },
-      {
-        path: '/games/:gameName/game',
-        name: 'game start',
-        meta: { requireAuth: false },
-        component: () => import('../views/TestGame.vue'),
-      },
     ]
   },
 ];
