@@ -13,6 +13,18 @@ const routes = [
         meta: { requireAuth: false },
         component: () => import('../views/Home.vue'),
       },
+      {
+        path: '/games/:gameName',
+        name: 'game',
+        meta: { requireAuth: false },
+        component: () => import('../views/Codenames.vue'),
+      },
+      {
+        path: '/games/:gameName/lobby',
+        name: 'game config',
+        meta: { requireAuth: false },
+        component: () => import('../views/Lobby.vue'),
+      },
     ]
   },
 ];
