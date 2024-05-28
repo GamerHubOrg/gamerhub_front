@@ -4,7 +4,9 @@ import { IRoomConfig } from "@/types/interfaces";
 import { computed, ref, watch, onMounted } from 'vue';
 import { areObjectsEquals } from "@/utils/functions"
 import { useSocketStore } from '../modules/socket/socket.store';
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const store = useAuthStore();
 const socketStore = useSocketStore();
 const roomId = computed(() => socketStore.getRoomId)
@@ -37,6 +39,12 @@ const handleStartGame = () => {
     }
 
     socketStore.handleStartGame(roomId.value)
+}
+
+const handleLeaveRoom = () => {
+    if (!currentUser.value) return;
+    socketStore.handleLeaveRoom()
+    router.push('/');
 }
 
 const handleJoinRoom = () => {
@@ -124,8 +132,11 @@ onMounted(() => {
                 <label for="maxPlayers">Nombre de joueurs maximum :</label>
                 <input id="maxPlayers" type="number" :disabled="!isOwner" min="0" v-model="config.maxPlayers"
                     placeholder="Entrez le nombre maximum de joueurs">
-                <button :disabled="!isOwner" class="bg-green-500 text-black" @click="handleStartGame">
+                <button :disabled="!isOwner || data.gameState === 'started'" class="bg-green-500 text-black" @click="handleStartGame">
                     Lancer la partie</button>
+
+                <button class="bg-red-500 text-black" @click="handleLeaveRoom">
+                    Quitter la room</button>
             </div>
             <div>
                 <p>Partager la room : {{ roomId }}</p>
