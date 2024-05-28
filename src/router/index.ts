@@ -19,11 +19,17 @@ const routes = [
         meta: { requireAuth: false },
         component: () => import('../views/Codenames.vue'),
       },
+      // {
+      //   path: '/games/:gameName/lobby',
+      //   name: 'game lobby',
+      //   meta: { requireAuth: false },
+      //   component: () => import('../views/Lobby.vue'),
+      // },
       {
-        path: '/games/:gameName/lobby',
-        name: 'game lobby',
+        path: '/games/:gameName/game',
+        name: 'game start',
         meta: { requireAuth: false },
-        component: () => import('../views/Room.vue'),
+        component: () => import('../views/TestGame.vue'),
       },
     ]
   },

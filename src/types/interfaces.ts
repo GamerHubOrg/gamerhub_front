@@ -18,6 +18,7 @@ export interface IRoomData {
   gameState: GameState;
   gameData?: IGameData;
   logs: IRoomLog[];
+  gameName: string;
 }
 
 export interface IRoomConfig {
