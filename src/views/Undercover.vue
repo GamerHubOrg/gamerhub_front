@@ -25,7 +25,7 @@
                         'outline outline-green-400': user.id === gameData?.playerTurn && gameData?.state !== 'vote'
                     }"
                 >
-                    <span v-if="user.id === currentUser.id && gameData?.undercoverPlayerIds?.includes(user.id)">Tu es l'undercover</span>
+                    <!-- <span v-if="user.id === currentUser.id && gameData?.undercoverPlayerIds?.includes(user.id)">Tu es l'undercover</span> -->
                     <img :src="user.picture" class="w-full">
                     <span class="text-xs truncate">{{ user.username }} ({{ user.isEliminated ? 'dead' : 'alive' }})</span>
                     <div class="flex flex-col gap-3 items-center mt-2">
