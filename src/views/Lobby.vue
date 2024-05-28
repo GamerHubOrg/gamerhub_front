@@ -23,6 +23,8 @@ const handleUpdateRoom = () => {
 const handleStartGame = () => {
     if (isOwner.value) {
         socket.emit("room:start", state.room, config.value)
+        // TODO: Change according to selected game
+        socket.emit("game:undercover:initialize", state.room);
     }
 }
 

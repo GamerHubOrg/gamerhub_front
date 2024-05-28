@@ -36,18 +36,6 @@
                             </span>
                         </div>
                     </div>
-                    <!-- <button 
-                        v-if="gameState === 'words'" 
-                        @click="() => handlePlayTurn(user)"
-                    >
-                        tmp: play user turn
-                    </button>
-                    <button 
-                        v-if="gameState === 'vote'" 
-                        @click="() => handleVoteForUser(user)"
-                    >
-                        tmp: send user vote
-                    </button> -->
                     <button 
                         v-if="gameState === 'vote' && !hasCurrentPlayerVoted && !user.isEliminated && !isCurrentUserEliminated" 
                         class="bg-green-400 rounded" 
@@ -85,19 +73,11 @@ const isCurrentPlayerTurn = computed(() => currentUser.value.id === gameData.val
 const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && votes.value.some((vote) => vote.playerId === currentUser.value.id));
 const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlayerIds?.includes(currentUser.value.id))
 
-// function handlePlayTurn(user: User) {
-//     socket.emit("game:undercover:send-word", { roomId: state.room, userId: user.id, word: 'test'});
-// }
-
 function handleSendWord() {
     if (wordForm.value && wordForm.value === '') return;
     socket.emit("game:undercover:send-word", { roomId: state.room, userId: gameData.value?.playerTurn, word: wordForm.value});
     wordForm.value = undefined;
 }
-
-// function handleVoteForUser(user: User) {
-//     socket.emit("game:undercover:vote", { roomId: state.room, userId: user.id, vote: currentUser.value.id});
-// }
 
 function handleVote(user: User) {
     socket.emit("game:undercover:vote", { roomId: state.room, userId: currentUser.value.id, vote: user.id});
@@ -106,8 +86,6 @@ function handleVote(user: User) {
 function getUserWords(user: User) {
     return gameData.value?.words?.filter((word) => word.playerId === user.id);
 }
-
-socket.emit("game:undercover:initialize", state.room);
 
 socket.on("game:undercover:data", ({ data }) => {
     state.data.gameData = data;

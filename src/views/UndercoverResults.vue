@@ -8,6 +8,7 @@
         <th>Mots</th>
         <th>Camp</th>
         <th>Etat de fin</th>
+        <th>Mot</th>
       </tr>
       <tr v-for="user in roomData.users" :key="user.id">
         <td><span :class="{ 'font-bold': currentUser.id === user.id }">{{ user.username }}</span></td>
@@ -25,6 +26,7 @@
           <span v-if="!user.isEliminated">Voted for : {{ getPlayerFromVote(user.id) }}</span>
           <span v-else>dead</span>
         </td>
+        <td>{{ gameData.undercoverPlayerIds?.includes(user.id) ? gameData.spyWord : gameData.civilianWord }}</td>
       </tr>
     </table>
   </div>
