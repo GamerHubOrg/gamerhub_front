@@ -36,14 +36,15 @@
 import { User } from '@/modules/auth/user';
 import { IUndercoverGameData, IUndercoverRoomData } from '@/types/interfaces';
 import { computed } from 'vue';
-import { state } from '@/services/socket';
+import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
 
 const store = useAuthStore();
+const socketStore = useSocketStore();
 
 const currentUser = computed(() => (store.getCurrentUser as User))
-const roomData = computed(() => (state.data as IUndercoverRoomData));
-const gameData = computed(() => (state.data.gameData as IUndercoverGameData));
+const roomData = computed(() => (socketStore.getRoomData as IUndercoverRoomData));
+const gameData = computed(() => (roomData.value.gameData as IUndercoverGameData));
 const votes = computed(() => gameData.value.votes || []);
 
 function getUserWords(user: User) {

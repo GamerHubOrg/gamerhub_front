@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { User } from '@/modules/auth/user';
-import { useSocketStore } from '../modules/socket/socket.store';
+import { useSocketStore } from '../../modules/socket/socket.store';
 import { IUndercoverRoomData } from '@/types/interfaces';
 import { computed, ref } from 'vue';
 
@@ -81,19 +81,19 @@ const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlaye
 
 function handleSendWord() {
     if (wordForm.value && wordForm.value === '') return;
-    socket.value.emit("game:undercover:send-word", { roomId: roomId.value, userId: gameData.value?.playerTurn, word: wordForm.value});
+    socket.value?.emit("game:undercover:send-word", { roomId: roomId.value, userId: gameData.value?.playerTurn, word: wordForm.value});
     wordForm.value = undefined;
 }
 
 function handleVote(user: User) {
-    socket.value.emit("game:undercover:vote", { roomId: roomId.value, userId: currentUser.value.id, vote: user.id});
+    socket.value?.emit("game:undercover:vote", { roomId: roomId.value, userId: currentUser.value.id, vote: user.id});
 }
 
 function getUserWords(user: User) {
     return gameData.value?.words?.filter((word) => word.playerId === user.id);
 }
 
-socket.value.on("game:undercover:data", ({ data }) => {
+socket.value?.on("game:undercover:data", ({ data }) => {
     stateData.value.gameData = data;
 })
 </script>
