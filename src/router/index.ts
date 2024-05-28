@@ -14,16 +14,10 @@ const routes = [
         component: () => import('../views/Home.vue'),
       },
       {
-        path: '/games/:gameName',
-        name: 'game',
+        path: '/room/:roomId',
+        name: 'game start',
         meta: { requireAuth: false },
-        component: () => import('../views/Codenames.vue'),
-      },
-      {
-        path: '/games/:gameName/lobby',
-        name: 'game lobby',
-        meta: { requireAuth: false },
-        component: () => import('../views/Room.vue'),
+        component: () => import('../views/Game.vue'),
       },
     ]
   },
