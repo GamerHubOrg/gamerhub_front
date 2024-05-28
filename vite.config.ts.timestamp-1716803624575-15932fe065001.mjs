@@ -4,7 +4,6 @@ import vue from "file:///Users/lucas/Desktop/ynov/gamerhub/gamerhub_front/node_m
 import path from "path";
 var __vite_injected_original_dirname = "/Users/lucas/Desktop/ynov/gamerhub/gamerhub_front";
 var vite_config_default = defineConfig(({ mode }) => {
-  console.log(mode);
   Object.assign(process.env, loadEnv(mode, process.cwd()));
   return {
     plugins: [vue()],

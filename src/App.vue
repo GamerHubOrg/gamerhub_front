@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import Room from '@/components/Room.vue';
+</script>
+
 <template>
-  <router-view />
+  <Room>
+    <router-view />
+  </Room>
 </template>
