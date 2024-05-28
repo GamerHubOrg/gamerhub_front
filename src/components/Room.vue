@@ -3,7 +3,9 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useAuthStore } from "@/modules/auth/auth.store";
 import { IRoomData } from "@/types/interfaces";
 import { useSocketStore } from '../modules/socket/socket.store';
+import { useRouter } from "vue-router";
 
+const router = useRouter()
 const store = useAuthStore();
 const socketStore = useSocketStore();
 const roomStore = socketStore;
@@ -34,6 +36,7 @@ function onRoomUpdated(data: IRoomData) {
 
 function onRoomStarted(data: IRoomData) {
     socketStore.handleRoomUpdate({ data })
+    router.push(`/room/${roomId.value}`)
 }
 
 function onRoomDeleted(roomId: string) {
