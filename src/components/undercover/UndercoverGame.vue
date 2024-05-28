@@ -57,14 +57,20 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { User } from '@/modules/auth/user';
-import socket, { state } from '@/services/socket';
+import { useSocketStore } from '../modules/socket/socket.store';
 import { IUndercoverRoomData } from '@/types/interfaces';
 import { computed, ref } from 'vue';
 
 const store = useAuthStore();
+const socketStore = useSocketStore();
+
+const stateData = computed(() => socketStore.getRoomData)
+const roomId = computed(() => socketStore.getRoomId)
+const socket = computed(() => socketStore.getSocket)
+
 const wordForm = ref(undefined);
 const currentUser = computed(() => (store.getCurrentUser as User))
-const roomData = computed(() => (state.data as IUndercoverRoomData));
+const roomData = computed(() => (stateData.value as IUndercoverRoomData));
 const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'words');
 const votes = computed(() => gameData.value?.votes || []);
@@ -75,19 +81,19 @@ const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlaye
 
 function handleSendWord() {
     if (wordForm.value && wordForm.value === '') return;
-    socket.emit("game:undercover:send-word", { roomId: state.room, userId: gameData.value?.playerTurn, word: wordForm.value});
+    socket.value.emit("game:undercover:send-word", { roomId: roomId.value, userId: gameData.value?.playerTurn, word: wordForm.value});
     wordForm.value = undefined;
 }
 
 function handleVote(user: User) {
-    socket.emit("game:undercover:vote", { roomId: state.room, userId: currentUser.value.id, vote: user.id});
+    socket.value.emit("game:undercover:vote", { roomId: roomId.value, userId: currentUser.value.id, vote: user.id});
 }
 
 function getUserWords(user: User) {
     return gameData.value?.words?.filter((word) => word.playerId === user.id);
 }
 
-socket.on("game:undercover:data", ({ data }) => {
-    state.data.gameData = data;
+socket.value.on("game:undercover:data", ({ data }) => {
+    stateData.value.gameData = data;
 })
 </script>
