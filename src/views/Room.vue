@@ -6,6 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import { IRoomData } from "@/types/interfaces";
 import Lobby from "./Lobby.vue";
 import Undercover from "./Undercover.vue";
+import UndercoverResults from "./UndercoverResults.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -55,7 +56,8 @@ function onRoomCreated(roomId: string, data: IRoomData) {
 
     state.room = roomId;
     state.data = data;
-    socket.emit("room:join", roomId, {...currentUser.value, username: 'test@test.fr', email: 'test@test.fr', id: currentUser.value?.id + '-TEST'})
+    // socket.emit("room:join", roomId, {...currentUser.value, username: 'test@test.fr', email: 'test@test.fr', id: currentUser.value?.id + '-TEST'})
+    // socket.emit("room:join", roomId, {...currentUser.value, username: 'test2@test.fr', email: 'test2@test.fr', id: currentUser.value?.id + '-TEST2'})
     router.push({ path: `/games/${gameName}/lobby`, query: { roomId } })
 }
 
@@ -139,4 +141,5 @@ onBeforeUnmount(() => {
     </div>
     <Lobby v-if="state.data.gameState === 'lobby'" />
     <Undercover v-if="state.data.gameState === 'started'" />
+    <UndercoverResults v-else-if="state.data.gameState === 'results'" />
 </template>

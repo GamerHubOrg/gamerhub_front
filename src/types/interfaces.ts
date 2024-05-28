@@ -14,7 +14,7 @@ export interface IRoomLog {
 
 export interface IRoomData {
   users: SocketUser[];
-  config: IRoomConfig;
+  config?: IRoomConfig;
   gameState: GameState;
   gameData?: IGameData;
   logs: IRoomLog[];
@@ -35,7 +35,6 @@ export interface IPlayerData {
 export interface IUndercoverVote {
   playerId: string;
   vote: string;
-  turn: number;
 }
 
 export interface IUndercoverWords {
@@ -50,10 +49,29 @@ export interface ITestGameData extends IGameData {
 
 export type IUndercoverGameState = 'vote' | 'words';
 
+export type IUndercoverCamp = 'undercover' | 'civilian'; 
+
+export interface IUndercoverPlayer extends SocketUser {
+  isEliminated?: boolean
+}
+
+export interface IUndercoverConfig extends IRoomConfig {
+  wordsPerTurn: number;
+}
+
+export interface IUndercoverRoomData extends IRoomData {
+  users: IUndercoverPlayer[];
+  config?: IUndercoverConfig;
+  gameData?: IUndercoverGameData;
+}
+
 export interface IUndercoverGameData extends IGameData {
   words?: IUndercoverWords[];
   votes: IUndercoverVote[],
   playerTurn?: string;
   state: IUndercoverGameState;
-  turn: number;
+  civilianWord?: string;
+  spyWord?: string;
+  undercoverPlayerIds?: string[];
+  campWin?: IUndercoverCamp
 }
