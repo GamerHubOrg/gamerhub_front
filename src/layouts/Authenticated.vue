@@ -21,7 +21,9 @@ async function handleSyncUserInfo() {
     const userInfo = await loadUserInfo();
     console.log(userInfo)
     store.setAuthToken(keycloak.token);
+    console.log(userInfo);
     store.setCurrentUser({
+      id: userInfo.sub,
       firstname: userInfo.given_name,
       lastname: userInfo.family_name,
       username: userInfo.preferred_username,
