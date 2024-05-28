@@ -1,5 +1,5 @@
 <template>
-  <div class="antialiased bg-gray-50 dark:bg-gray-900 min-h-screen h-full">
+  <div class="antialiased bg-gray-50 overlay min-h-screen h-full">
     <Navbar />
 
     <main class="p-4 h-full pt-20 3xl:max-w-screen-3xl w-full mx-auto">
@@ -41,3 +41,9 @@ onMounted(async () => {
   await handleSyncUserInfo();
 });
 </script>
+
+<style scoped>
+.overlay {
+  background-color: rgba(18, 18, 18, 1);
+}
+</style>

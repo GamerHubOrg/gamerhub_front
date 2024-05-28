@@ -1,23 +1,11 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <router-link to="/games/codenames">
-        <div
-          class="border-2 border-gray-300 rounded-lg dark:border-gray-600 h-64 overflow-hidden"
-        >
-          <img src="../assets/games/codenames.png" class="object-cover w-full h-full">
-        </div>
-      </router-link>
-      <div
-        class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-64"
-      ></div>
-      <div
-        class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-64"
-      ></div>
-      <div
-        class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-64"
-      ></div>
-    </div>
-    <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-full"></div>
+    <GameListItem name="Codenames" nbPlayers="4-8" time="<15min" routerLink="/games/codenames" img="/src/assets/games/codenames.png"/>
+    <GameListItem name="Undercover" nbPlayers="3-12" time="10-30min" routerLink="/games/codenames" img="/src/assets/games/undercover.webp" />
   </div>
+  
 </template>
+
+<script lang="ts" setup>
+import GameListItem from "@/components/GameListItem.vue";
+</script>

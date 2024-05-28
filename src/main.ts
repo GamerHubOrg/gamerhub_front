@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router/index';
-import './style.css'
+import './style.scss'
 import App from './App.vue'
 import { keycloak } from './services/keycloak';
 
