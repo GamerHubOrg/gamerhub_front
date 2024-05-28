@@ -55,6 +55,7 @@ function onRoomCreated(roomId: string, data: IRoomData) {
 
     state.room = roomId;
     state.data = data;
+    socket.emit("room:join", roomId, {...currentUser.value, username: 'test@test.fr', email: 'test@test.fr', id: currentUser.value?.id + '-TEST'})
     router.push({ path: `/games/${gameName}/lobby`, query: { roomId } })
 }
 

@@ -10,24 +10,39 @@
                 <div 
                     class="flex flex-col gap-2 max-w-48 bg-white dark:bg-gray-800 p-3 rounded-md"
                     :class="{
-                        'outline outline-green-400': user.id === gameData.playerTurn
+                        'outline outline-green-400': user.id === gameData.playerTurn && gameData.state !== 'vote'
                     }"
                 >
                     <img :src="user.picture" class="w-full">
-                    <span class="truncate">{{ user.username }}</span>
-                    <div class="flex flex-col gap-3 items-center">
+                    <span class="text-xs truncate">{{ user.username }}</span>
+                    <div class="flex flex-col gap-3 items-center mt-2">
                         <span class="font-semibold">Mots</span>
                         <div class="flex flex-col gap-2">
-                            <span v-for="(word, index) in getUserWords(user)" :key="index">
+                            <span v-for="(word, index) in getUserWords(user)" :key="`${user.id}-${index}`">
                                 {{ word.word }}
                             </span>
                         </div>
                     </div>
+                    <button 
+                        v-if="gameState === 'words'" 
+                        @click="() => handlePlayTurn(user)"
+                    >
+                        tmp: play turn
+                    </button>
+                    <button 
+                        v-if="gameState === 'vote'" 
+                        class="bg-green-400 rounded" 
+                        @click="() => handleVote(user)"
+                    >
+                        vote
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div v-if="currentUser.id === gameData.playerTurn" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-md">
+        {{ gameData }}
+
+        <div v-if="currentUser.id === gameData.playerTurn && gameState === 'words'" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row items-center gap-3 bg-white dark:bg-gray-800 p-3 rounded-md">
             <input v-model="wordForm" type="text" class="p-3" @submit="handleSendWord">
             <button class="bg-green-400 rounded" @click="handleSendWord">send</button>
         </div>
@@ -45,10 +60,19 @@ const store = useAuthStore();
 const wordForm = ref(undefined);
 const currentUser = computed(() => (store.getCurrentUser as User))
 const gameData = computed(() => (state.data.gameData as IUndercoverGameData));
+const gameState = computed(() => gameData.value.state || 'words');
+
+function handlePlayTurn(user: User) {
+    socket.emit("game:undercover:send-word", { roomId: state.room, userId: user.id, word: 'test'});
+}
 
 function handleSendWord() {
     if (wordForm.value && wordForm.value === '') return;
     socket.emit("game:undercover:send-word", { roomId: state.room, userId: gameData.value.playerTurn, word: wordForm.value});
+}
+
+function handleVote(user: User) {
+    socket.emit("game:undercover:vote", { roomId: state.room, userId: currentUser.value.id, vote: user.id});
 }
 
 function getUserWords(user: User) {
@@ -58,6 +82,7 @@ function getUserWords(user: User) {
 socket.emit("game:undercover:initialize", state.room);
 
 socket.on("game:undercover:data", ({ data }) => {
+    console.log('UNDERCOVER', { data })
     state.data.gameData = data;
 })
 </script>

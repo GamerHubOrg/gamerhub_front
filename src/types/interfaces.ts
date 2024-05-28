@@ -32,6 +32,12 @@ export interface IPlayerData {
   points: number;
 }
 
+export interface IUndercoverVote {
+  playerId: string;
+  vote: string;
+  turn: number;
+}
+
 export interface IUndercoverWords {
   playerId: string;
   word: string;
@@ -42,7 +48,12 @@ export interface ITestGameData extends IGameData {
   playersData?: IPlayerData[];
 }
 
+export type IUndercoverGameState = 'vote' | 'words';
+
 export interface IUndercoverGameData extends IGameData {
   words?: IUndercoverWords[];
+  votes: IUndercoverVote[],
   playerTurn?: string;
+  state: IUndercoverGameState;
+  turn: number;
 }
