@@ -20,7 +20,7 @@
                 class="flex justify-center items-center"
             >
                 <div 
-                    class="flex flex-col gap-2 max-w-48 bg-white dark:bg-gray-800 p-3 rounded-md"
+                    class="flex flex-col gap-2 max-w-48 bg-white p-3 rounded-md"
                     :class="{
                         'outline outline-green-400': user.id === gameData?.playerTurn && gameData?.state !== 'vote'
                     }"
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div v-if="!isCurrentUserEliminated && currentUser.id === gameData?.playerTurn && gameState === 'words'" class="border fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row items-center gap-3 bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-3 rounded-md">
+        <div v-if="!isCurrentUserEliminated && currentUser.id === gameData?.playerTurn && gameState === 'words'" class="border fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row items-center gap-3 bg-white border-gray-200 p-3 rounded-md">
             <input v-model="wordForm" type="text" class="p-3" @submit="handleSendWord">
             <button class="bg-green-400 rounded" @click="handleSendWord">send</button>
         </div>

@@ -2,7 +2,8 @@
   <nav
       class="px-8 py-4 fixed left-0 right-0 top-0 z-50">
     <div class="flex flex-wrap justify-between items-center 3xl:max-w-screen-3xl w-full mx-auto 3xl:px-4 h-10">
-      <div class="flex justify-start items-center">
+      <div class="flex justify-start items-center text-white">
+        <router-link to="/" class="border p-2 rounded mr-2">GamerHub</router-link>
         <button v-if="roomId" class="flex items-center gap-2" @click="handleToggleLobby">
           <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -36,7 +37,7 @@
 
         <div v-if="authToken" class="flex flex-row items-center">
           <button type="button"
-                  class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300"
                   id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown"
                   @click="showUserMenu = !showUserMenu">
             <span class="sr-only">Open user menu</span>
@@ -46,18 +47,18 @@
         <button v-else @click="handleConnect">Se connecter</button>
         <!-- Dropdown menu -->
         <div
-            class="absolute right-0 top-10 z-50 my-4 mr-4 w-56 text-base list-none bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl"
+            class="absolute right-0 top-10 z-50 my-4 mr-4 w-56 text-base list-none bg-white divide-y divide-gray-100 shadow rounded-xl"
             :class="{ 'hidden': !showUserMenu }" id="dropdown">
           <div class="py-3 px-4">
-            <span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ currentUser?.firstname }} {{
+            <span class="block text-sm font-semibold text-white">{{ currentUser?.firstname }} {{
                 currentUser?.lastname
               }}</span>
-            <span class="block text-sm text-gray-900 truncate dark:text-white">{{ currentUser?.email }}</span>
+            <span class="block text-sm text-gray-900 truncate">{{ currentUser?.email }}</span>
           </div>
-          <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+          <ul class="py-1 text-gray-700" aria-labelledby="dropdown">
             <li>
               <a href="#"
-                 class="flex items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                 class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
                 <svg
                     class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +70,7 @@
             </li>
             <li>
               <a href="#"
-                 class="flex items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                 class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
                 <svg
                     class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -80,10 +81,10 @@
                 Account settings</a>
             </li>
           </ul>
-          <ul class="py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
+          <ul class="py-1 text-gray-700" aria-labelledby="dropdown">
             <li>
               <span
-                  class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
+                  class="block py-2 px-4 text-sm hover:bg-gray-100 cursor-pointer"
                   @click="handleLogout">Sign out</span>
             </li>
           </ul>

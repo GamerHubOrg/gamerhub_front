@@ -1,6 +1,6 @@
 <template>
   <div class="h-full">
-    <router-link to="/games/codenames">
+    <div>
       <div class="relative listGameWrapper" :style="{ backgroundImage: `url(${img})` }">
         <div class="absolute bottom-12 left-4 right-0 p-4 mb-5">
           <h2 class="text-white text-3xl font-bold">{{ name }}</h2>
@@ -11,7 +11,7 @@
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
       </div>
-    </router-link>
+    </div>
   </div>
 </template>
 

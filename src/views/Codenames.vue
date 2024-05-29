@@ -15,7 +15,7 @@ const handleRoomStart = () => {
 
 <template>
   <div>
-    <div class="border-2 border-gray-300 rounded-lg dark:border-gray-600 h-64 overflow-hidden">
+    <div class="border-2 border-gray-300 rounded-lg h-64 overflow-hidden">
       <img src="../assets/games/codenames.png" class="object-cover w-full h-full">
     </div>
     <h1 class="text-center text-4xl font-bold">Codenames</h1>
