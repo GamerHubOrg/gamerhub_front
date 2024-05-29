@@ -25,6 +25,18 @@ export interface IRoomConfig {
   maxPlayers?: number;
 }
 
+export type UndercoverTheme = 'classic';
+
+export type UndercoverMode = 'words';
+
+export interface IUndercoverConfig extends IRoomConfig {
+  mode: UndercoverMode;
+  theme: UndercoverTheme;
+  spyCount: number;
+  wordsPerTurn: number;
+  anonymousMode: boolean;
+}
+
 export interface IGameData {}
 
 export interface IPlayerData {

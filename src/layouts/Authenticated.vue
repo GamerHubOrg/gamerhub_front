@@ -1,7 +1,7 @@
 <template>
-  <div class="antialiased bg-gray-50 overlay min-h-screen h-full">
-    <Navbar @toggleLobby="toggleLobby"/>
-    <Lobby v-if="lobbyExpanded"/>
+  <div class="antialiased bg-gray-50 min-h-screen h-full">
+    <Navbar @toggleLobby="toggleLobby" />
+    <Lobby v-if="lobbyExpanded" />
 
     <main class="p-4 h-full pt-20 3xl:max-w-screen-3xl w-full mx-auto">
       <router-view/>
