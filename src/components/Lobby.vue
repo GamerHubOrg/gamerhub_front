@@ -21,7 +21,7 @@ const createGame = ref<string>("undercover");
 const updateGame = ref<string>("");
 const joinRoom = ref<string>("");
 
-const config = computed<IRoomConfig>(() => data.value.config ?? {});
+const config = computed(() => data.value.config ?? {});
 const currentUser = computed(() => store.getCurrentUser);
 const roomUsers = computed(() => data.value?.users ?? []);
 
@@ -50,8 +50,7 @@ const handleStartGame = () => {
   if (!isOwner.value) {
     console.log("Vous n'êtes pas propriétaire.");
     return;
-  }
-
+  } 
   socketStore.handleStartGame(roomId.value)
 }
 
@@ -84,6 +83,7 @@ watch(
 onMounted(() => {
     if (data.value.gameName) updateGame.value = data.value.gameName
 })
+
 </script>
 
 <template>
@@ -169,7 +169,7 @@ onMounted(() => {
                             </div>
                         </div>
 
-                        <div v-if="user.isOwner && user.id !== currentUser.id" class="flex flex-row gap-2">
+                        <div v-if="isOwner && user.id !== currentUser.id" class="flex flex-row gap-2">
                             <button class="bg-[#E8B9141A] text-[#E8B914] rounded-lg px-3 py-1.5 text-sm">Promote</button>
                             <button class="bg-[#E847471A] text-[#E84747] rounded-lg px-3 py-1.5 text-sm">Kick</button>
                         </div>
@@ -188,17 +188,17 @@ onMounted(() => {
 
                 <UndercoverConfig 
                     v-if="data.gameName === 'undercover'" 
-                    v-model="config"
+                    :config="config"
                     @update="handleUpdateRoom"
                 />
                 <SpeedrundleConfig 
                     v-else-if="data.gameName === 'speedrundle'" 
-                    v-model="config"
+                    :config="config"
                     @update="handleUpdateRoom"
                 />
             </div>
 
-            <div class="flex flex-col gap-4 text-white">
+            <div class="flex flex-col gap-4 text-white mt-20">
                 <div class="flex flex-row justify-between items-center bg-white bg-opacity-5 rounded-2xl p-4">
                     <span class="font-semibold text-2xl">{{ roomId }}</span>
                     <div 

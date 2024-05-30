@@ -5,7 +5,7 @@
             <select 
                 id="mode" 
                 :disabled="!isOwner" 
-                v-model="config.mode"
+                v-model="internalConfig.mode"
             >
                 <option value="words">Mots</option>
             </select>
@@ -16,7 +16,7 @@
             <select 
                 id="theme" 
                 :disabled="!isOwner" 
-                v-model="config.theme"
+                v-model="internalConfig.theme"
             >
                 <option value="classic">Classic</option>
             </select>
@@ -30,7 +30,7 @@
                 :disabled="!isOwner" 
                 :min="3"
                 placeholder="Entrez le nombre maximum de joueurs"
-                v-model="config.maxPlayers"
+                v-model="internalConfig.maxPlayers"
             >
         </div>
 
@@ -42,7 +42,19 @@
                 :disabled="!isOwner" 
                 :min="0"
                 placeholder="Entrez le nombre d'espions"
-                v-model="config.spyCount"
+                v-model="internalConfig.spyCount"
+            >
+        </div>
+
+        <div class="option-container">
+            <label for="wordsPerTurn">Nombre de mots par tour :</label>
+            <input 
+                id="wordsPerTurn" 
+                type="number" 
+                :disabled="!isOwner" 
+                :min="1"
+                :max="10"
+                v-model="internalConfig.wordsPerTurn"
             >
         </div>
 
@@ -52,7 +64,7 @@
                 id="anonymousMode" 
                 type="checkbox" 
                 :disabled="!isOwner" 
-                v-model="config.anonymousMode"
+                v-model="internalConfig.anonymousMode"
             >
         </div>
     </div>
@@ -63,9 +75,10 @@ import { useAuthStore } from '@/modules/auth/auth.store';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed, onMounted, ref, watch } from 'vue';
 import { IUndercoverConfig } from './undercover.types';
+import { areObjectsEquals } from '@/utils/functions';
 
 const emit = defineEmits(['update'])
-defineProps({
+const props = defineProps({
     config: {
         type: Object,
         default: () => {},
@@ -75,7 +88,7 @@ defineProps({
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
-const config = ref<IUndercoverConfig>({ 
+const internalConfig = ref<IUndercoverConfig>({ 
     maxPlayers: 6,
     wordsPerTurn: 3, 
     mode: 'words', 
@@ -90,16 +103,32 @@ const currentUser = computed(() => store.getCurrentUser);
 const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
 
 watch(
-    () => config.value,
+    () => internalConfig.value,
     () => {
+        if (!isOwner.value) return;
         if (timer.value) clearTimeout(timer.value)
-        timer.value = setTimeout(() => emit('update', config.value), 300);
+        timer.value = setTimeout(() => emit('update', internalConfig.value), 500);
+    },
+    { deep: true }
+)
+
+watch(
+    () => ({...props.config}),
+    () => {
+        if (areObjectsEquals(internalConfig.value, props.config)) return;
+        internalConfig.value = (props.config as IUndercoverConfig)
     },
     { deep: true }
 )
 
 onMounted(() => {
-    emit('update', config.value);
+    if (props.config && JSON.stringify(props.config) !== '{}') {
+        internalConfig.value = (props.config as IUndercoverConfig)
+    }
+
+    if (isOwner.value) {
+        emit('update', internalConfig.value)
+    }
 })
 </script>
 

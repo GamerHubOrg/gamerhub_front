@@ -25,9 +25,7 @@ const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
 async function handleSyncUserInfo() {
   try {
     const userInfo = await loadUserInfo();
-    console.log(userInfo)
     store.setAuthToken(keycloak.token);
-    console.log(userInfo);
     store.setCurrentUser({
       id: userInfo.sub,
       firstname: userInfo.given_name,
@@ -41,7 +39,6 @@ async function handleSyncUserInfo() {
   } catch (err) {
     store.setAuthToken(undefined);
     store.setCurrentUser(undefined);
-    console.log("authenticated.vue", err);
   }
 }
 

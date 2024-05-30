@@ -1,5 +1,5 @@
 <template>
-   <div class="flex flex-col items-center gap-7">
+   <div class="flex flex-col items-center gap-7 text-white">
         <h2 class="text-3xl">Undercover</h2>
         <p>Ton mot : <span class="font-semibold">{{ isCurrentPlayerUndercover ? gameData?.spyWord : gameData?.civilianWord }}</span></p>
         <div v-if="!isCurrentUserEliminated">
@@ -13,11 +13,12 @@
             </div>
         </div>
         <div v-else>Tu es éliminé</div>
+        {{ gameData }}
         <div class="grid grid-cols-4 gap-12">
             <div 
                 v-for="user in roomData.users" 
                 :key="user.socket_id"
-                class="flex justify-center items-center"
+                class="flex justify-center items-center text-black"
             >
                 <div 
                     class="flex flex-col gap-2 max-w-48 bg-white p-3 rounded-md"
@@ -93,8 +94,10 @@ function handleVote(user: User) {
 function getUserWords(user: User) {
     return gameData.value?.words?.filter((word) => word.playerId === user.id);
 }
+console.log(socket.value);
 
 socket.value?.on("game:undercover:data", ({ data }) => {
-    stateData.value.gameData = data;
+    console.log("game:undercover:data", data)
+    socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
 })
 </script>

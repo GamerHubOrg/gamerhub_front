@@ -7,9 +7,14 @@
 import { useSocketStore } from '@/modules/socket/socket.store';
 import UndercoverGame from './UndercoverGame.vue';
 import UndercoverResults from './UndercoverResults.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 
 const socketStore = useSocketStore();
 const data = computed(() => socketStore.getRoomData)
+const roomId = computed(() => socketStore.getRoomId)
+const socket = computed(() => socketStore.getSocket)
 
+onMounted(() => {
+  socket.value?.emit('game:undercover:get-data', roomId.value)
+})
 </script>

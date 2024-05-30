@@ -24,8 +24,6 @@ const toggleLogs = () => areLogsExpanded.value = !areLogsExpanded.value
 // Fonction qui recoivent un évenement du serveur
 
 function onRoomJoined(roomId: string, data: IRoomData) {
-  console.log("data", data);
-
   socketStore.handleRoomUpdate({roomId, data})
   localStorage.setItem("roomId", roomId)
 }
