@@ -51,6 +51,7 @@ const handleStartGame = () => {
     console.log("Vous n'êtes pas propriétaire.");
     return;
   } 
+  gameStore.setIsLobbyCollapsed(true);
   socketStore.handleStartGame(roomId.value)
 }
 

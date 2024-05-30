@@ -1,25 +1,42 @@
 <template>
-  <div class="h-full">
-    <div>
-      <div class="relative listGameWrapper" :style="{ backgroundImage: `url(${img})` }">
-        <div class="absolute bottom-12 left-4 right-0 p-4 mb-5">
-          <h2 class="text-white text-3xl font-bold">{{ name }}</h2>
-        </div>
+  <div class="game-wrapper-background rounded-2xl p-6 min-h-[470px]" :style="{ backgroundImage: `url(${img})` }">
+    <div class="flex flex-col justify-end h-full gap-2">
+      <h2 class="text-white text-3xl font-bold">{{ name }}</h2>
 
-        <div class="flex absolute bottom-5 left-4 right-0 p-4 gap-9 text-white">
+      <div class="flex gap-3 justify-between flex-row items-end text-white">
+        <div class="flex gap-9">
           <p class="gameInfosShadow">{{ nbPlayers }} players</p>
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
+
+        <Button 
+          v-if="!roomId" 
+          type="primary" 
+          shape="squared"
+          @click="handleCreateRoom"
+        >
+          Create room
+        </Button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps({
+import { computed } from 'vue';
+import Button from './Button.vue';
+import { useSocketStore } from '@/modules/socket/socket.store';
+import { useAuthStore } from '@/modules/auth/auth.store';
+import { useGamesStore } from '@/modules/games/games.store';
+
+const props = defineProps({
   name: {
     type: String,
     required: true
+  },
+  gameName: {
+    type: String,
+    required: true,
   },
   nbPlayers: {
     type: String,
@@ -39,6 +56,18 @@ defineProps({
   }
 });
 
+const store = useAuthStore();
+const socketStore = useSocketStore();
+const gameStore = useGamesStore();
+const roomId = computed(() => socketStore.getRoomId)
+const currentUser = computed(() => store.getCurrentUser);
+
+function handleCreateRoom() {
+  if (!currentUser.value) return;
+  socketStore.handleCreateRoom(currentUser.value, props.gameName)
+  gameStore.setIsLobbyCollapsed(false);
+}
+
 </script>
 
 <style scoped>
@@ -48,10 +77,8 @@ defineProps({
   border-radius: 15px;
 }
 
-.listGameWrapper {
-  min-height: 470px;
+.game-wrapper-background {
   background-size: cover;
   background-position: center;
-  border-radius: 15px;
 }
 </style>

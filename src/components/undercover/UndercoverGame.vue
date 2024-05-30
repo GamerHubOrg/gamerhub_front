@@ -13,7 +13,7 @@
             </div>
         </div>
         <div v-else>Tu es éliminé</div>
-        {{ gameData }}
+
         <div class="grid grid-cols-4 gap-12">
             <div 
                 v-for="user in roomData.users" 
@@ -94,10 +94,8 @@ function handleVote(user: User) {
 function getUserWords(user: User) {
     return gameData.value?.words?.filter((word) => word.playerId === user.id);
 }
-console.log(socket.value);
 
 socket.value?.on("game:undercover:data", ({ data }) => {
-    console.log("game:undercover:data", data)
     socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
 })
 </script>
