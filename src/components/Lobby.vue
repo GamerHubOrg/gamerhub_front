@@ -140,7 +140,7 @@ onMounted(() => {
                 <h5 class="w-full text-center font-bold text-lg text-white">New room</h5>
                 <div class="border border-dark3 rounded p-2 flex flex-row items-center gap-2 text-white">
                     <label for="game" class="whitespace-nowrap font-semibold">Mode de jeu :</label>
-                    <select id="game" class="bg-transparent w-full" v-model="createGame">
+                    <select id="game" class="bg-dark3 w-full" v-model="createGame">
                         <option value="undercover">Undercover</option>
                         <option value="speedrundle">SpeedrunDLE</option>
                     </select>

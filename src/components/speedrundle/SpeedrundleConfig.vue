@@ -38,15 +38,15 @@
         </div>
 
         <div class="option-container">
-            <label for="maxPlayers">Nombre de rounds :</label>
+            <label for="nbRounds">Nombre de rounds :</label>
             <input 
-                id="maxPlayers" 
+                id="nbRounds" 
                 type="number" 
                 :disabled="!isOwner" 
                 :min="1"
                 :max="10"
                 placeholder="Entrez le nombre de rounds"
-                v-model="config.maxPlayers"
+                v-model="config.nbRounds"
             >
         </div>
     </div>
@@ -71,9 +71,9 @@ const socketStore = useSocketStore();
 
 const config = ref<ISpeedrundleConfig>({ 
     maxPlayers: 6,
-    roundsNumber: 1,
+    nbRounds: 1,
     mode: 'classic', 
-    theme: 'lol', 
+    theme: 'league_of_legends', 
 });
 const timer = ref();
 const data = computed(() => socketStore.getRoomData)
