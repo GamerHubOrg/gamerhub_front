@@ -6,7 +6,7 @@
           <h2 class="text-white text-3xl font-bold">{{ name }}</h2>
         </div>
 
-        <div class="flex absolute bottom-5 left-4 right-0 p-4 gap-9">
+        <div class="flex absolute bottom-5 left-4 right-0 p-4 gap-9 text-white">
           <p class="gameInfosShadow">{{ nbPlayers }} players</p>
           <p class="gameInfosShadow">{{ time }}</p>
         </div>

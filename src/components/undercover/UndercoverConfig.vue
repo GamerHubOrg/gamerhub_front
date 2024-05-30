@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col gap-3">
-        <div class="border rounded p-2">
-            <label for="maxPlayers">Mode de jeu :</label>
+    <div class="flex flex-col gap-3 text-white">
+        <div class="option-container">
+            <label for="mode">Mode de jeu :</label>
             <select 
                 id="mode" 
                 :disabled="!isOwner" 
@@ -11,8 +11,8 @@
             </select>
         </div>
 
-        <div class="border rounded p-2">
-            <label for="maxPlayers">Thème :</label>
+        <div class="option-container">
+            <label for="thme">Thème :</label>
             <select 
                 id="theme" 
                 :disabled="!isOwner" 
@@ -22,7 +22,7 @@
             </select>
         </div>
 
-        <div class="border rounded p-2">
+        <div class="option-container">
             <label for="maxPlayers">Nombre de joueurs maximum :</label>
             <input 
                 id="maxPlayers" 
@@ -34,19 +34,19 @@
             >
         </div>
 
-        <div class="border rounded p-2">
+        <div class="option-container">
             <label for="spyCount">Nombre d'espions :</label>
             <input 
                 id="spyCount" 
                 type="number" 
                 :disabled="!isOwner" 
-                min="0"
+                :min="0"
                 placeholder="Entrez le nombre d'espions"
                 v-model="config.spyCount"
             >
         </div>
 
-        <div class="border rounded p-2">
+        <div class="option-container">
             <label for="anonymousMode">Mode caché :</label>
             <input 
                 id="anonymousMode" 
@@ -102,3 +102,17 @@ onMounted(() => {
     emit('update', config.value);
 })
 </script>
+
+<style lang="scss" scoped>
+.option-container {
+    @apply border border-dark3 rounded p-2 flex flex-row items-center gap-2;
+
+    > label {
+        @apply whitespace-nowrap font-semibold;
+    }
+
+    input[type="text"], input[type="number"], select {
+        @apply bg-transparent w-full;
+    }
+}
+</style>

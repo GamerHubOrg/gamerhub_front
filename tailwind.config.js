@@ -13,6 +13,10 @@ export default {
         'primary': 'rgba(0, 165, 105, 1)',
         'secondary': 'rgba(255, 255, 255, 0.2)',
         'lightgrey': 'rgba(30, 30, 30, 1)',
+        'dark1': '#121212',
+        'dark2': '#1E1E1E',
+        'dark3': '#232323',
+        'dark5': '#272727',
       }
     },
   },

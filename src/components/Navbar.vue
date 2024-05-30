@@ -1,10 +1,8 @@
 <template>
-  <nav
-      class="px-8 py-4 fixed left-0 right-0 top-0 z-50">
+  <nav class="px-8 py-4 fixed left-0 right-0 top-0 z-30 bg-dark1 text-white">
     <div class="flex flex-wrap justify-between items-center 3xl:max-w-screen-3xl w-full mx-auto 3xl:px-4 h-10">
       <div class="flex justify-start items-center text-white">
-        <router-link to="/" class="border p-2 rounded mr-2">GamerHub</router-link>
-        <button v-if="roomId" class="flex items-center gap-2" @click="handleToggleLobby">
+        <button v-if="roomId" class="flex items-center gap-2" @click="handleOpenLobby">
           <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M13 15C13 13.4087 12.3679 11.8826 11.2426 10.7574C10.1174 9.63214 8.5913 9 7 9M7 9C5.4087 9 3.88258 9.63214 2.75736 10.7574C1.63214 11.8826 1 13.4087 1 15M7 9C9.20914 9 11 7.20914 11 5C11 2.79086 9.20914 1 7 1C4.79086 1 3 2.79086 3 5C3 7.20914 4.79086 9 7 9ZM21 15C21 13.4087 20.3679 11.8826 19.2426 10.7574C18.1174 9.63214 16.5913 9 15 9C16.0609 9 17.0783 8.57857 17.8284 7.82843C18.5786 7.07828 19 6.06087 19 5C19 3.93913 18.5786 2.92172 17.8284 2.17157C17.0783 1.42143 16.0609 1 15 1"
@@ -12,11 +10,11 @@
           </svg>
           {{ data.users?.length }} players
         </button>
-        <button v-else class="flex items-center gap-2" @click="handleToggleLobby">
+        <button v-else class="flex items-center gap-2" @click="handleOpenLobby">
           Jouer
         </button>
       </div>
-      <div class="flex items-center lg:order-2">
+      <div class="flex items-center gap-2">
         <!-- Apps -->
         <Button routerLink="/games">
           <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +31,6 @@
           </svg>
           Premium
         </Button>
-        <Button routerLink="/games" type="primary" shape="squared">Support</Button>
 
         <div v-if="authToken" class="flex flex-row items-center">
           <button type="button"
@@ -44,13 +41,13 @@
             <img class="w-8 h-8 rounded-full" :src="currentUser?.picture" alt="user photo"/>
           </button>
         </div>
-        <button v-else @click="handleConnect">Se connecter</button>
+        <Button v-else type="primary" shape="squared" @click="handleConnect">Se connecter</Button>
         <!-- Dropdown menu -->
         <div
-            class="absolute right-0 top-10 z-50 my-4 mr-4 w-56 text-base list-none bg-white divide-y divide-gray-100 shadow rounded-xl"
+            class="absolute right-0 top-10 z-30 my-4 mr-4 w-56 text-base list-none bg-white divide-y divide-gray-100 shadow rounded-xl"
             :class="{ 'hidden': !showUserMenu }" id="dropdown">
           <div class="py-3 px-4">
-            <span class="block text-sm font-semibold text-white">{{ currentUser?.firstname }} {{
+            <span class="block text-sm font-semibold text-gray-900">{{ currentUser?.firstname }} {{
                 currentUser?.lastname
               }}</span>
             <span class="block text-sm text-gray-900 truncate">{{ currentUser?.email }}</span>
@@ -58,7 +55,7 @@
           <ul class="py-1 text-gray-700" aria-labelledby="dropdown">
             <li>
               <a href="#"
-                 class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
+                  class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
                 <svg
                     class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -70,7 +67,7 @@
             </li>
             <li>
               <a href="#"
-                 class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
+                  class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
                 <svg
                     class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -100,15 +97,11 @@ import {useAuthStore} from "../modules/auth/auth.store";
 import {keycloak} from '../services/keycloak'
 import {useSocketStore} from '../modules/socket/socket.store';
 import Button from '../components/Button.vue';
-
-const emit = defineEmits(["toggleLobby"]);
-
-const handleToggleLobby = () => {
-  emit("toggleLobby");
-}
+import { useGamesStore } from "@/modules/games/games.store";
 
 const store = useAuthStore();
 const roomStore = useSocketStore();
+const gameStore = useGamesStore();
 const roomId = computed(() => roomStore.getRoomId)
 const data = computed(() => roomStore.getRoomData)
 
@@ -116,6 +109,10 @@ const data = computed(() => roomStore.getRoomData)
 const authToken = computed(() => store.getAuthToken)
 const currentUser = computed(() => store.getCurrentUser)
 const showUserMenu = ref(false);
+
+function handleOpenLobby() {
+  gameStore.setIsLobbyCollapsed(false);
+}
 
 async function handleConnect() {
   try {
