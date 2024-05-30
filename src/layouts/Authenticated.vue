@@ -1,7 +1,7 @@
 <template>
-  <div class="antialiased bg-gray-50 overlay min-h-screen h-full">
-    <Navbar @toggleLobby="toggleLobby"/>
-    <Lobby v-if="lobbyExpanded"/>
+  <div class="min-h-screen h-full">
+    <Navbar />
+    <Lobby v-if="!isLobbyCollapsed"/>
 
     <main class="p-4 h-full pt-20 3xl:max-w-screen-3xl w-full mx-auto">
       <router-view/>
@@ -10,19 +10,17 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import Lobby from '../components/Lobby.vue';
 import Navbar from '../components/Navbar.vue';
 import {useAuthStore} from "../modules/auth/auth.store";
 import {keycloak, loadUserInfo} from "../services/keycloak";
-
-const lobbyExpanded = ref(false)
-
-function toggleLobby() {
-  lobbyExpanded.value = !lobbyExpanded.value;
-}
+import { useGamesStore } from '@/modules/games/games.store';
 
 const store = useAuthStore();
+const gamesStore = useGamesStore();
+
+const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
 
 async function handleSyncUserInfo() {
   try {
@@ -51,9 +49,3 @@ onMounted(async () => {
   await handleSyncUserInfo();
 });
 </script>
-
-<style scoped>
-.overlay {
-  background-color: rgba(18, 18, 18, 1);
-}
-</style>

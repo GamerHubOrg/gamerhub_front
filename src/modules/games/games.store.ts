@@ -1,25 +1,19 @@
 import { defineStore } from 'pinia'
-import { Game } from './game';
-import api from '../../services/api';
 
 type State = {
-  games: Game[],
+  isLobbyCollapsed: boolean,
 }
 
 export const useGamesStore = defineStore('games', {
   state: () => ({
-    games: [],
+    isLobbyCollapsed: true,
   }) as State,
   getters: {
-    getGames: (state) => state.games,
+    getIsLobbyCollapsed: (state) => state.isLobbyCollapsed,
   },
   actions: {
-    setGames(games: Game[]) {
-      this.games = games;
-    },
-    async fetchGames() {
-      const { data } = await api.get('/games');
-      this.setGames(data);
+    setIsLobbyCollapsed(collapsed: boolean) {
+      this.isLobbyCollapsed = collapsed;
     }
   }
 })

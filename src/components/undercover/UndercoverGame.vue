@@ -25,7 +25,7 @@
                         'outline outline-green-400': user.id === gameData?.playerTurn && gameData?.state !== 'vote'
                     }"
                 >
-                    <!-- <span v-if="user.id === currentUser.id && gameData?.undercoverPlayerIds?.includes(user.id)">Tu es l'undercover</span> -->
+                    <span v-if="user.id === currentUser.id && gameData?.undercoverPlayerIds?.includes(user.id) && !isAnonymouseMode">Tu es l'undercover</span>
                     <img :src="user.picture" class="w-full">
                     <span class="text-xs truncate">{{ user.username }} ({{ user.isEliminated ? 'dead' : 'alive' }})</span>
                     <div class="flex flex-col gap-3 items-center mt-2">
@@ -58,8 +58,8 @@
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { User } from '@/modules/auth/user';
 import { useSocketStore } from '../../modules/socket/socket.store';
-import { IUndercoverRoomData } from '@/types/interfaces';
 import { computed, ref } from 'vue';
+import { IUndercoverRoomData } from './undercover.types';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -74,6 +74,7 @@ const roomData = computed(() => (stateData.value as IUndercoverRoomData));
 const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'words');
 const votes = computed(() => gameData.value?.votes || []);
+const isAnonymouseMode = computed(() => !!roomData.value.config?.anonymousMode);
 const isCurrentUserEliminated = computed(() => !!roomData.value.users.find((u) => u.id === currentUser.value.id)?.isEliminated);
 const isCurrentPlayerTurn = computed(() => currentUser.value.id === gameData.value?.playerTurn);
 const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && votes.value.some((vote) => vote.playerId === currentUser.value.id));
