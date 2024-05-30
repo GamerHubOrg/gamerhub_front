@@ -7,7 +7,8 @@
                 :disabled="!isOwner" 
                 v-model="config.mode"
             >
-                <option value="words">Mots</option>
+                <option value="classic">Classic</option>
+                <option value="less_trials">Few trials possible</option>
             </select>
         </div>
 
@@ -18,7 +19,9 @@
                 :disabled="!isOwner" 
                 v-model="config.theme"
             >
-                <option value="classic">Classic</option>
+                <option value="lol">League Of Legends</option>
+                <option value="pokemon">Pokemon</option>
+                <option value="marvel">Marvel</option>
             </select>
         </div>
 
@@ -28,31 +31,22 @@
                 id="maxPlayers" 
                 type="number" 
                 :disabled="!isOwner" 
-                :min="3"
+                :min="1"
                 placeholder="Entrez le nombre maximum de joueurs"
                 v-model="config.maxPlayers"
             >
         </div>
 
         <div class="option-container">
-            <label for="spyCount">Nombre d'espions :</label>
+            <label for="maxPlayers">Nombre de rounds :</label>
             <input 
-                id="spyCount" 
+                id="maxPlayers" 
                 type="number" 
                 :disabled="!isOwner" 
-                :min="0"
-                placeholder="Entrez le nombre d'espions"
-                v-model="config.spyCount"
-            >
-        </div>
-
-        <div class="option-container">
-            <label for="anonymousMode">Mode caché :</label>
-            <input 
-                id="anonymousMode" 
-                type="checkbox" 
-                :disabled="!isOwner" 
-                v-model="config.anonymousMode"
+                :min="1"
+                :max="10"
+                placeholder="Entrez le nombre de rounds"
+                v-model="config.maxPlayers"
             >
         </div>
     </div>
@@ -62,7 +56,7 @@
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed, onMounted, ref, watch } from 'vue';
-import { IUndercoverConfig } from './undercover.types';
+import { ISpeedrundleConfig } from './speedrundle.types';
 
 const emit = defineEmits(['update'])
 defineProps({
@@ -75,13 +69,11 @@ defineProps({
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
-const config = ref<IUndercoverConfig>({ 
+const config = ref<ISpeedrundleConfig>({ 
     maxPlayers: 6,
-    wordsPerTurn: 3, 
-    mode: 'words', 
-    theme: 'classic', 
-    spyCount: 1, 
-    anonymousMode: true 
+    roundsNumber: 1,
+    mode: 'classic', 
+    theme: 'lol', 
 });
 const timer = ref();
 const data = computed(() => socketStore.getRoomData)

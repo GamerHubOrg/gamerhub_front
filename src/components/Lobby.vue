@@ -5,6 +5,7 @@ import { computed, ref, watch, onMounted } from 'vue';
 import { useSocketStore } from '../modules/socket/socket.store';
 import { useRouter } from "vue-router";
 import UndercoverConfig from '@/components/undercover/UndercoverConfig.vue'
+import SpeedrundleConfig from '@/components/speedrundle/SpeedrundleConfig.vue'
 import { useGamesStore } from "@/modules/games/games.store";
 
 const router = useRouter();
@@ -68,6 +69,7 @@ const handleJoinRoom = () => {
 const handleRoomStart = () => {
   if (!currentUser.value) return;
   socketStore.handleCreateRoom(currentUser.value, createGame.value)
+  updateGame.value = createGame.value;
 }
 
 watch(
@@ -176,8 +178,21 @@ onMounted(() => {
 
                 <h5 class="w-full text-center font-bold text-lg text-white">Settings</h5>
 
+                <div class="border border-dark3 rounded p-2 flex flex-row items-center gap-2 text-white">
+                    <label for="game" class="whitespace-nowrap font-semibold">Change game :</label>
+                    <select id="game" class="bg-transparent w-full" v-model="updateGame">
+                        <option value="undercover">Undercover</option>
+                        <option value="speedrundle">SpeedrunDLE</option>
+                    </select>
+                </div>
+
                 <UndercoverConfig 
                     v-if="data.gameName === 'undercover'" 
+                    v-model="config"
+                    @update="handleUpdateRoom"
+                />
+                <SpeedrundleConfig 
+                    v-else-if="data.gameName === 'speedrundle'" 
                     v-model="config"
                     @update="handleUpdateRoom"
                 />
