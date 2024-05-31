@@ -14,5 +14,5 @@
 <script lang="ts" setup>
 import GameListItem from "@/components/GameListItem.vue";
 
-const undercoverImage = import('/src/assets/games/undercover.webp');
+import undercoverImage from '@/assets/games/undercover.webp';
 </script>
