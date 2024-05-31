@@ -51,7 +51,7 @@ const props = defineProps({
     required: false
   },
   img: {
-    type: Object,
+    type: String,
     required: true
   }
 });
