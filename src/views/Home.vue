@@ -5,7 +5,7 @@
       nb-players="3-12"
       game-name="undercover"
       time="10-30min" 
-      img="/src/assets/games/undercover.webp" 
+      :img="undercoverImage" 
     />
   </div>
   
@@ -13,4 +13,6 @@
 
 <script lang="ts" setup>
 import GameListItem from "@/components/GameListItem.vue";
+
+const undercoverImage = import('/src/assets/games/undercover.webp');
 </script>
