@@ -1,6 +1,5 @@
 <template>
   <div class="mt-6 flex flex-col gap-6">
-    <img src="http://192.168.1.44:10180/api/preview/big/Gamerhub/ghost-solid.svg" alt="">
 
     <div>
       <div class="border-b border-dark1 bg-dark3 py-4 rounded-t-xl">
@@ -184,27 +183,28 @@
               <th scope="col" class="py-2 font-semibold table-cell">Actions</th>
             </tr>
           </thead>
+
           <tbody class="divide-y divide-white/5">
-            <tr v-for="item in activityItems" :key="item._id">
+            <tr v-for="config in configs" :key="config._id">
               <td class="py-2 pl-0 pr-8 font-semibold table-cell lg:pr-20">
                 <div class="flex">
-                  <div class="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-300 ring-1 ring-inset ring-white/10">{{ item.upvotes }}</div>
+                  <div class="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-300 ring-1 ring-inset ring-white/10">{{ config.upvotes }}</div>
                 </div>
               </td>
               <td class="py-2 pl-4 font-semibold sm:pl-6 lg:pl-8">
-                <div class="text-gray-300 text-xs">{{ item.name }}</div>
+                <div class="text-gray-300 text-xs">{{ config.name }}</div>
               </td>
               <td class="py-2 font-semibold table-cell">
-                <div class="text-gray-300 text-xs">{{ item.game }}</div>
+                <div class="text-gray-300 text-xs">{{ config.game }}</div>
               </td>
               <td class="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell">
                 <div class="flex items-center gap-x-4 text-xs">
-                  <img :src="item.user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-                  <div class="truncate font-medium leading-6 text-white">{{ item.user.username }}</div>
+                  <img src="https://image.fr" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+                  <div class="truncate font-medium leading-6 text-white">{{ config.userId }}</div>
                 </div>
               </td>
               <td class="hidden py-2 pl-0 pr-4 text-right font-semibold sm:table-cell sm:pr-6 lg:pr-8">
-                <div class="text-gray-300 text-xs">{{ item.createdAt }}</div>
+                <div class="text-gray-300 text-xs">{{ config.createdAt }}</div>
               </td>
               <td class="py-2 font-semibold table-cell">
                 <div class="flex text-xs">
@@ -217,27 +217,40 @@
     </div>
     </div>
 
+    {{ pagination.length }}
+
     <nav class="flex items-center justify-between border-t border-primary px-4 sm:px-0">
       <div class="-mt-px flex w-0 flex-1">
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">
+        <span 
+          class="cursor-pointer inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400"
+          :class="{'opacity-50 cursor-not-allowed': currentPage === 0}"
+          @click="currentPage > 0 && handleChangePage(-1)"
+        >
           <ArrowLongLeftIcon class="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
           Previous
-        </a>
+        </span>
       </div>
       <div class="hidden md:-mt-px md:flex">
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">1</a>
-        <a href="#" class="inline-flex items-center border-t-2 border-white px-4 pt-4 text-sm font-medium text-white" aria-current="page">2</a>
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">3</a>
-        <span class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300">...</span>
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">8</a>
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">9</a>
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">10</a>
+        <span 
+          v-for="(_, index) in pagination" :key="index"
+          class="cursor-pointer inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400"
+          :class="{
+            'border-white text-white': currentPage === index,
+          }"
+          @click="currentPage = index"
+        >
+          {{ index + 1 }}
+        </span>
       </div>
       <div class="-mt-px flex w-0 flex-1 justify-end">
-        <a href="#" class="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400">
+        <span 
+          class="cursor-pointer inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-300 hover:border-gray-300 hover:text-gray-400"
+          :class="{'opacity-50 cursor-not-allowed': currentPage >= pagination.length}"
+          @click="currentPage < pagination.length && handleChangePage(1)"
+        >
           Next
           <ArrowLongRightIcon class="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
-        </a>
+        </span>
       </div>
     </nav>
   </div>
@@ -258,6 +271,7 @@ import Button from "@/components/Button.vue";
 import { ChevronDownIcon, ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/vue/20/solid";
 import { computed, onMounted, ref, watch } from "vue";
 import { useGamesStore } from "@/modules/games/games.store";
+import { Config } from "@/modules/games/games.types";
 
 interface IConfigSort {
     name: string;
@@ -286,9 +300,12 @@ const gamesStore = useGamesStore();
 
 const filtersTimer = ref();
 const activeFilters = ref<IActiveFilter[]>([]);
-const activeSort = ref<IConfigSort>();
+const activeSort = ref();
+const pageSize = ref(20);
+const currentPage = ref(0);
 
-const activityItems = computed(() => gamesStore.getConfig);
+const configs = computed<Config[]>(() => gamesStore.getConfigs.list || []);
+const totalConfig = computed<number>(() => gamesStore.getConfigs.total || 0);
 
 const sortOptions: IConfigSort[] = [
     { name: "Upvotes: High to Low", label: "upvotes", value: -1 },
@@ -308,8 +325,14 @@ const filters: IConfigFilter[] = [
   },
 ];
 
+const pagination = computed(() => Array(Math.ceil(totalConfig.value / pageSize.value)))
+
+function handleChangePage(direction: number) {
+  currentPage.value += direction;
+}
+
 function handleSetActiveSort(sort: IConfigSort) {
-    activeSort.value = sort;
+    activeSort.value = { [sort.label]: sort.value };
 }
 
 function handleRemoveFilter(activeFilter: IActiveFilter) {
@@ -336,14 +359,21 @@ function handleFilterChange(filter: IConfigFilter, option: IConfigFilterOption) 
 
 async function handleFetchConfigs() {
     try {
-      await gamesStore.fetchConfigs({ filters: activeFilters.value, sort: activeSort.value });
+      const sort = {...activeSort.value};
+      const filters = activeFilters.value.reduce((acc, f) => {
+        if (!acc[f.key]) return {...acc, [f.key]: [f.value]};
+        return {...acc, [f.key]: [...acc[f.key], f.value]};
+      }, {});
+      const skip = currentPage.value * pageSize.value;
+
+      await gamesStore.fetchConfigs({ filters, sort, skip, limit: pageSize.value });
     } catch(err) {
         console.error(err);
     }
 }
 
 watch(
-    [() => activeFilters.value, () => activeSort.value],
+    [() => activeFilters.value, () => activeSort.value, () => currentPage.value],
     () => {
       if (filtersTimer.value) clearTimeout(filtersTimer.value)
 
@@ -351,9 +381,10 @@ watch(
         handleFetchConfigs()
       }, 500)
     },
+    { deep: true }
 )
 
 onMounted(() => {
-  activeSort.value = sortOptions[0];
+  handleSetActiveSort(sortOptions[0]);
 })
 </script>

@@ -21,6 +21,16 @@ export interface IRoomData {
   gameName: string;
 }
 
+export interface IGameConfigProperties {
+  maxPlayers: number;
+  mode: string;
+  theme: string;
+  spyCount: number;
+  wordsPerTurn: number;
+  anonymousMode: boolean;
+  roundsNumber: number;
+}
+
 export interface IRoomConfig {
   maxPlayers?: number;
 }
