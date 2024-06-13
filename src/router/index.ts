@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 
 const routes = [
   {
@@ -26,6 +26,12 @@ const routes = [
         component: () => import('../views/Community.vue'),
       },
       {
+        path: 'profile',
+        name: 'profile',
+        meta: {requireAuth: false},
+        component: () => import('../views/Profile.vue'),
+      },
+      {
         path: '/premium',
         name: 'premium',
         meta: { requireAuth: false },
@@ -48,8 +54,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_BASE_URL),
-  routes,
+    history: createWebHistory(import.meta.env.VITE_BASE_URL),
+    routes,
 });
 
 export default router;

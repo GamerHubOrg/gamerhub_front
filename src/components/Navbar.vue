@@ -91,7 +91,8 @@
                     d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                     clip-rule="evenodd"></path>
                 </svg>
-                My profile</a>
+                My profile
+              </router-link>
             </li>
             <li>
               <a href="#" class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
