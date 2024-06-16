@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, onMounted} from 'vue';
 import Lobby from '../components/Lobby.vue';
 import Navbar from '../components/Navbar.vue';
 import {useAuthStore} from "../modules/auth/auth.store";
@@ -24,14 +24,17 @@ const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
 
 async function handleSyncUserInfo() {
   try {
-    const userInfo = await loadUserInfo();
+    const keycloakUserInfo = loadUserInfo();
+    if (!keycloakUserInfo || !keycloak.token) return;
+    const localUserInfo = await store.getUserInfo(keycloakUserInfo.sub)
     store.setAuthToken(keycloak.token);
+    console.log(localUserInfo);
     store.setCurrentUser({
-      id: userInfo.sub,
-      firstname: userInfo.given_name,
-      lastname: userInfo.family_name,
-      username: userInfo.preferred_username,
-      email: userInfo.email,
+      id: keycloakUserInfo.sub,
+      firstname: keycloakUserInfo.given_name,
+      lastname: keycloakUserInfo.family_name,
+      username: keycloakUserInfo.preferred_username,
+      email: keycloakUserInfo.email,
       roles: keycloak.realmAccess!.roles,
       picture: "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg"
     })

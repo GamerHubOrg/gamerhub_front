@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { User } from './user';
+import api from '@/services/api'
 
 type State = {
   currentUser?: User,
@@ -22,5 +23,10 @@ export const useAuthStore = defineStore('auth', {
     setAuthToken(token?: string) {
       this.authToken = token;
     },
+    async getUserInfo(userId?: string) {
+      const { data } = await api.get(`/users/${userId}`)
+
+      return data;
+    }
   }
 })
