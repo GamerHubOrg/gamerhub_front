@@ -20,24 +20,30 @@ export const useAuthStore = defineStore('auth', {
     setCurrentUser(user?: User) {
       this.currentUser = user;
     },
-    setAuthToken(token?: string) {
+    setAuthToken(token: string) {
       localStorage.setItem('gamerhub_token', token)
       this.authToken = token;
     },
     async logout() {
       await api.post('users/logout')
+      localStorage.removeItem('gamerhub_token')
+      this.setCurrentUser(undefined);
     },
-    async login({ email, password }) {
+    async login({ email, password }: any) {
       const { data } = await api.post('/users/login', { email, password })
-      this.setAuthToken(data);
+      this.setAuthToken(data.access_token);
     },
-    async register({ username, email, password, confirmPassword }) {
+    async register({ username, email, password, confirmPassword }: any) {
       const { data } = await api.post('/users/register', { username, email, password, confirmPassword })
-      this.setAuthToken(data);
+      this.setAuthToken(data.access_token);
     },
     async getMe() {
       const { data } = await api.get('/users/me')
       this.setCurrentUser(data);
+    },
+    async fetchUser(userId: string) {
+      const { data } = await api.get(`/users/${userId}`)
+      return data;
     }
   }
 })

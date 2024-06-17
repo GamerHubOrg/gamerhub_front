@@ -198,10 +198,17 @@
                 <div class="text-gray-300 text-xs">{{ config.game }}</div>
               </td>
               <td class="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell">
-                <div class="flex items-center gap-x-4 text-xs">
-                  <img src="https://image.fr" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-                  <div class="truncate font-medium leading-6 text-white">{{ config.userId }}</div>
-                </div>
+                <User :id="config.userId" v-slot="{ loading, user }">
+                  <div v-if="loading || !user">
+                    <Loader size="w-6 h-6" />
+                  </div>
+                  <div v-else class="flex items-center gap-x-4 text-xs">
+                    <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+                    <div class="truncate font-medium leading-6 text-white">
+                        <span>{{ user.username }}</span>
+                    </div>
+                  </div>
+                </User>
               </td>
               <td class="hidden py-2 pl-0 pr-4 text-right font-semibold sm:table-cell sm:pr-6 lg:pr-8">
                 <div class="text-gray-300 text-xs">{{ config.createdAt }}</div>
@@ -216,8 +223,6 @@
         </table>
     </div>
     </div>
-
-    {{ pagination.length }}
 
     <nav class="flex items-center justify-between border-t border-primary px-4 sm:px-0">
       <div class="-mt-px flex w-0 flex-1">
@@ -271,6 +276,8 @@ import Button from "@/components/Button.vue";
 import { ChevronDownIcon, ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/vue/20/solid";
 import { computed, onMounted, ref, watch } from "vue";
 import { useGamesStore } from "@/modules/games/games.store";
+import User from '@/components/User.vue';
+import Loader from '@/components/Loader.vue';
 import { Config } from "@/modules/games/games.types";
 
 interface IConfigSort {

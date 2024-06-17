@@ -138,6 +138,7 @@ async function handleConnect() {
 async function handleLogout() {
   try {
     await store.logout();
+    router.push('/login')
   } catch (err) {
     console.error(err);
   }
