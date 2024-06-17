@@ -32,15 +32,13 @@ async function handleSyncUserInfo() {
 
     console.log("USERINFO", { keycloakUserInfo });
 
-    if (!keycloakUserInfo || !keycloak.token) return;
-
     store.setAuthToken(keycloak.token);
-    const localUserInfo = await store.getUserInfo(keycloakUserInfo.sub)
+    const localUserInfo = await store.getUserInfo(keycloakUserInfo?.sub)
 
     store.setCurrentUser({
-      id: keycloakUserInfo.sub,
-      firstname: keycloakUserInfo.given_name,
-      lastname: keycloakUserInfo.family_name,
+      id: keycloakUserInfo?.sub,
+      firstname: keycloakUserInfo?.given_name,
+      lastname: keycloakUserInfo?.family_name,
       username: localUserInfo.username,
       email: localUserInfo.email,
       roles: keycloak.realmAccess!.roles,
