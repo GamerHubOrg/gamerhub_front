@@ -107,10 +107,10 @@
 <script lang="ts" setup>
 import {computed, ref} from "vue";
 import {useAuthStore} from "../modules/auth/auth.store";
-import {keycloak} from '../services/keycloak'
 import {useSocketStore} from '../modules/socket/socket.store';
 import Button from '../components/Button.vue';
 import { useGamesStore } from "@/modules/games/games.store";
+import router from "@/router";
 
 const store = useAuthStore();
 const roomStore = useSocketStore();
@@ -129,7 +129,7 @@ function handleOpenLobby() {
 
 async function handleConnect() {
   try {
-    await keycloak.login();
+    router.push('/login')
   } catch (err) {
     console.error(err);
   }
@@ -137,7 +137,8 @@ async function handleConnect() {
 
 async function handleLogout() {
   try {
-    await keycloak.logout();
+    await store.logout();
+    router.push('/login')
   } catch (err) {
     console.error(err);
   }

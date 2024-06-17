@@ -27,6 +27,18 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/login',
+    name: 'login',
+    meta: { requireAuth: false },
+    component: () => import('../views/Login.vue'),
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    meta: { requireAuth: false },
+    component: () => import('../views/Register.vue'),
+  },
 ];
 
 const router = createRouter({
