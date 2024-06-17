@@ -19,6 +19,12 @@ const routes = [
         meta: { requireAuth: false },
         component: () => import('../views/Game.vue'),
       },
+      {
+        path: '/community',
+        name: 'community',
+        meta: { requireAuth: false },
+        component: () => import('../views/Community.vue'),
+      },
     ]
   },
 ];

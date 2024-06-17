@@ -53,11 +53,9 @@ export const useSocketStore = defineStore("socket", {
       if (data !== undefined) this.data = data;
     },
     handleCreateRoom(user: User, gameName: string) {
-      console.log("create");
       socket.emit("room:create", gameName, user);
     },
     handleJoinRoom(user: User, roomId: string) {
-      console.log("joining");
       socket.emit("room:join", roomId, user);
     },
     handleLeaveRoom() {

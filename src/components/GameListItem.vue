@@ -1,10 +1,11 @@
 <template>
-  <div class="game-wrapper-background rounded-2xl p-6 min-h-[470px]" :style="{ backgroundImage: `url(${img})` }">
+  <div class="relative game-wrapper-background rounded-2xl p-6 min-h-[470px]" :style="{ backgroundImage: `url(${img})` }">
+    <div class="absolute inset-0 bg-gradient-to-bl from-transparent to-[#0000004A]"></div>
     <div class="flex flex-col justify-end h-full gap-2">
       <h2 class="text-white text-3xl font-bold">{{ name }}</h2>
 
       <div class="flex gap-3 justify-between flex-row items-end text-white">
-        <div class="flex gap-9">
+        <div class="flex gap-6">
           <p class="gameInfosShadow">{{ nbPlayers }} players</p>
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
