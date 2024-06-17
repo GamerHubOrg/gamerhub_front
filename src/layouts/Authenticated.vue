@@ -26,15 +26,16 @@ async function handleSyncUserInfo() {
   try {
     const keycloakUserInfo = loadUserInfo();
     if (!keycloakUserInfo || !keycloak.token) return;
-    const localUserInfo = await store.getUserInfo(keycloakUserInfo.sub)
+
     store.setAuthToken(keycloak.token);
-    console.log(localUserInfo);
+    const localUserInfo = await store.getUserInfo(keycloakUserInfo.sub)
+
     store.setCurrentUser({
       id: keycloakUserInfo.sub,
       firstname: keycloakUserInfo.given_name,
       lastname: keycloakUserInfo.family_name,
-      username: keycloakUserInfo.preferred_username,
-      email: keycloakUserInfo.email,
+      username: localUserInfo.username,
+      email: localUserInfo.email,
       roles: keycloak.realmAccess!.roles,
       picture: "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg"
     })
