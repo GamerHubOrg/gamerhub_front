@@ -26,11 +26,11 @@ async function handleSyncUserInfo() {
   try {
     const keycloakUserInfo = loadUserInfo();
 
-    console.log(keycloak.token);
+    console.log("TOKEN", keycloak.token);
 
     if (!keycloakUserInfo || !keycloak.token) return;
 
-    console.log({ keycloakUserInfo })
+    console.log("USERINFO", { keycloakUserInfo })
 
     store.setAuthToken(keycloak.token);
     const localUserInfo = await store.getUserInfo(keycloakUserInfo.sub)
