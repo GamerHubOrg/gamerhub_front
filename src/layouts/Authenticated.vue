@@ -25,7 +25,12 @@ const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
 async function handleSyncUserInfo() {
   try {
     const keycloakUserInfo = loadUserInfo();
+
+    console.log(keycloak.token);
+
     if (!keycloakUserInfo || !keycloak.token) return;
+
+    console.log({ keycloakUserInfo })
 
     store.setAuthToken(keycloak.token);
     const localUserInfo = await store.getUserInfo(keycloakUserInfo.sub)
