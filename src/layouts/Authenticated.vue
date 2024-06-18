@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen h-full">
     <Navbar />
-    <Lobby v-if="!isLobbyCollapsed"/>
+    <Lobby v-show="!isLobbyCollapsed"/>
 
     <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
       <router-view/>
