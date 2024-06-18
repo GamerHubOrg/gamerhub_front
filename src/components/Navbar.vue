@@ -45,7 +45,7 @@
           Premium
         </Button>
 
-        <div v-if="authToken" class="flex flex-row items-center">
+        <div v-if="currentUser" class="flex flex-row items-center">
           <button type="button"
                   class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300"
                   id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown"
@@ -118,8 +118,6 @@ const gameStore = useGamesStore();
 const roomId = computed(() => roomStore.getRoomId)
 const data = computed(() => roomStore.getRoomData)
 
-
-const authToken = computed(() => store.getAuthToken)
 const currentUser = computed(() => store.getCurrentUser)
 const showUserMenu = ref(false);
 

@@ -10,19 +10,13 @@ type State = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     currentUser: undefined,
-    authToken: undefined,
   }) as State,
   getters: {
     getCurrentUser: (state) => state.currentUser,
-    getAuthToken: (state) => state.authToken,
   },
   actions: {
     setCurrentUser(user?: User) {
       this.currentUser = user;
-    },
-    setAuthToken(token: string) {
-      localStorage.setItem('gamerhub_token', token)
-      this.authToken = token;
     },
     async logout() {
       await api.post('users/logout')
@@ -30,16 +24,17 @@ export const useAuthStore = defineStore('auth', {
       this.setCurrentUser(undefined);
     },
     async login({ email, password }: any) {
-      const { data } = await api.post('/users/login', { email, password })
-      this.setAuthToken(data.access_token);
+      await api.post('/users/login', { email, password })
     },
     async register({ username, email, password, confirmPassword }: any) {
-      const { data } = await api.post('/users/register', { username, email, password, confirmPassword })
-      this.setAuthToken(data.access_token);
+      await api.post('/users/register', { username, email, password, confirmPassword })
     },
     async getMe() {
       const { data } = await api.get('/users/me')
-      this.setCurrentUser(data);
+      this.setCurrentUser({
+        ...data,
+        picture: data.picture || "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg",
+      });
     },
     async fetchUser(userId: string) {
       const { data } = await api.get(`/users/${userId}`)

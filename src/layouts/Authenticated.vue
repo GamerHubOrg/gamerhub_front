@@ -23,15 +23,9 @@ const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
 
 async function handleSyncUserInfo() {
   try {
-    const token = localStorage.getItem('gamerhub_token');
-
-    if (!token) return;
-
-    store.setAuthToken(token);
     await store.getMe()
 
   } catch (err) {
-    store.setAuthToken(undefined);
     store.setCurrentUser(undefined);
   }
 }
