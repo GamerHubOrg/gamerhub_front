@@ -1,67 +1,148 @@
 <template>
-  <div>
-    <span>Le camp qui a gagné : {{ gameData.campWin }}</span>
+  <div class="text-white">
+    <h1 class="text-center font-bold text-4xl">{{ gameData.campWin === 'undercover' ? 'Undercover win' : 'Civilian win' }} !</h1>
 
-    <table class="border-collapse">
-      <tr>
-        <th>Username</th>
-        <th>Mots</th>
-        <th>Camp</th>
-        <th>Etat de fin</th>
-        <th>Mot</th>
-      </tr>
-      <tr v-for="user in roomData.users" :key="user.id">
-        <td><span :class="{ 'font-bold': currentUser.id === user.id }">{{ user.username }}</span></td>
-        <td>
-          <div class="flex flex-col gap-2">
-            <span v-for="(word, index) in getUserWords(user)" :key="`${user.id}-${index}`">
-                {{ word.word }}
-            </span>
+    <div class="flex flex-col mt-12 rounded-md overflow-hidden overflow-x-auto">
+      <div class="flex flex-row items-center justify-between gap-2 bg-dark2 p-3">
+        <span>Username</span>
+        <div 
+          v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+          :key="turn"
+          class="flex flex-row items-center justify-between gap-2 w-full"
+        >
+          <span 
+            v-for="word in config.wordsPerTurn" 
+            :key="word"
+            class="w-full text-center"
+          >
+            Mot {{ word }}
+          </span>
+          <span 
+            class="w-full text-center"
+          >
+            Vote {{ turn }}
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <div v-for="user in civilianUsers" :key="user._id">
+          <div 
+            class="flex flex-row items-center justify-between p-3" 
+            :class="{
+              'bg-green-500 bg-opacity-10':!gameData.undercoverPlayerIds?.includes(user._id),
+              'bg-red-500 bg-opacity-10': gameData.undercoverPlayerIds?.includes(user._id),
+            }"
+          >
+            <div class="flex items-center gap-x-4 text-xs">
+              <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+              <div class="truncate font-medium leading-6 text-white">
+                <span>{{ user.username }}</span>
+              </div>
+            </div>
+            <div 
+              v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+              :key="turn"
+              class="flex flex-row items-center justify-between gap-2 w-full"
+            >
+              <span
+                v-for="word in config.wordsPerTurn" 
+                :key="word"
+                class="w-full text-center"
+              >
+                {{ getUserWord(user, word - 1) }}
+              </span>
+              <span 
+                class="w-full text-center"
+              >
+              {{ getUserVote(user, turn - 1) }}
+              </span>
+            </div>
           </div>
-        </td>
-        <td>
-          <span>{{ gameData.undercoverPlayerIds?.includes(user.id) ? 'undercover' : 'civilian' }}</span>
-        </td>
-        <td>
-          <span v-if="!user.isEliminated">Voted for : {{ getPlayerFromVote(user.id) }}</span>
-          <span v-else>dead</span>
-        </td>
-        <td>{{ gameData.undercoverPlayerIds?.includes(user.id) ? gameData.spyWord : gameData.civilianWord }}</td>
-      </tr>
-    </table>
+        </div>
+      </div>
+
+      <div>
+        <div v-for="user in spyUsers" :key="user._id">
+          <div 
+            class="flex flex-row items-center justify-between p-3" 
+            :class="{
+              'bg-green-500 bg-opacity-10':!gameData.undercoverPlayerIds?.includes(user._id),
+              'bg-red-500 bg-opacity-10': gameData.undercoverPlayerIds?.includes(user._id),
+            }"
+          >
+            <span :class="{ 'font-bold': currentUser._id === user._id }">{{ user.username }}</span>
+            <div 
+              v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+              :key="turn"
+              class="flex flex-row items-center justify-between gap-2 w-full"
+            >
+              <span
+                v-for="word in config.wordsPerTurn" 
+                :key="word"
+                class="w-full text-center"
+              >
+                {{ getUserWord(user, word - 1) }}
+              </span>
+              <span 
+                class="w-full text-center"
+              >
+              {{ getUserVote(user, turn - 1) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { User } from '@/modules/auth/user';
-import { IUndercoverGameData, IUndercoverRoomData } from '@/types/interfaces';
-import { computed } from 'vue';
+import { User as UserInterface } from '@/modules/auth/user';
+import { computed, ref, watch } from 'vue';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
+import { IUndercoverConfig, IUndercoverGameData, IUndercoverRoomData } from './undercover.types';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
-const currentUser = computed(() => (store.getCurrentUser as User))
+const currentUser = computed(() => (store.getCurrentUser as UserInterface))
 const roomData = computed(() => (socketStore.getRoomData as IUndercoverRoomData));
 const gameData = computed(() => (roomData.value.gameData as IUndercoverGameData));
-const votes = computed(() => gameData.value.votes || []);
+const config = computed(() => (roomData.value.config as IUndercoverConfig));
+const userIdsThatPlayed = computed(() => [...new Set(gameData.value?.words.map((w) => w.playerId))]);
 
-function getUserWords(user: User) {
-    return gameData.value?.words?.filter((word) => word.playerId === user.id);
+const gameUsers = ref([]);
+
+const civilianUsers = computed(() => gameUsers.value.filter((u) => !gameData.value.undercoverPlayerIds?.includes(u._id)));
+const spyUsers = computed(() => gameUsers.value.filter((u) => gameData.value.undercoverPlayerIds?.includes(u._id)));
+
+function getUserWord(user: UserInterface, wordIndex: number) {
+  const words = gameData.value?.words?.filter((word) => word.playerId === user?._id);
+  return words[wordIndex]?.word;
 }
 
-function getUserName(userId: string) {
-  const user = roomData.value.users.find((u) => u.id === userId);
-  return user ? user.username : 'unknown';
+function getUserVote(user: UserInterface, voteIndex: number) {
+  const votes = gameData.value?.votes?.filter((vote) => vote.playerId === user?._id);
+  const votedUserId = votes[voteIndex].vote;
+  return gameUsers.value.find((u) => u._id === votedUserId)?.username || 'unknown';
 }
 
-function getPlayerFromVote(userId: string) {
-  const vote = votes.value.find((v) => v.playerId === userId);
-  if (!vote) return 'unknown';
-  return getUserName(vote.vote);
+async function fetchUsers() {
+  console.log(userIdsThatPlayed.value)
+  const requests = userIdsThatPlayed.value.map((userId) => store.fetchUser(userId as string));
+  const result = (await Promise.allSettled(requests) as []).filter((req) => req.status === 'fulfilled');
+  gameUsers.value = result.map((req) => req.value) as [];
 }
 
+watch(
+  () => gameData.value,
+  () => {
+    fetchUsers();
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped>

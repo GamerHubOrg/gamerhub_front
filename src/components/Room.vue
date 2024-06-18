@@ -109,10 +109,4 @@ onBeforeUnmount(() => {
       </div>
     </div>
   </div>
-  <div v-if="areLogsExpanded" class="p-2">
-    <div v-for="log in state.data.logs" class="flex">
-      <p><span class="font-bold">{{ new Date(log.date).toLocaleString() }}</span> : <span>{{ log.message }}</span>
-      </p>
-    </div>
-  </div>
 </template>
