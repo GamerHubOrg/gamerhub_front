@@ -14,8 +14,6 @@
         </div>
         <div v-else>Tu es éliminé</div>
 
-        {{ gameData }}
-
         <div class="grid grid-cols-4 gap-12">
             <div 
                 v-for="user in roomData.users" 
