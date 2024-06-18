@@ -34,6 +34,18 @@ export const useGamesStore = defineStore('games', {
     async fetchConfigs({ filters, sort, skip, limit }) {
       const { data } = await api.get('/configs', { params: { filters, sort, skip, limit } })
       this.setConfigs(data);
+    },
+    async publishConfig({ game, name, config }) {
+      const { data } = await api.post('/configs', { game, name, config });
+      this.setConfigs({
+        ...this.configs,
+        list: [
+          ...this.configs.list,
+          data,
+        ],
+        hasMore: true,
+        total: this.configs.total + 1,
+      })
     }
   }
 })
