@@ -8,3 +8,7 @@ export const areObjectsEquals = (obj1: object, obj2: object): boolean => {
   }
   return true;
 };
+
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

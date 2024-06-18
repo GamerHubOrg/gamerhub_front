@@ -30,11 +30,11 @@ function onRoomJoined(roomId: string, data: IRoomData) {
 }
 
 function onRoomUpdated(data: IRoomData) {
-  socketStore.handleRoomUpdate({data})
+  socketStore.handleRoomUpdate({ data })
 }
 
 function onRoomStarted(data: IRoomData) {
-  socketStore.handleRoomUpdate({data})
+  socketStore.handleRoomUpdate({ data })
   router.push(`/room/${roomId.value}`)
 }
 
@@ -46,7 +46,7 @@ function onRoomBackToLobby(data: IRoomData) {
 }
 
 function onRoomDeleted(roomId: string) {
-  socketStore.handleRoomUpdate({roomId: "", data: {}})
+  socketStore.handleRoomUpdate({ roomId: "", data: {} })
   alert(`La room ${roomId} a été supprimée.`);
 }
 
@@ -73,13 +73,13 @@ if (socket) {
 }
 
 watch(
-    [() => currentUser.value, () => socketStore.getConnected],
-    () => {
-      const roomId = localStorage.getItem("roomId")
+  [() => currentUser.value, () => socketStore.getConnected],
+  () => {
+    const roomId = localStorage.getItem("roomId")
 
-      if (roomId && currentUser.value)
-        socketStore.handleJoinRoom(currentUser.value, roomId)
-    }
+    if (roomId && currentUser.value)
+      socketStore.handleJoinRoom(currentUser.value, roomId)
+  }
 )
 
 // watch(
@@ -95,7 +95,7 @@ watch(
 <template>
   <slot></slot>
   <div v-if="roomId"
-       class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg">
+    class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg">
     <div class="sticky top-0 left-0 flex p-2 justify-between items-center bg-white">
       <button @click="toggleLogs" class="font-bold">Journal de la room</button>
       <button v-if="areLogsExpanded" @click="toggleLogs" class="font-bold text-3xl">&times;</button>
@@ -103,8 +103,8 @@ watch(
     <div v-if="areLogsExpanded" class="p-2">
       <div v-for="log in data.logs" class="flex">
         <p><span class="font-bold">{{ new Date(log.date).toLocaleString() }}</span> : <span>{{
-            log.message
-          }}</span>
+    log.message
+  }}</span>
         </p>
       </div>
     </div>
