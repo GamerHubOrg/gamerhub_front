@@ -53,12 +53,26 @@ const handleUpdateRoom = (conf: IRoomConfig) => {
 }
 
 const handleStartGame = () => {
-  if (!isOwner.value) {
+    if (!isOwner.value) {
     console.log("Vous n'êtes pas propriétaire.");
     return;
-  } 
-  gameStore.setIsLobbyCollapsed(true);
-  socketStore.handleStartGame(roomId.value)
+    } 
+    gameStore.setIsLobbyCollapsed(true);
+    // @ts-ignore
+    socketStore.handleJoinRoom({
+        ...currentUser.value,
+        username: 'test1',
+        email: 'test1@test.fr',
+        _id: currentUser.value?._id + '-test1',
+    }, roomId.value)
+    // @ts-ignore
+    socketStore.handleJoinRoom({
+        ...currentUser.value,
+        username: 'test2',
+        email: 'test2@test.fr',
+        _id: currentUser.value?._id + '-test2',
+    }, roomId.value)
+    socketStore.handleStartGame(roomId.value)
 }
 
 const handleLeaveRoom = () => {

@@ -21,18 +21,18 @@
                 class="flex justify-center items-center text-black"
             >
                 <div 
-                    class="flex flex-col gap-2 max-w-48 bg-white p-3 rounded-md"
+                    class="flex flex-col gap-2 max-w-48 bg-dark5 text-white p-3 rounded-md"
                     :class="{
-                        'outline outline-green-400': user.id === gameData?.playerTurn && gameData?.state !== 'vote'
+                        'outline outline-green-400': user._id === gameData?.playerTurn && gameData?.state !== 'vote'
                     }"
                 >
-                    <span v-if="user.id === currentUser.id && gameData?.undercoverPlayerIds?.includes(user.id) && !isAnonymouseMode">Tu es l'undercover</span>
+                    <span v-if="user._id === currentUser._id && gameData?.undercoverPlayerIds?.includes(user._id) && !isAnonymouseMode">Tu es l'undercover</span>
                     <img :src="user.picture" class="w-full">
                     <span class="text-xs truncate">{{ user.username }} ({{ user.isEliminated ? 'dead' : 'alive' }})</span>
                     <div class="flex flex-col gap-3 items-center mt-2">
                         <span class="font-semibold">Mots</span>
                         <div class="flex flex-col gap-2">
-                            <span v-for="(word, index) in getUserWords(user)" :key="`${user.id}-${index}`">
+                            <span v-for="(word, index) in getUserWords(user)" :key="`${user._id}-${index}`">
                                 {{ word.word }}
                             </span>
                         </div>
@@ -48,10 +48,14 @@
             </div>
         </div>
 
-        <div v-if="!isCurrentUserEliminated && currentUser.id === gameData?.playerTurn && gameState === 'words'" class="border fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row items-center gap-3 bg-white border-gray-200 p-3 rounded-md">
-            <input v-model="wordForm" type="text" class="p-3" @submit="handleSendWord">
-            <button class="bg-green-400 rounded" @click="handleSendWord">send</button>
-        </div>
+        <form 
+            v-if="!isCurrentUserEliminated && currentUser._id === gameData?.playerTurn && gameState === 'words'" 
+            class="border fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row gap-3 bg-white border-gray-200 p-3 rounded-md"
+            @submit="handleSendWord"
+        >
+            <input v-model="wordForm" type="text" class="border border-primary border-opacity-20 rounded-md p-3 text-black">
+            <button type="submit" class="bg-green-400 rounded p-3" @click="handleSendWord">send</button>
+        </form>
    </div>
 </template>
 
@@ -76,26 +80,28 @@ const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'words');
 const votes = computed(() => gameData.value?.votes || []);
 const isAnonymouseMode = computed(() => !!roomData.value.config?.anonymousMode);
-const isCurrentUserEliminated = computed(() => !!roomData.value.users.find((u) => u.id === currentUser.value.id)?.isEliminated);
-const isCurrentPlayerTurn = computed(() => currentUser.value.id === gameData.value?.playerTurn);
-const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && votes.value.some((vote) => vote.playerId === currentUser.value.id));
-const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlayerIds?.includes(currentUser.value.id))
+const isCurrentUserEliminated = computed(() => !!roomData.value.users.find((u) => u._id === currentUser.value._id)?.isEliminated);
+const isCurrentPlayerTurn = computed(() => currentUser.value._id === gameData.value?.playerTurn);
+const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && votes.value.some((vote) => vote.playerId === currentUser.value._id));
+const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlayerIds?.includes(currentUser.value._id))
 
-function handleSendWord() {
+function handleSendWord(e: Event) {
+    e.preventDefault();
+
     if (wordForm.value && wordForm.value === '') return;
     socket.value?.emit("game:undercover:send-word", { roomId: roomId.value, userId: gameData.value?.playerTurn, word: wordForm.value});
     wordForm.value = undefined;
 }
 
 function handleVote(user: User) {
-    socket.value?.emit("game:undercover:vote", { roomId: roomId.value, userId: currentUser.value.id, vote: user.id});
+    socket.value?.emit("game:undercover:vote", { roomId: roomId.value, userId: currentUser.value._id, vote: user._id});
 }
 
 function getUserWords(user: User) {
-    return gameData.value?.words?.filter((word) => word.playerId === user.id);
+    return gameData.value?.words?.filter((word) => word.playerId === user._id);
 }
 
-socket.value?.on("game:undercover:data", ({ data }) => {
-    socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
+socket.value?.on("game:undercover:data", ({ logs, data }) => {
+    socketStore.handleRoomUpdate({ data: { ...roomData.value, logs, gameData: data } });
 })
 </script>
