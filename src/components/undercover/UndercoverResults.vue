@@ -25,6 +25,8 @@
         </div>
       </div>
 
+      {{ turnsNumber }}
+
       <div>
         <div v-for="user in civilianUsers" :key="user._id">
           <div 
@@ -38,7 +40,7 @@
               </div>
             </div>
             <div 
-              v-for="turn in ((gameData.words?.length || 0) / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+              v-for="turn in turnsNumber" 
               :key="turn"
               class="flex flex-row items-center justify-between gap-2 w-full"
             >
@@ -58,7 +60,7 @@
           </div>
         </div>
       </div>
-
+      
       <div>
         <div v-for="user in spyUsers" :key="user._id">
           <div 
@@ -72,7 +74,7 @@
               </div>
             </div>
             <div 
-              v-for="turn in ((gameData.words?.length || 0) / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+              v-for="turn in turnsNumber" 
               :key="turn"
               class="flex flex-row items-center justify-between gap-2 w-full"
             >
@@ -110,7 +112,9 @@ const currentUser = computed(() => (store.getCurrentUser as UserInterface))
 const roomData = computed(() => (socketStore.getRoomData as IUndercoverRoomData));
 const gameData = computed(() => (roomData.value.gameData as IUndercoverGameData));
 const config = computed(() => (roomData.value.config as IUndercoverConfig));
-const userIdsThatPlayed = computed(() => [...new Set(gameData.value?.words.map((w) => w.playerId))]);
+
+const userIdsThatPlayed = computed(() => [...new Set(gameData.value.words.map((w) => w.playerId))]);
+const turnsNumber = computed(() => Math.ceil(((gameData.value.words?.length || 0) / userIdsThatPlayed.value.length) / config.value.wordsPerTurn))
 
 const gameUsers = ref([]);
 
@@ -118,16 +122,15 @@ const civilianUsers = computed(() => gameUsers.value.filter((u) => !gameData.val
 const spyUsers = computed(() => gameUsers.value.filter((u) => gameData.value.undercoverPlayerIds?.includes(u._id)));
 
 function getUserWord(user: UserInterface, turn: number, wordIndex: number) {
-  const words = gameData.value?.words?.filter((word) => word.playerId === user?._id);
+  const words = gameData.value.words?.filter((word) => word.playerId === user?._id);
   const index = (turn * config.value.wordsPerTurn) + wordIndex;
-  return words[index]?.word;
+  return words[index]?.word || '';
 }
 
 function getUserVote(user: UserInterface, voteIndex: number) {
   const votes = gameData.value?.votes?.filter((vote) => vote.playerId === user?._id);
   const votedUserId = votes[voteIndex]?.vote;
-  console.log(votes, voteIndex)
-  return gameUsers.value.find((u) => u._id === votedUserId)?.username || 'unknown';
+  return gameUsers.value.find((u) => u._id === votedUserId)?.username || '';
 }
 
 async function fetchUsers() {
