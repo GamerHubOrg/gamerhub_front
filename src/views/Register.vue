@@ -79,7 +79,6 @@ async function handleRegister(e) {
     await store.register(form.value)
     router.push('/');
   } catch(err) {
-    console.log({ err })
     error.value = err.response.data
   }
 }

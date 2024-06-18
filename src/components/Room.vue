@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import {useAuthStore} from "@/modules/auth/auth.store";
 import {IRoomData} from "@/types/interfaces";
 import {useSocketStore} from '../modules/socket/socket.store';
@@ -81,15 +81,6 @@ watch(
 //         }
 //     }
 // )
-
-onMounted(() => {
-  window.addEventListener('beforeunload', () => socketStore.handleLeaveRoom())
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('beforeunload', () => socketStore.handleLeaveRoom())
-})
-
 </script>
 
 <template>

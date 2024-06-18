@@ -41,7 +41,7 @@
               </div>
             </div>
             <div 
-              v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+              v-for="turn in ((gameData.words?.length || 0) / userIdsThatPlayed?.length) / config.wordsPerTurn" 
               :key="turn"
               class="flex flex-row items-center justify-between gap-2 w-full"
             >
@@ -71,9 +71,14 @@
               'bg-red-500 bg-opacity-10': gameData.undercoverPlayerIds?.includes(user._id),
             }"
           >
-            <span :class="{ 'font-bold': currentUser._id === user._id }">{{ user.username }}</span>
+            <div class="flex items-center gap-x-4 text-xs">
+              <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+              <div class="truncate font-medium leading-6 text-white">
+                <span>{{ user.username }}</span>
+              </div>
+            </div>
             <div 
-              v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+              v-for="turn in ((gameData.words?.length || 0) / userIdsThatPlayed?.length) / config.wordsPerTurn" 
               :key="turn"
               class="flex flex-row items-center justify-between gap-2 w-full"
             >
@@ -125,14 +130,13 @@ function getUserWord(user: UserInterface, wordIndex: number) {
 
 function getUserVote(user: UserInterface, voteIndex: number) {
   const votes = gameData.value?.votes?.filter((vote) => vote.playerId === user?._id);
-  const votedUserId = votes[voteIndex].vote;
+  const votedUserId = votes[voteIndex]?.vote;
   return gameUsers.value.find((u) => u._id === votedUserId)?.username || 'unknown';
 }
 
 async function fetchUsers() {
-  console.log(userIdsThatPlayed.value)
   const requests = userIdsThatPlayed.value.map((userId) => store.fetchUser(userId as string));
-  const result = (await Promise.allSettled(requests) as []).filter((req) => req.status === 'fulfilled');
+  const result = (await Promise.allSettled(requests) as [])?.filter((req) => req.status === 'fulfilled');
   gameUsers.value = result.map((req) => req.value) as [];
 }
 

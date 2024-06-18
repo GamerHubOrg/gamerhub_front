@@ -110,7 +110,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="fixed left-0 top-0 p-6 h-full bg-dark2 z-50 w-full overflow-y-auto max-w-[480px]">
+    <div class="fixed left-0 top-0 p-6 h-full bg-dark2 z-50 w-full overflow-y-auto max-w-[480px] pb-6">
         <div class="flex flex-row items-center justify-between mb-5">
             <h3 class="text-white text-2xl font-bold">Game Room</h3>
             <button class="rounded bg-white bg-opacity-10 text-white p-2 text-sm" @click="handleOpenLobby">
@@ -203,7 +203,7 @@ onMounted(() => {
 
                 <div class="border border-dark3 rounded p-2 flex flex-row items-center gap-2 text-white">
                     <label for="game" class="whitespace-nowrap font-semibold">Change game :</label>
-                    <select id="game" class="bg-transparent w-full" v-model="updateGame">
+                    <select id="game" class="bg-transparent w-full" v-model="updateGame" :disabled="!isOwner">
                         <option value="undercover">Undercover</option>
                         <option value="speedrundle">SpeedrunDLE</option>
                     </select>
@@ -243,6 +243,7 @@ onMounted(() => {
                         Leave room
                     </button>
                     <button 
+                        v-if="isOwner"
                         class="w-full bg-[#00A569] rounded-xl p-3 text-sm"
                         @click="handleStartGame"
                     >
@@ -250,7 +251,7 @@ onMounted(() => {
                     </button>
                 </div>
 
-                <button class="w-full bg-dark5 flex flex-row items-center justify-center gap-2 rounded-xl p-3 mb-6" @click="publishConfigModalOpen = true">
+                <button v-if="isOwner" class="w-full bg-dark5 flex flex-row items-center justify-center gap-2 rounded-xl p-3" @click="publishConfigModalOpen = true">
                     <svg width="18" height="18" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 11V19C1 19.5304 1.21071 20.0391 1.58579 20.4142C1.96086 20.7893 2.46957 21 3 21H15C15.5304 21 16.0391 20.7893 16.4142 20.4142C16.7893 20.0391 17 19.5304 17 19V11M13 5L9 1M9 1L5 5M9 1V14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
