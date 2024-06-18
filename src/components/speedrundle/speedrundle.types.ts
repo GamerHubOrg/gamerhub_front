@@ -1,87 +1,91 @@
 import { IRoomConfig, IRoomData, IGameData } from "@/types/interfaces";
 
+export type SpeedrundleMode = "classic" | "less_trials";
 
-export type SpeedrundleMode = 'classic' | 'less_trials';
-
-export type SpeedrundleTheme = 'league_of_legends' | 'pokemon' | 'marvel';
+export type SpeedrundleTheme = "league_of_legends" | "pokemon" | "marvel";
 
 export interface ISpeedrundleConfig extends IRoomConfig {
-    mode: SpeedrundleMode;
-    theme: SpeedrundleTheme;
-    nbRounds: number;
+  mode: SpeedrundleMode;
+  theme: SpeedrundleTheme;
+  nbRounds: number;
 }
 
 export interface ILolData {
-    dataType: "Lol";
-    splash: string;
-    sprite: string;
-    title: string;
-    tags: string[];
-    gender: string;
-    ressource: string;
-    range: string[];
-    position: string[];
-  }
-  
-  export interface ICharacter {
-    name: string;
-    lang: string;
-    apiId?: string;
-    data: Record<any, any>;
-  }
-  
-  export interface ILolCharacter extends ICharacter {
-    data: ILolData;
-  }
-  
-export type ISpeedrundleGameState = 'guess';
+  dataType: "Lol";
+  splash: string;
+  sprite: string;
+  title: string;
+  tags: string[];
+  gender: string;
+  ressource: string;
+  range: string[];
+  position: string[];
+}
+
+export interface ICharacter {
+  _id: string;
+  name: string;
+  lang: string;
+  apiId?: string;
+  data: Record<any, any>;
+}
+
+export interface ILolCharacter extends ICharacter {
+  data: ILolData;
+}
+
+export type ISpeedrundleGameState = "guess";
 
 export interface ISpeedrundleRoomData extends IRoomData {
-    config?: ISpeedrundleConfig;
-    gameData?: ISpeedrundleGameData;
+  config?: ISpeedrundleConfig;
+  gameData?: ISpeedrundleGameData;
 }
 
 export interface ISpeedrundleGameData extends IGameData {
-    allCharacters: SpeedrunCharacter[];
-    charactersToGuess: SpeedrunCharacter[];
-    turn: number;   
-    state: ISpeedrundleGameState;
-    score: ISpeedrundleScore[];
-    columns: IColumn[];
+  columns: IColumn[];
+  allCharacters: ICharacter[];
+  charactersToGuess: ICharacter[];
+  usersAnswers: ISpeedrundleAnswer[];
 }
+
+
+export interface ISpeedrundleAnswer {
+  playerId: string;
+  currentRound: number;
+  guesses: string[][];
+}
+
 interface IColumn {
-    name: string;
-    key: string;
-  }
+  name: string;
+  key: string;
+  type? : string
+}
 
 export interface ISpeedrundleScore {
-    playerId: string, 
-    points: number
+  playerId: string;
+  points: number;
 }
 
 export interface ISpeedrundleSendCharacter {
-    roomId: string,
-    userId: string,
-    character: string,
+  roomId: string;
+  userId: string;
+  character: string;
 }
 
-export type SpeedrunCharacter =  ILolCharacter ;
-
+export type SpeedrunCharacter = ILolCharacter;
 
 export interface ISpeedrundleSendVote {
-    roomId: string,
-    vote: string;
-    userId: string,
+  roomId: string;
+  vote: string;
+  userId: string;
 }
 
 export interface ISpeedrundleGuess {
-    playerId: string;
-    guess: string;
+  playerId: string;
+  guess: string;
 }
 
 export interface ISpeedrundleConfig extends IRoomConfig {
-    nbRounds: number;
-    theme : SpeedrundleTheme;
+  nbRounds: number;
+  theme: SpeedrundleTheme;
 }
-
-export const defaultSpeedrundleGameData: ISpeedrundleGameData = { state: 'guess', turn: 1, allCharacters: [], charactersToGuess : [], score: [], columns:[]};
