@@ -33,6 +33,7 @@ export interface IUndercoverRoomData extends IRoomData {
 export interface IUndercoverVote {
     playerId: string;
     vote: string;
+    turn: number;
 }
 
 export interface IUndercoverWords {
@@ -48,6 +49,7 @@ export interface IUndercoverGameData extends IGameData {
   civilianWord?: string;
   spyWord?: string;
   undercoverPlayerIds?: string[];
-  campWin?: IUndercoverCamp
+  campWin?: IUndercoverCamp;
+  turn: number;
 }
 

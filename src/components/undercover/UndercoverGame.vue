@@ -14,6 +14,8 @@
         </div>
         <div v-else>Tu es éliminé</div>
 
+        {{ gameData }}
+
         <div class="grid grid-cols-4 gap-12">
             <div 
                 v-for="user in roomData.users" 
@@ -79,10 +81,11 @@ const roomData = computed(() => (stateData.value as IUndercoverRoomData));
 const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'words');
 const votes = computed(() => gameData.value?.votes || []);
+const currentTurnVotes = computed(() => votes.value.filter((v) => v.turn === gameData.value?.turn));
 const isAnonymouseMode = computed(() => !!roomData.value.config?.anonymousMode);
 const isCurrentUserEliminated = computed(() => !!roomData.value.users.find((u) => u._id === currentUser.value._id)?.isEliminated);
 const isCurrentPlayerTurn = computed(() => currentUser.value._id === gameData.value?.playerTurn);
-const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && votes.value.some((vote) => vote.playerId === currentUser.value._id));
+const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && currentTurnVotes.value.some((vote) => vote.playerId === currentUser.value._id));
 const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlayerIds?.includes(currentUser.value._id))
 
 function handleSendWord(e: Event) {

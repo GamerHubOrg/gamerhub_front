@@ -28,16 +28,13 @@
       <div>
         <div v-for="user in civilianUsers" :key="user._id">
           <div 
-            class="flex flex-row items-center justify-between p-3" 
-            :class="{
-              'bg-green-500 bg-opacity-10':!gameData.undercoverPlayerIds?.includes(user._id),
-              'bg-red-500 bg-opacity-10': gameData.undercoverPlayerIds?.includes(user._id),
-            }"
+            class="flex flex-row items-center justify-between p-3 bg-green-500 bg-opacity-10" 
           >
             <div class="flex items-center gap-x-4 text-xs">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-              <div class="truncate font-medium leading-6 text-white">
-                <span>{{ user.username }}</span>
+              <div class="font-medium leading-6 text-white">
+                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
+                <span v-else class="text-green-400">Moi</span>
               </div>
             </div>
             <div 
@@ -50,7 +47,7 @@
                 :key="word"
                 class="w-full text-center"
               >
-                {{ getUserWord(user, word - 1) }}
+                {{ getUserWord(user, turn - 1, word - 1) }}
               </span>
               <span 
                 class="w-full text-center"
@@ -65,16 +62,13 @@
       <div>
         <div v-for="user in spyUsers" :key="user._id">
           <div 
-            class="flex flex-row items-center justify-between p-3" 
-            :class="{
-              'bg-green-500 bg-opacity-10':!gameData.undercoverPlayerIds?.includes(user._id),
-              'bg-red-500 bg-opacity-10': gameData.undercoverPlayerIds?.includes(user._id),
-            }"
+            class="flex flex-row items-center justify-between p-3 bg-red-500 bg-opacity-10" 
           >
             <div class="flex items-center gap-x-4 text-xs">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-              <div class="truncate font-medium leading-6 text-white">
-                <span>{{ user.username }}</span>
+              <div class="font-medium leading-6 text-white">
+                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
+                <span v-else class="text-red-400">Moi</span>
               </div>
             </div>
             <div 
@@ -87,12 +81,12 @@
                 :key="word"
                 class="w-full text-center"
               >
-                {{ getUserWord(user, word - 1) }}
+                {{ getUserWord(user, turn - 1, word - 1) }}
               </span>
               <span 
                 class="w-full text-center"
               >
-              {{ getUserVote(user, turn - 1) }}
+                {{ getUserVote(user, turn - 1) }}
               </span>
             </div>
           </div>
@@ -123,14 +117,16 @@ const gameUsers = ref([]);
 const civilianUsers = computed(() => gameUsers.value.filter((u) => !gameData.value.undercoverPlayerIds?.includes(u._id)));
 const spyUsers = computed(() => gameUsers.value.filter((u) => gameData.value.undercoverPlayerIds?.includes(u._id)));
 
-function getUserWord(user: UserInterface, wordIndex: number) {
+function getUserWord(user: UserInterface, turn: number, wordIndex: number) {
   const words = gameData.value?.words?.filter((word) => word.playerId === user?._id);
-  return words[wordIndex]?.word;
+  const index = (turn * config.value.wordsPerTurn) + wordIndex;
+  return words[index]?.word;
 }
 
 function getUserVote(user: UserInterface, voteIndex: number) {
   const votes = gameData.value?.votes?.filter((vote) => vote.playerId === user?._id);
   const votedUserId = votes[voteIndex]?.vote;
+  console.log(votes, voteIndex)
   return gameUsers.value.find((u) => u._id === votedUserId)?.username || 'unknown';
 }
 
