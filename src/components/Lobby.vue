@@ -7,6 +7,10 @@ import { useRouter } from "vue-router";
 import UndercoverConfig from '@/components/undercover/UndercoverConfig.vue'
 import SpeedrundleConfig from '@/components/speedrundle/SpeedrundleConfig.vue'
 import { useGamesStore } from "@/modules/games/games.store";
+import { toast } from 'vue3-toastify';
+import Modal from '@/components/Modal.vue';
+import { DialogTitle } from '@headlessui/vue'
+import { CheckIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter();
 const store = useAuthStore();
@@ -20,11 +24,13 @@ const roomCodeStatus = ref<string>("Copy")
 const createGame = ref<string>("undercover");
 const updateGame = ref<string>("");
 const joinRoom = ref<string>("");
+const shareConfigName = ref<string>("");
 
 const config = computed(() => data.value.config ?? {});
 const currentUser = computed(() => store.getCurrentUser);
 const roomUsers = computed(() => data.value?.users ?? []);
 
+const publishConfigModalOpen = ref(false);
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
 
 const handleOpenLobby = () => {
@@ -70,6 +76,22 @@ const handleRoomStart = () => {
   if (!currentUser.value) return;
   socketStore.handleCreateRoom(currentUser.value, createGame.value)
   updateGame.value = createGame.value;
+}
+
+const handleShareConfig = async (e) => {
+    try {
+        e.preventDefault();
+        await gameStore.publishConfig({ game: data.value.gameName, name: shareConfigName.value, config: config.value});
+        shareConfigName.value = "";
+        publishConfigModalOpen.value = false
+        toast("Config plublished successfully !", {
+            autoClose: 1000,
+            type: 'success',
+            theme: 'dark'
+        });
+    } catch(err) {
+        console.log(err);
+    }
 }
 
 watch(
@@ -228,7 +250,7 @@ onMounted(() => {
                     </button>
                 </div>
 
-                <button class="w-full bg-dark5 flex flex-row items-center justify-center gap-2 rounded-xl p-3">
+                <button class="w-full bg-dark5 flex flex-row items-center justify-center gap-2 rounded-xl p-3 mb-6" @click="publishConfigModalOpen = true">
                     <svg width="18" height="18" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 11V19C1 19.5304 1.21071 20.0391 1.58579 20.4142C1.96086 20.7893 2.46957 21 3 21H15C15.5304 21 16.0391 20.7893 16.4142 20.4142C16.7893 20.0391 17 19.5304 17 19V11M13 5L9 1M9 1L5 5M9 1V14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -236,5 +258,27 @@ onMounted(() => {
                 </button>
             </div>
         </div>
-  </div>
+    </div>
+    <Modal 
+        :open="publishConfigModalOpen" 
+        @close="publishConfigModalOpen = false" 
+    >
+        <form @submit="handleShareConfig">
+            <div>
+                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-dark5">
+                    <CheckIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
+                </div>
+                <div class="mt-3 text-center sm:mt-5">
+                    <DialogTitle as="h3" class="text-base font-semibold leading-6 text-white">Give this config a name !</DialogTitle>
+                    <div class="mt-10">
+                        <input v-model="shareConfigName" required type="text" class="block w-full p-1.5 rounded-md border-0 bg-dark5 shadow-sm ring-1 ring-inset ring-dark3 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6" placeholder="Config name here..." />
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                <button type="submit" class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:col-start-2">Share</button>
+                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0" @click="publishConfigModalOpen = false" ref="cancelButtonRef">Cancel</button>
+            </div>
+        </form>
+    </Modal>
 </template>

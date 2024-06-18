@@ -9,6 +9,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --toastify-color-success: #00A569;
+  --toastify-color-dark: #232323;
 }
 
 body {

@@ -65,7 +65,9 @@ async function handleLogin(e) {
     await store.login(form.value)
     router.push('/');
   } catch(err) {
-    error.value = err.response.data
+    if (err.response) {
+      error.value = err.response.data
+    }
   }
 }
 </script>
