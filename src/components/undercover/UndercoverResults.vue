@@ -4,7 +4,7 @@
 
     <div class="flex flex-col mt-12 rounded-md overflow-hidden overflow-x-auto">
       <div class="flex flex-row items-center justify-between gap-2 bg-dark2 p-3">
-        <span>Username</span>
+        <span class="w-56">Username</span>
         <div 
           v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
           :key="turn"
@@ -13,28 +13,32 @@
           <span 
             v-for="word in config.wordsPerTurn" 
             :key="word"
-            class="w-full text-center"
+            class="text-center w-60"
           >
             Mot {{ word }}
           </span>
           <span 
-            class="w-full text-center"
+            class="text-center w-60"
           >
             Vote {{ turn }}
           </span>
         </div>
       </div>
 
-      {{ turnsNumber }}
-
       <div>
+        <div class="bg-green-500 bg-opacity-20 p-3 flex flex-row items-center gap-2">
+          <TrophyIcon v-if="gameData.campWin === 'civilian'" class="w-5 text-yellow-400"/>
+          <span class="text-green-400 font-bold text-lg">Civilians</span>
+          <span>-</span>
+          <span>{{ gameData.civilianWord }} </span>
+        </div>
         <div v-for="user in civilianUsers" :key="user._id">
           <div 
             class="flex flex-row items-center justify-between p-3 bg-green-500 bg-opacity-10" 
           >
-            <div class="flex items-center gap-x-4 text-xs">
+            <div class="flex items-center gap-x-4 text-xs w-56 overflow-hidden">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-              <div class="font-medium leading-6 text-white">
+              <div class="font-medium leading-6 text-white truncate">
                 <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
                 <span v-else class="text-green-400">Moi</span>
               </div>
@@ -47,12 +51,12 @@
               <span
                 v-for="word in config.wordsPerTurn" 
                 :key="word"
-                class="w-full text-center"
+                class="text-center w-60"
               >
                 {{ getUserWord(user, turn - 1, word - 1) }}
               </span>
               <span 
-                class="w-full text-center"
+                class="text-center w-60"
               >
               {{ getUserVote(user, turn - 1) }}
               </span>
@@ -62,11 +66,17 @@
       </div>
       
       <div>
+        <div class="bg-red-500 bg-opacity-20 p-3 flex flex-row items-center gap-3">
+          <TrophyIcon v-if="gameData.campWin === 'undercover'" class="w-5 text-yellow-400" />
+          <span class="text-red-400 font-bold text-lg">Spies</span>
+          <span>-</span>
+          <span>{{ gameData.spyWord }} </span>
+        </div>
         <div v-for="user in spyUsers" :key="user._id">
           <div 
             class="flex flex-row items-center justify-between p-3 bg-red-500 bg-opacity-10" 
           >
-            <div class="flex items-center gap-x-4 text-xs">
+            <div class="flex items-center gap-x-4 text-xs w-56">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
               <div class="font-medium leading-6 text-white">
                 <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
@@ -81,12 +91,12 @@
               <span
                 v-for="word in config.wordsPerTurn" 
                 :key="word"
-                class="w-full text-center"
+                class="w-60 text-center"
               >
                 {{ getUserWord(user, turn - 1, word - 1) }}
               </span>
               <span 
-                class="w-full text-center"
+                class="w-60 text-center"
               >
                 {{ getUserVote(user, turn - 1) }}
               </span>
@@ -104,6 +114,7 @@ import { computed, ref, watch } from 'vue';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { IUndercoverConfig, IUndercoverGameData, IUndercoverRoomData } from './undercover.types';
+import { TrophyIcon } from '@heroicons/vue/24/solid'
 
 const store = useAuthStore();
 const socketStore = useSocketStore();

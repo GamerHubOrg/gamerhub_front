@@ -32,6 +32,7 @@ const roomUsers = computed(() => data.value?.users ?? []);
 
 const publishConfigModalOpen = ref(false);
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
+const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= 3);
 
 const handleOpenLobby = () => {
   gameStore.setIsLobbyCollapsed(true);
@@ -245,6 +246,7 @@ onMounted(() => {
                     <button 
                         v-if="isOwner"
                         class="w-full bg-[#00A569] rounded-xl p-3 text-sm"
+                        :disabled="!canStartTheGame"
                         @click="handleStartGame"
                     >
                         Start
