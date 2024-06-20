@@ -11,7 +11,7 @@
                         <img :src="user.picture" class="W-full rounded-md">
                         <span class="text-xs truncate">{{ user.username }} </span>
                     </div>
-                    <span class="font-semibold text-xs">Score : {{ getUserScore(user._id) }}</span>
+                    <span class="font-semibold text-xs">Score : {{ scores[user._id] }}</span>
                 </div>
             </div>
         </div>
@@ -66,35 +66,35 @@ const characterGuessId = ref<string>("");
 const charactersToGuess = ref<ILolCharacter[]>(gameData.value.charactersToGuess as ILolCharacter[]);
 const charactersRemaining = ref<ILolCharacter[]>(gameData.value.allCharacters as ILolCharacter[]);
 
-const currentCharacterToGuess = computed(() => {
-    const userAnswers = gameData.value.usersAnswers?.find(({ playerId }) => playerId === currentUser.value._id)
-    if (!userAnswers) return undefined;
-    const { currentRound } = userAnswers
-    const currentCharacter = charactersToGuess.value[currentRound - 1];
-    if (!currentCharacter) return undefined;
-    console.log("character to guess", currentCharacter.name);
+const userAnswers = computed(() => gameData.value.usersAnswers?.find(({ playerId }) => playerId === currentUser.value._id))
 
-    return currentCharacter;
+const currentCharacterToGuess = computed(() => {
+    if (!userAnswers.value) return undefined
+    const { currentRound } = userAnswers.value;
+    return charactersToGuess.value[currentRound - 1];;
 })
 
 const guessedCharacters = computed(() => {
-    const userAnswers = gameData.value.usersAnswers?.find(({ playerId }) => playerId === currentUser.value._id)
-    if (!userAnswers) return [];
-    const { guesses, currentRound } = userAnswers
+    if (!userAnswers.value) return [];
+    const { guesses, currentRound } = userAnswers.value
     return guesses[currentRound - 1]?.map((characterId) => formatCharacter(characterId)).filter((e) => !!e) ?? []
 })
 
 const filteredCharacters = computed(() => {
     const chars = charactersRemaining.value
     if (!chars) return [];
-    return chars.map(({ _id, name, data }) => ({ value: _id, label: name, imageUrl: data.sprite }))
+    return chars.filter(({_id}) => !guessedCharacters.value.some((e) => e.id === _id)).map(({ _id, name, data }) => ({ value: _id, label: name, imageUrl: data.sprite }))
 })
 
-function getUserScore(userId: string): number {
-    // const scoreEntry = gameData?.value?.score?.find((score: ISpeedrundleScore) => score.playerId === userId);
-    // return scoreEntry ? scoreEntry.points : 0;
-    return 0
-}
+const scores = computed(() => {
+    const scoresObject: Record<string, number> = {};
+    for (const { _id } of roomData.value.users) {
+        const answers = gameData.value.usersAnswers?.find((e) => _id === e.playerId)
+        scoresObject[_id as keyof object] = answers?.score ?? 0;
+    }
+    return scoresObject
+})
+
 
 function verifyArrayInclusion(array1: string[], array2: string[]) {
     const allGood = array1.every((tag) => array2.includes(tag)) && array2.every((tag) => array1.includes(tag))
@@ -140,15 +140,14 @@ function getColumnClass(id: string, column: string) {
 
 function formatLolCharacter(characterData: ILolCharacter) {
     const sprite = characterData.data.sprite;
-    const {  ressource } = characterData.data;
-    const name = characterData.name;
-    const gender = characterData.data.gender === "male" ? "Masculin" : characterData.data.gender === "female" ? "Féminin" : "Autre"  ;
+    const { ressource } = characterData.data;
+    const gender = characterData.data.gender === "male" ? "Masculin" : characterData.data.gender === "female" ? "Féminin" : "Autre";
     const tags = characterData.data.tags.join(", ");
     const rangeObjets = characterData.data.range.map((e) => capitalizeFirstLetter(e))
     const range = rangeObjets.length > 1 ? rangeObjets.join(", ") : rangeObjets[0];
     const position = characterData.data.position.map((e) => capitalizeFirstLetter(e)).join(", ")
 
-    return { id: characterData._id, sprite,gender, name, tags, ressource, range, position }
+    return { id: characterData._id, sprite, gender, tags, ressource, range, position }
 }
 
 function formatCharacter(id: string) {

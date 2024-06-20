@@ -48,13 +48,12 @@ export interface ISpeedrundleGameData extends IGameData {
   usersAnswers: ISpeedrundleAnswer[];
 }
 
-
 export interface ISpeedrundleAnswer {
   playerId: string;
   currentRound: number;
   guesses: string[][];
+  score: number;
 }
-
 interface IColumn {
   name: string;
   key: string;
