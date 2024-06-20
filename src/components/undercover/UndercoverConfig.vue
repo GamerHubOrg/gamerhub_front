@@ -103,7 +103,7 @@ const data = computed(() => socketStore.getRoomData)
 
 const currentUser = computed(() => store.getCurrentUser);
 const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
-const isConfigDisabled = computed(() => !isOwner.value && data.value.gameState !== 'lobby');
+const isConfigDisabled = computed(() => !isOwner.value || data.value.gameState !== 'lobby');
 
 watch(
     () => internalConfig.value,
