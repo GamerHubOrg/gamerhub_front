@@ -1,10 +1,13 @@
 <template>
    <div class="flex flex-col items-center gap-7 text-white">
         <h2 class="text-3xl">Undercover</h2>
-        <p v-if="config.mode === 'words'">
+        <div v-if="config.mode === 'words'" class="flex flex-row items-center gap-2">
             Ton mot : 
-            <span class="font-semibold backdrop-blur-sm">{{ gameWord }}</span>
-        </p>
+            <div class="overflow-hidden relative group flex justify-center items-center cursor-pointer" @click="handleShowImage">
+                <EyeSlashIcon class="group-hover:hidden absolute w-4 text-primary z-10" />
+                <span class="font-semibold filter blur-lg grayscale group-hover:blur-none">{{ gameWord }}</span>
+            </div>
+        </div>
         <div v-else-if="config.mode === 'images'" class="flex flex-row items-center gap-2">
             Ton image : 
             <div class="overflow-hidden relative group flex justify-center items-center cursor-pointer" @click="handleShowImage">
