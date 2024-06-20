@@ -7,6 +7,13 @@
       time="10-30min" 
       :img="undercoverImage" 
     />
+    <GameListItem 
+      name="SpeedrunDLE" 
+      nb-players="1+"
+      game-name="speedrundle"
+      time="10-30min" 
+      :img="codenamesImage" 
+    />
   </div>
   
 </template>
@@ -14,5 +21,6 @@
 <script lang="ts" setup>
 import GameListItem from "@/components/GameListItem.vue";
 
+import codenamesImage from '@/assets/games/codenames.png';
 import undercoverImage from '@/assets/games/undercover.webp';
 </script>
