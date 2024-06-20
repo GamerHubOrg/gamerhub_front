@@ -220,6 +220,7 @@ onMounted(() => {
                 <UndercoverConfig v-if="data.gameName === 'undercover'" :config="config" @update="handleUpdateRoom" />
                 <SpeedrundleConfig v-else-if="data.gameName === 'speedrundle'" :config="config"
                     @update="handleUpdateRoom" />
+            </div>
 
             <div class="flex flex-col gap-4 text-white mt-20">
                 <div class="flex flex-row justify-between items-center bg-white bg-opacity-5 rounded-2xl p-4">
