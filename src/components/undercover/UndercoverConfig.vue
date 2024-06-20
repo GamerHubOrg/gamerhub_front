@@ -4,7 +4,7 @@
             <label for="mode">Mode de jeu :</label>
             <select 
                 id="mode" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 v-model="internalConfig.mode"
             >
                 <option value="words">Mots</option>
@@ -15,7 +15,7 @@
             <label for="thme">Thème :</label>
             <select 
                 id="theme" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 v-model="internalConfig.theme"
             >
                 <option value="classic">Classic</option>
@@ -27,7 +27,7 @@
             <input 
                 id="maxPlayers" 
                 type="number" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 :min="3"
                 placeholder="Entrez le nombre maximum de joueurs"
                 v-model="internalConfig.maxPlayers"
@@ -39,7 +39,7 @@
             <input 
                 id="spyCount" 
                 type="number" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 :min="0"
                 placeholder="Entrez le nombre d'espions"
                 v-model="internalConfig.spyCount"
@@ -51,7 +51,7 @@
             <input 
                 id="wordsPerTurn" 
                 type="number" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 :min="1"
                 :max="10"
                 v-model="internalConfig.wordsPerTurn"
@@ -63,7 +63,7 @@
             <input 
                 id="anonymousMode" 
                 type="checkbox" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 v-model="internalConfig.anonymousMode"
             >
         </div>
@@ -101,6 +101,7 @@ const data = computed(() => socketStore.getRoomData)
 
 const currentUser = computed(() => store.getCurrentUser);
 const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
+const isConfigDisabled = computed(() => !isOwner.value && data.value.gameState !== 'lobby');
 
 watch(
     () => internalConfig.value,

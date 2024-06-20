@@ -67,6 +67,9 @@ export const useSocketStore = defineStore("socket", {
       socket.emit("room:start", roomId);
       socket.emit(`game:${this.data.gameName}:initialize`, roomId);
     },
+    handleGoToLobby(roomId: string) {
+      socket.emit("room:lobby", roomId);
+    },
     handleUpdateRoom(roomId: string, config: IRoomConfig) {
       socket.emit("room:update", roomId, config);
     },

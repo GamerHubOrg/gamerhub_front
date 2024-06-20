@@ -3,9 +3,10 @@ import {computed, ref, watch} from "vue";
 import {useAuthStore} from "@/modules/auth/auth.store";
 import {IRoomData} from "@/types/interfaces";
 import {useSocketStore} from '../modules/socket/socket.store';
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
 const router = useRouter()
+const route = useRoute();
 const store = useAuthStore();
 const socketStore = useSocketStore();
 const roomStore = socketStore;
@@ -37,6 +38,13 @@ function onRoomStarted(data: IRoomData) {
   router.push(`/room/${roomId.value}`)
 }
 
+function onRoomBackToLobby(data: IRoomData) {
+  socketStore.handleRoomUpdate({data})
+  if (route.path.includes('room')) {
+    router.push('/')
+  }
+}
+
 function onRoomDeleted(roomId: string) {
   socketStore.handleRoomUpdate({roomId: "", data: {}})
   alert(`La room ${roomId} a été supprimée.`);
@@ -58,6 +66,7 @@ if (socket) {
   socket.on("room:joined", onRoomJoined);
   socket.on("room:updated", onRoomUpdated);
   socket.on("room:started", onRoomStarted);
+  socket.on("room:lobbied", onRoomBackToLobby);
   socket.on("room:not-found", onRoomNotFound)
   socket.on("user:not-auth", onUserNotAuth)
   socket.on("room:deleted", onRoomDeleted)

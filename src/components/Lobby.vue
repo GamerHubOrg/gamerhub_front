@@ -32,7 +32,8 @@ const roomUsers = computed(() => data.value?.users ?? []);
 
 const publishConfigModalOpen = ref(false);
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
-const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= 2);
+const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= 3);
+const isGameStarted = computed(() => data.value.gameState !== 'lobby');
 
 const handleOpenLobby = () => {
   gameStore.setIsLobbyCollapsed(true);
@@ -78,6 +79,11 @@ const handleRoomStart = () => {
   if (!currentUser.value) return;
   socketStore.handleCreateRoom(currentUser.value, createGame.value)
   updateGame.value = createGame.value;
+}
+
+const handleGoToLobby = () => {
+    if (!currentUser.value) return;
+    socketStore.handleGoToLobby(roomId.value)
 }
 
 const handleShareConfig = async (e) => {
@@ -250,9 +256,18 @@ onMounted(() => {
                         :disabled="!canStartTheGame"
                         @click="handleStartGame"
                     >
-                        Start
+                        {{ isGameStarted ? 'Restart' : 'Start' }}
                     </button>
                 </div>
+
+                <button 
+                    v-if="isOwner && isGameStarted"
+                    class="w-full bg-blue-400 rounded-xl p-3 text-sm"
+                    :disabled="!canStartTheGame"
+                    @click="handleGoToLobby"
+                >
+                    Change config and restart
+                </button>
 
                 <button v-if="isOwner" class="w-full bg-dark5 flex flex-row items-center justify-center gap-2 rounded-xl p-3" @click="publishConfigModalOpen = true">
                     <svg width="18" height="18" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
