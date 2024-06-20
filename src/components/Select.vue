@@ -50,8 +50,10 @@ const props = defineProps<{
     queryStartsWith?: boolean;
 }>();
 
+const options = computed(() => props.options ?? [])
+
 const selectedOption = computed(() => {
-    const option = props.options.find((e) => e.value === props.value) || { value: '', label: 'Select a character' }
+    const option = options.value.find((e) => e.value === props.value) || { value: '', label: 'Select a character' }
     searchQuery.value = option?.value;
     if (!option) return { value: '', label: 'Select a character' };
     return option;
@@ -80,7 +82,7 @@ const filteredOptions = computed(() => {
     if (props.hideOptions && searchQuery.value === '') {
         return [];
     } else {
-        return props.options.filter(option => {
+        return options.value.filter(option => {
             if (props.queryStartsWith) {
                 return option.label.toLowerCase().startsWith(searchQuery.value.toLowerCase())
             }
