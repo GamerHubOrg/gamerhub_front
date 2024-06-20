@@ -30,7 +30,14 @@
           <TrophyIcon v-if="gameData.campWin === 'civilian'" class="w-5 text-yellow-400"/>
           <span class="text-green-400 font-bold text-lg">Civilians</span>
           <span>-</span>
-          <span>{{ gameData.civilianWord }} </span>
+          <span v-if="config.mode === 'words'">{{ gameData.civilianWord }}</span>
+          <button 
+            v-else-if="config.mode === 'images'" 
+            class="bg-green-500 bg-opacity-50 text-green-950 p-2 rounded-md text-sm" 
+            @click="() => handleShowImage(gameData.civilianWord)"
+          >
+            Voir l'image
+          </button>
         </div>
         <div v-for="user in civilianUsers" :key="user._id">
           <div 
@@ -70,8 +77,14 @@
           <TrophyIcon v-if="gameData.campWin === 'undercover'" class="w-5 text-yellow-400" />
           <span class="text-red-400 font-bold text-lg">Spies</span>
           <span>-</span>
-          <span>{{ gameData.spyWord }} </span>
-        </div>
+          <span v-if="config.mode === 'words'">{{ gameData.spyWord }}</span>
+          <button 
+            v-else-if="config.mode === 'images'" 
+            class="bg-red-500 bg-opacity-50 text-red-950 p-2 rounded-md text-sm" 
+            @click="() => handleShowImage(gameData.spyWord)"
+          >
+            Voir l'image
+          </button>        </div>
         <div v-for="user in spyUsers" :key="user._id">
           <div 
             class="flex flex-row items-center justify-between p-3 bg-red-500 bg-opacity-10" 
@@ -105,6 +118,9 @@
         </div>
       </div>
     </div>
+    <Modal v-if="config.mode === 'images'" :open="showImageModalOpen" @close="showImageModalOpen = false">
+        <img :src="selectedWord" />
+    </Modal>
   </div>
 </template>
 
@@ -115,6 +131,7 @@ import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { IUndercoverConfig, IUndercoverGameData, IUndercoverRoomData } from './undercover.types';
 import { TrophyIcon } from '@heroicons/vue/24/solid'
+import Modal from '../Modal.vue';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -126,6 +143,8 @@ const config = computed(() => (roomData.value.config as IUndercoverConfig));
 
 const userIdsThatPlayed = computed(() => [...new Set(gameData.value.words.map((w) => w.playerId))]);
 const turnsNumber = computed(() => Math.ceil(((gameData.value.words?.length || 0) / userIdsThatPlayed.value.length) / config.value.wordsPerTurn))
+const selectedWord = ref('');
+const showImageModalOpen = ref(false);
 
 const gameUsers = ref([]);
 
@@ -148,6 +167,11 @@ async function fetchUsers() {
   const requests = userIdsThatPlayed.value.map((userId) => store.fetchUser(userId as string));
   const result = (await Promise.allSettled(requests) as [])?.filter((req) => req.status === 'fulfilled');
   gameUsers.value = result.map((req) => req.value) as [];
+}
+
+function handleShowImage(word: string) {
+  selectedWord.value = word;
+  showImageModalOpen.value = true;
 }
 
 watch(

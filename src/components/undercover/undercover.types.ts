@@ -6,7 +6,7 @@ export type IUndercoverCamp = 'undercover' | 'civilian';
 
 export type UndercoverTheme = 'classic';
 
-export type UndercoverMode = 'words';
+export type UndercoverMode = 'words' | 'images' | 'songs';
 
 export interface IUndercoverConfig extends IRoomConfig {
   mode: UndercoverMode;
