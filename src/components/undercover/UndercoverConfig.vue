@@ -8,6 +8,8 @@
                 v-model="internalConfig.mode"
             >
                 <option value="words">Mots</option>
+                <option value="images">Images</option>
+                <option value="songs">Sons</option>
             </select>
         </div>
 

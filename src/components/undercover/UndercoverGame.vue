@@ -1,7 +1,23 @@
 <template>
    <div class="flex flex-col items-center gap-7 text-white">
         <h2 class="text-3xl">Undercover</h2>
-        <p>Ton mot : <span class="font-semibold">{{ isCurrentPlayerUndercover ? gameData?.spyWord : gameData?.civilianWord }}</span></p>
+        <div v-if="config.mode === 'words'" class="flex flex-row items-center gap-2">
+            Ton mot : 
+            <div class="overflow-hidden relative group flex justify-center items-center cursor-pointer" @click="handleShowImage">
+                <EyeSlashIcon class="group-hover:hidden absolute w-4 text-primary z-10" />
+                <span class="font-semibold filter blur-lg grayscale group-hover:blur-none">{{ gameWord }}</span>
+            </div>
+        </div>
+        <div v-else-if="config.mode === 'images'" class="flex flex-row items-center gap-2">
+            Ton image : 
+            <div class="overflow-hidden relative group flex justify-center items-center cursor-pointer" @click="handleShowImage">
+                <EyeSlashIcon class="group-hover:hidden absolute w-6 text-primary z-10" />
+                <img
+                    :src="gameWord"
+                    class="max-w-24 max-h-16 filter blur-lg grayscale group-hover:grayscale-0 group-hover:blur-none"
+                />
+            </div>
+        </div>
         <div v-if="!isCurrentUserEliminated">
             <div v-if="gameState === 'words'">
                 <span v-if="isCurrentPlayerTurn">Send a word</span>
@@ -56,6 +72,9 @@
             <input v-model="wordForm" type="text" class="border border-primary border-opacity-20 rounded-md p-3 text-black">
             <button type="submit" class="bg-green-400 rounded p-3" @click="handleSendWord">send</button>
         </form>
+        <Modal v-if="config.mode === 'images'" :open="showImageModalOpen" @close="showImageModalOpen = false">
+            <img :src="gameWord" />
+        </Modal>
    </div>
 </template>
 
@@ -64,7 +83,9 @@ import { useAuthStore } from '@/modules/auth/auth.store';
 import { User } from '@/modules/auth/user';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { computed, ref } from 'vue';
-import { IUndercoverRoomData } from './undercover.types';
+import { EyeSlashIcon } from '@heroicons/vue/24/solid';
+import { IUndercoverConfig, IUndercoverRoomData } from './undercover.types';
+import Modal from '../Modal.vue';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -74,8 +95,10 @@ const roomId = computed(() => socketStore.getRoomId)
 const socket = computed(() => socketStore.getSocket)
 
 const wordForm = ref(undefined);
+const showImageModalOpen = ref(false);
 const currentUser = computed(() => (store.getCurrentUser as User))
 const roomData = computed(() => (stateData.value as IUndercoverRoomData));
+const config = computed(() => (roomData.value.config as IUndercoverConfig));
 const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'words');
 const votes = computed(() => gameData.value?.votes || []);
@@ -85,6 +108,7 @@ const isCurrentUserEliminated = computed(() => !!roomData.value.users.find((u) =
 const isCurrentPlayerTurn = computed(() => currentUser.value._id === gameData.value?.playerTurn);
 const hasCurrentPlayerVoted  = computed(() => gameState.value === 'vote' && currentTurnVotes.value.some((vote) => vote.playerId === currentUser.value._id));
 const isCurrentPlayerUndercover = computed(() => gameData.value?.undercoverPlayerIds?.includes(currentUser.value._id))
+const gameWord = computed(() => isCurrentPlayerUndercover.value ? gameData.value?.spyWord : gameData.value?.civilianWord);
 
 function handleSendWord(e: Event) {
     e.preventDefault();
@@ -100,6 +124,10 @@ function handleVote(user: User) {
 
 function getUserWords(user: User) {
     return gameData.value?.words?.filter((word) => word.playerId === user._id);
+}
+
+function handleShowImage() {
+    showImageModalOpen.value = true;
 }
 
 socket.value?.on("game:undercover:data", ({ logs, data }) => {
