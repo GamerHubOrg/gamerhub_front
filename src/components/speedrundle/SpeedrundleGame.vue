@@ -173,7 +173,6 @@ function handleSendCharacter() {
 }
 
 socket.value?.on("game:speedrundle:data", ({ data }: { data: any }) => {
-    console.log("speedrundle data", data);
     stateData.value.gameData = data;
     charactersToGuess.value = data.charactersToGuess;
     charactersRemaining.value = data.allCharacters;

@@ -31,8 +31,12 @@ const currentUser = computed(() => store.getCurrentUser);
 const roomUsers = computed(() => data.value?.users ?? []);
 
 const publishConfigModalOpen = ref(false);
+const minimumPlayers = {
+    undercover: 3,
+    speedrundle: 1
+};
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
-const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= 3);
+const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= minimumPlayers[data.value.gameName as keyof object || ""]);
 const isGameStarted = computed(() => data.value.gameState !== 'lobby');
 
 const handleOpenLobby = () => {
