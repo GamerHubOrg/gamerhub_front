@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "build:prod": "vite build",
+    "preview": "vite preview --port 8080",
     "start": "vite preview --host --port 80"
   },
   "dependencies": {
