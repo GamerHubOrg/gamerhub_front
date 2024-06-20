@@ -6,7 +6,7 @@
       <div class="flex flex-row items-center justify-between gap-2 bg-dark2 p-3">
         <span class="w-56">Username</span>
         <div 
-          v-for="turn in (gameData.words?.length / userIdsThatPlayed?.length) / config.wordsPerTurn" 
+          v-for="turn in turnsNumber" 
           :key="turn"
           class="flex flex-row items-center justify-between gap-2 w-full"
         >
@@ -36,9 +36,9 @@
           <div 
             class="flex flex-row items-center justify-between p-3 bg-green-500 bg-opacity-10" 
           >
-            <div class="flex items-center gap-x-4 text-xs w-56 overflow-hidden">
+            <div class="flex items-center gap-x-4 text-xs w-56">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-              <div class="font-medium leading-6 text-white truncate">
+              <div class="font-medium leading-6 text-white">
                 <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
                 <span v-else class="text-green-400">Moi</span>
               </div>
@@ -79,7 +79,7 @@
             <div class="flex items-center gap-x-4 text-xs w-56">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
               <div class="font-medium leading-6 text-white">
-                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
+                <span v-if="user._id !== currentUser._id">{{ user.username }}dsada sdadsa dsad</span>
                 <span v-else class="text-red-400">Moi</span>
               </div>
             </div>

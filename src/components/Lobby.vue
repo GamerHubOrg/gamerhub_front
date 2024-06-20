@@ -32,7 +32,7 @@ const roomUsers = computed(() => data.value?.users ?? []);
 
 const publishConfigModalOpen = ref(false);
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
-const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= 3);
+const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= 2);
 
 const handleOpenLobby = () => {
   gameStore.setIsLobbyCollapsed(true);
