@@ -3,6 +3,7 @@
         <h2 class="text-3xl">Speedrun Dle</h2>
         <p>Le thème de la partie est : <span class="font-semibold">{{ roomCong?.theme }} : {{ roomCong?.mode }}</span>
         </p>
+
         <div class="absolute right-0 flex flex-col gap-1">
             <div v-for="user in roomData.users" :key="user.socket_id" class="flex justify-center items-center">
                 <div class="flex items-center gap-2 max-w-48 max-h-12 p-3 rounded-md"
@@ -50,6 +51,7 @@ import { computed, ref, watch } from 'vue';
 import { ILolCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
 import Select from "@/components/Select.vue"
 import { capitalizeFirstLetter } from '../../utils/functions';
+import { ISpeedrundleAnswer } from '../../../../gamerhub_back/socket/games/speedrundle/speedrundle.types';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -63,10 +65,10 @@ const roomCong = computed(() => roomData.value.config);
 const gameData = computed(() => roomData.value.gameData as ISpeedrundleGameData);
 
 const characterGuessId = ref<string>("");
-const charactersToGuess = ref<ILolCharacter[]>(gameData.value.charactersToGuess as ILolCharacter[]);
-const charactersRemaining = ref<ILolCharacter[]>(gameData.value.allCharacters as ILolCharacter[]);
+const charactersToGuess = ref<ILolCharacter[]>([]);
+const allCharacters = ref<ILolCharacter[]>([]);
 
-const userAnswers = computed(() => gameData.value.usersAnswers?.find(({ playerId }) => playerId === currentUser.value._id))
+const userAnswers = ref<ISpeedrundleAnswer>()
 
 const currentCharacterToGuess = computed(() => {
     if (!userAnswers.value) return undefined
@@ -81,9 +83,9 @@ const guessedCharacters = computed(() => {
 })
 
 const filteredCharacters = computed(() => {
-    const chars = charactersRemaining.value
+    const chars = allCharacters.value
     if (!chars) return [];
-    return chars.filter(({_id}) => !guessedCharacters.value.some((e) => e.id === _id)).map(({ _id, name, data }) => ({ value: _id, label: name, imageUrl: data.sprite }))
+    return chars.filter(({ _id }) => !guessedCharacters.value.some((e) => e.id === _id)).map(({ _id, name, data }) => ({ value: _id, label: name, imageUrl: data.sprite }))
 })
 
 const scores = computed(() => {
@@ -172,10 +174,23 @@ function handleSendCharacter() {
     characterGuessId.value = "";
 }
 
-socket.value?.on("game:speedrundle:data", ({ data }: { data: any }) => {
+socket.value?.on("game:speedrundle:data", ({ data }: { data: any }, target: string) => {
     stateData.value.gameData = data;
-    charactersToGuess.value = data.charactersToGuess;
-    charactersRemaining.value = data.allCharacters;
+
+    if (target === "all" || target === currentUser.value._id) {
+        userAnswers.value = gameData.value.usersAnswers?.find(({ playerId }) => playerId === currentUser.value._id)
+    }
+
+    if (charactersToGuess.value?.length === 0) {
+        console.log("to Guess", data.charactersToGuess);
+
+        charactersToGuess.value = data.charactersToGuess ?? [];
+    }
+    if (allCharacters.value?.length === 0) {
+        console.log("all", data.allCharacters);
+
+        allCharacters.value = data.allCharacters ?? [];
+    }
 })
 
 watch(
