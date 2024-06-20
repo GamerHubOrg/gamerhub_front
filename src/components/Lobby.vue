@@ -65,6 +65,7 @@ const handleStartGame = () => {
 const handleLeaveRoom = () => {
   if (!currentUser.value) return;
   socketStore.handleLeaveRoom()
+  localStorage.removeItem("roomId")
   router.push('/');
 }
 
