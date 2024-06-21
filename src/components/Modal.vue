@@ -18,10 +18,8 @@
     </TransitionRoot>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { CheckIcon } from '@heroicons/vue/24/outline'
+<script setup lang="ts">
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 defineEmits(['close'])
 defineProps({

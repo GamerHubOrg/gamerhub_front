@@ -29,7 +29,7 @@ function onRoomJoined(roomId: string, data: IRoomData) {
   localStorage.setItem("roomId", roomId)
 }
 
-function onRoomUpdated(data: IRoomData) {
+function onRoomUpdated(data: IRoomData) { 
   socketStore.handleRoomUpdate({ data })
 }
 
