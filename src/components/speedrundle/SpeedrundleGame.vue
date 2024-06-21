@@ -4,7 +4,6 @@
     <p>
       Le thème de la partie est :
       <span class="font-semibold">{{ roomCong?.theme }} : {{ roomCong?.mode }}</span>
-      {{ currentCharacterToGuess?.name }}
     </p>
 
     <div class="absolute right-0 flex flex-col gap-1">
@@ -68,12 +67,12 @@ import { computed, ref, watch } from "vue";
 import {
   ICharacter,
   ILolCharacter,
+  ISpeedrundleAnswer,
   ISpeedrundleGameData,
   ISpeedrundleRoomData,
 } from "./speedrundle.types";
 import Select from "@/components/Select.vue";
 import { capitalizeFirstLetter } from "../../utils/functions";
-import { ISpeedrundleAnswer } from "../../../../gamerhub_back/socket/games/speedrundle/speedrundle.types";
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -243,7 +242,7 @@ function handleSendCharacter() {
   characterGuessId.value = "";
 }
 
-socket.value?.on("game:speedrundle:data", ({ data }: { data: any }) => {
+socket.value?.on("game:speedrundle:data", ({ data }: { data: any }) => { 
   stateData.value.gameData = data;
 
   userAnswers.value = gameData.value.usersAnswers?.find(

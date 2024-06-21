@@ -59,6 +59,8 @@ export interface ISpeedrundleRoundData {
   guesses : string[];
   score : number;
   hasFound : boolean;
+  startDate : Date;
+
 }
 
 interface IColumn {
