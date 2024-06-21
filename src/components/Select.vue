@@ -5,7 +5,7 @@
             <div class="flex items-center">
                 <img v-if="selectedOption.imageUrl" :src="selectedOption.imageUrl" alt=""
                     class="w-6 h-6 rounded-full mr-2">
-                <input v-if="!hideSearch" v-model="searchQuery" type="text"
+                <input v-if="!hideSearch" v-model="searchQuery" @click="handleInputClick" type="text"
                     class="w-full p-2 border-b border-gray-300 focus:outline-none text-black" placeholder="Search...">
             </div>
             <span class="pointer-events-none">
@@ -69,6 +69,11 @@ const toggleDropdown = (value?: boolean) => {
         }, 0);
     }
 };
+
+const handleInputClick = (e : Event) => {
+    e.stopPropagation();
+    if(!showDropdown.value) toggleDropdown();
+}
 
 // Select the clicked option
 const selectOption = (option: IOption) => {
