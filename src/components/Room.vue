@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
-import {useAuthStore} from "@/modules/auth/auth.store";
-import {IRoomData} from "@/types/interfaces";
-import {useSocketStore} from '../modules/socket/socket.store';
-import {useRoute, useRouter} from "vue-router";
+import { computed, ref, watch } from "vue";
+import { useAuthStore } from "@/modules/auth/auth.store";
+import { IRoomData } from "@/types/interfaces";
+import { useSocketStore } from '../modules/socket/socket.store';
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter()
 const route = useRoute();
@@ -39,7 +39,7 @@ function onRoomStarted(data: IRoomData) {
 }
 
 function onRoomBackToLobby(data: IRoomData) {
-  socketStore.handleRoomUpdate({data})
+  socketStore.handleRoomUpdate({ data })
   if (route.path.includes('room')) {
     router.push('/')
   }
@@ -103,16 +103,10 @@ watch(
     <div v-if="areLogsExpanded" class="p-2">
       <div v-for="log in data.logs" class="flex">
         <p><span class="font-bold">{{ new Date(log.date).toLocaleString() }}</span> : <span>{{
-    log.message
-  }}</span>
+          log.message
+            }}</span>
         </p>
       </div>
-    </div>
-  </div>
-  <div v-if="areLogsExpanded" class="p-2">
-    <div v-for="log in data.logs" class="flex">
-      <p><span class="font-bold">{{ new Date(log.date).toLocaleString() }}</span> : <span>{{ log.message }}</span>
-      </p>
     </div>
   </div>
 </template>

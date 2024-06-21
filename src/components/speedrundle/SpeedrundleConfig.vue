@@ -19,7 +19,7 @@
                 :disabled="!isOwner" 
                 v-model="config.theme"
             >
-                <option value="lol">League Of Legends</option>
+                <option value="league_of_legends">League Of Legends</option>
                 <option value="pokemon">Pokemon</option>
                 <option value="marvel">Marvel</option>
             </select>
