@@ -26,7 +26,7 @@ const routes = [
         component: () => import('../views/Community.vue'),
       },
       {
-        path: 'profile',
+        path: '/profile',
         name: 'profile',
         meta: {requireAuth: false},
         component: () => import('../views/Profile.vue'),

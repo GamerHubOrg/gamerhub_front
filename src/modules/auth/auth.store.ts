@@ -45,6 +45,9 @@ export const useAuthStore = defineStore('auth', {
     async fetchUser(userId: string) {
       const { data } = await api.get(`/users/${userId}`)
       return data;
+    },
+    async updateUser({username, email, password, imageUrl}: any) {
+      await api.patch(`/${this.currentUser?._id}`, {username, email, password, imageUrl})
     }
   }
 })
