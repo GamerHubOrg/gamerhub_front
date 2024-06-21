@@ -32,7 +32,7 @@ const roomUsers = computed(() => data.value?.users ?? []);
 
 const publishConfigModalOpen = ref(false);
 const minimumPlayers = {
-    undercover: 3,
+    undercover: 1,
     speedrundle: 1
 };
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
@@ -53,6 +53,11 @@ const handleCopyRoomCode = () => {
 const handleUpdateRoom = (conf: IRoomConfig) => {
     if (!isOwner.value) {
         console.log("Vous n'êtes pas propriétaire.");
+        return;
+    }
+
+    if (data.value.gameState !== 'lobby') {
+        console.log("La partie a déjà commencé.");
         return;
     }
     socketStore.handleUpdateRoom(roomId.value, conf)
@@ -90,7 +95,7 @@ const handleGoToLobby = () => {
     socketStore.handleGoToLobby(roomId.value)
 }
 
-const handleShareConfig = async (e) => {
+const handleShareConfig = async (e: Event) => {
     try {
         e.preventDefault();
         await gameStore.publishConfig({ game: data.value.gameName, name: shareConfigName.value, config: config.value});
