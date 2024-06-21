@@ -1,27 +1,40 @@
 <template>
-  <div>
-    <span>Le vainqueur est : {{ gameData.winner }}</span>
+  <div class="text-white">
+    <h1 class="text-center font-bold text-4xl">Résultats</h1>
 
-    <table class="border-collapse">
-      <tr>
-        <th>Username</th>
-        <th>Mots</th>
-        <th>Camp</th>
-        <th>Etat de fin</th>
-        <th>Mot</th>
-      </tr>
-      <tr v-for="user in roomData.users" :key="user.id">
-        <td><span :class="{ 'font-bold': currentUser.id === user.id }">{{ user.username }}</span></td>
-        <td>
-          <div class="flex flex-col gap-2">
-            <span v-for="(word, index) in getUserWords(user)" :key="`${user.id}-${index}`">
-                {{ word.word }}
+    <div class="flex flex-col mt-12 rounded-md overflow-hidden overflow-x-auto">
+      <div class="flex flex-row items-center justify-between gap-2 bg-dark2 p-3">
+        <span class="w-12">Rank</span>
+        <span class="w-56">Username</span>
+        <div class="flex flex-row items-center justify-between gap-2 w-full">
+          <span v-for="character in charactersToGuess" :key="character._id">
+            {{ character.name }}
+          </span>
+          <span>Total</span>
+        </div>
+      </div>
+
+      <div v-for="user in usersResults" :key="user._id">
+        <div class="flex flex-row items-center justify-between p-3 gap-2 bg-white bg-opacity-10">
+          <span class="text-3xl font-bold font-serif w-12 text-center" :class="getRankColor(user.rank)">{{ user.rank }}</span>
+          <div class="flex items-center gap-x-4 text-xs w-56">
+            <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+            <div class="font-medium leading-6 text-white">
+              <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
+              <span v-else class="text-green-400">Moi</span>
+            </div>
+          </div>
+          <div class="flex flex-row items-center justify-between gap-2 w-full">
+            <span v-for="character, i in charactersToGuess" :key="character._id">
+              {{ user.scores[i] }}
             </span>
+            <span>{{ user.totalScore }}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script setup lang="ts">
@@ -87,7 +100,13 @@ function getRankColor(rank: number) {
 </script>
 
 <style scoped>
-table, th, td {
+table,
+th,
+td {
   @apply border border-black;
+}
+
+.text-glow {
+  text-shadow: 0 0 8px currentColor;
 }
 </style>

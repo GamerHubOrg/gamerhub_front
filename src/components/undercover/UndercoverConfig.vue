@@ -119,7 +119,6 @@ watch(
     () => ({...props.config}),
     () => {
         if (areObjectsEquals(internalConfig.value, props.config)) return;
-        console.log('watch props config', props.config.mode)
         internalConfig.value = (props.config as IUndercoverConfig)
     },
     { deep: true }
@@ -129,9 +128,7 @@ onMounted(() => {
     if (props.config && JSON.stringify(props.config) !== '{}') {
         internalConfig.value = (props.config as IUndercoverConfig)
     }
-    console.log('onMounted config', props.config.mode)
     if (isOwner.value) {
-        console.log('onMounted config isOwner')
         emit('update', internalConfig.value)
     }
 })

@@ -5,7 +5,7 @@
             <select 
                 id="mode" 
                 :disabled="!isOwner" 
-                v-model="config.mode"
+                v-model="internalConfig.mode"
             >
                 <option value="classic">Classic</option>
                 <option value="less_trials">Few trials possible</option>
@@ -17,7 +17,7 @@
             <select 
                 id="theme" 
                 :disabled="!isOwner" 
-                v-model="config.theme"
+                v-model="internalConfig.theme"
             >
                 <option value="lol">League Of Legends</option>
                 <option value="pokemon">Pokemon</option>
@@ -33,7 +33,7 @@
                 :disabled="!isOwner" 
                 :min="1"
                 placeholder="Entrez le nombre maximum de joueurs"
-                v-model="config.maxPlayers"
+                v-model="internalConfig.maxPlayers"
             >
         </div>
 
@@ -46,7 +46,7 @@
                 :min="1"
                 :max="10"
                 placeholder="Entrez le nombre de rounds"
-                v-model="config.nbRounds"
+                v-model="internalConfig.nbRounds"
             >
         </div>
     </div>
@@ -57,9 +57,10 @@ import { useAuthStore } from '@/modules/auth/auth.store';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed, onMounted, ref, watch } from 'vue';
 import { ISpeedrundleConfig } from './speedrundle.types';
+import { areObjectsEquals } from '@/utils/functions';
 
 const emit = defineEmits(['update'])
-defineProps({
+const props = defineProps({
     config: {
         type: Object,
         default: () => {},
@@ -69,7 +70,8 @@ defineProps({
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
-const config = ref<ISpeedrundleConfig>({ 
+
+const internalConfig = ref<ISpeedrundleConfig>({ 
     maxPlayers: 6,
     nbRounds: 1,
     mode: 'classic', 
@@ -82,16 +84,31 @@ const currentUser = computed(() => store.getCurrentUser);
 const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
 
 watch(
-    () => config.value,
+    () => internalConfig.value,
     () => {
+        if (!isOwner.value) return;
         if (timer.value) clearTimeout(timer.value)
-        timer.value = setTimeout(() => emit('update', config.value), 300);
+        timer.value = setTimeout(() => emit('update', internalConfig.value), 500);
+    },
+    { deep: true }
+)
+
+watch(
+    () => ({...props.config}),
+    () => {
+        if (areObjectsEquals(internalConfig.value, props.config)) return;
+        internalConfig.value = (props.config as ISpeedrundleConfig)
     },
     { deep: true }
 )
 
 onMounted(() => {
-    emit('update', config.value);
+    if (props.config && JSON.stringify(props.config) !== '{}') {
+        internalConfig.value = (props.config as ISpeedrundleConfig)
+    }
+    if (isOwner.value) {
+        emit('update', internalConfig.value)
+    }
 })
 </script>
 
