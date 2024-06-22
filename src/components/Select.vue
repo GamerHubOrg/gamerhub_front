@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 
 interface IOption {
     value: string;

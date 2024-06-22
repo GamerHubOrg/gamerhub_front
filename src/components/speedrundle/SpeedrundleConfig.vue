@@ -4,7 +4,7 @@
             <label for="mode">Mode de jeu :</label>
             <select 
                 id="mode" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 v-model="internalConfig.mode"
             >
                 <option value="classic">Classic</option>
@@ -16,7 +16,7 @@
             <label for="thme">Thème :</label>
             <select 
                 id="theme" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 v-model="internalConfig.theme"
             >
                 <option value="league_of_legends">League Of Legends</option>
@@ -30,7 +30,7 @@
             <input 
                 id="maxPlayers" 
                 type="number" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 :min="1"
                 placeholder="Entrez le nombre maximum de joueurs"
                 v-model="internalConfig.maxPlayers"
@@ -42,7 +42,7 @@
             <input 
                 id="nbRounds" 
                 type="number" 
-                :disabled="!isOwner" 
+                :disabled="isConfigDisabled" 
                 :min="1"
                 :max="10"
                 placeholder="Entrez le nombre de rounds"
@@ -82,6 +82,7 @@ const data = computed(() => socketStore.getRoomData)
 
 const currentUser = computed(() => store.getCurrentUser);
 const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
+const isConfigDisabled = computed(() => !isOwner.value || data.value.gameState !== 'lobby');
 
 watch(
     () => internalConfig.value,
