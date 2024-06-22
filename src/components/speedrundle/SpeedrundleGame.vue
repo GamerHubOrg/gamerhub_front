@@ -74,6 +74,7 @@ import {
 import { formatLolCharacter } from './speedrundle.functions'
 import Select from "@/components/Select.vue";
 import { capitalizeFirstLetter } from "../../utils/functions";
+import findCharacterSound from '../../assets/games/speedrundle/sounds/find-character.wav'
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -223,6 +224,15 @@ function handleSendCharacter() {
   );
   characterGuessId.value = "";
 }
+
+function handlePlaySoundEffect(sound: string) {
+  const wordAudio = new Audio(sound)
+  wordAudio.volume = 0.05
+  wordAudio.play();
+}
+
+socket.value?.on('game:speedrundle:find-character', () => handlePlaySoundEffect(findCharacterSound));
+socket.value?.on('game:speedrundle:end-game', () => handlePlaySoundEffect(findCharacterSound));
 
 socket.value?.on("game:speedrundle:data", ({ data }: { data: any }) => { 
   stateData.value.gameData = data;

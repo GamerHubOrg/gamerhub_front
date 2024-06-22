@@ -86,16 +86,15 @@ const selectOption = (option: IOption) => {
 const filteredOptions = computed(() => {
     if (props.hideOptions && searchQuery.value === '') {
         return [];
-    } else {
-        return options.value.filter(option => {
-            if (props.queryStartsWith) {
-                return option.label.toLowerCase().startsWith(searchQuery.value.toLowerCase())
-            }
-
-            return option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
-        }
-        ).sort((a, b) => a.label.localeCompare(b.label));
     }
+    return options.value.filter(option => {
+        if (props.queryStartsWith) {
+            return option.label.toLowerCase().startsWith(searchQuery.value.toLowerCase())
+        }
+
+        return option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+    }
+    ).sort((a, b) => a.label.localeCompare(b.label));
 });
 
 // Close the dropdown when clicked outside
