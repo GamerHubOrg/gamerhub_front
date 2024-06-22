@@ -57,7 +57,6 @@ const handleUpdateRoom = (conf: IRoomConfig) => {
     }
 
     if (data.value.gameState !== 'lobby') {
-        console.log("La partie a déjà commencé.");
         return;
     }
     socketStore.handleUpdateRoom(roomId.value, conf)

@@ -86,6 +86,9 @@ import { computed, ref } from 'vue';
 import { EyeSlashIcon } from '@heroicons/vue/24/solid';
 import { IUndercoverConfig, IUndercoverRoomData } from './undercover.types';
 import Modal from '../Modal.vue';
+import sendWordSound from '../../assets/games/undercover/sounds/send-word.wav'
+import newRoundSound from '../../assets/games/undercover/sounds/new-round.wav'
+import startGameSound from '../../assets/games/undercover/sounds/game-start.wav'
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -116,10 +119,16 @@ function handleSendWord(e: Event) {
     if (wordForm.value && wordForm.value === '') return;
     socket.value?.emit("game:undercover:send-word", { roomId: roomId.value, userId: gameData.value?.playerTurn, word: wordForm.value});
     wordForm.value = undefined;
+    const wordAudio = new Audio(sendWordSound)
+    wordAudio.volume = 0.05
+    wordAudio.play();
 }
 
 function handleVote(user: User) {
     socket.value?.emit("game:undercover:vote", { roomId: roomId.value, userId: currentUser.value._id, vote: user._id});
+    const wordAudio = new Audio(sendWordSound)
+    wordAudio.volume = 0.05
+    wordAudio.play();
 }
 
 function getUserWords(user: User) {
@@ -129,6 +138,18 @@ function getUserWords(user: User) {
 function handleShowImage() {
     showImageModalOpen.value = true;
 }
+
+socket.value?.on('game:undercover:new-round', () => {
+    const wordAudio = new Audio(newRoundSound)
+    wordAudio.volume = 0.05
+    wordAudio.play();
+})
+
+socket.value?.on('game:undercover:start', () => {
+    const wordAudio = new Audio(startGameSound)
+    wordAudio.volume = 0.04
+    wordAudio.play();
+})
 
 socket.value?.on("game:undercover:data", ({ logs, data }) => {
     socketStore.handleRoomUpdate({ data: { ...roomData.value, logs, gameData: data } });
