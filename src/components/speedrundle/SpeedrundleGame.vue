@@ -4,6 +4,7 @@
     <p>
       Le thème de la partie est :
       <span class="font-semibold">{{ roomCong?.theme }} : {{ roomCong?.mode }}</span>
+      {{ currentCharacterToGuess?.name }}
     </p>
 
     <div class="absolute right-0 flex flex-col gap-1">
@@ -167,14 +168,12 @@ function getColumnClass(id: string, column: string) {
 }
 
 function formatCharacter(id: string) {
-  const characterData = allCharacters.value.find(({ _id }) => _id === id) as
-    | ILolCharacter
-    | undefined;
+  const characterData = allCharacters.value.find(({ _id }) => _id === id);
   if (!characterData) return undefined;
 
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
-      return formatLolCharacter(characterData);
+      return formatLolCharacter(characterData as ILolCharacter);
 
     default:
       break;
@@ -204,12 +203,14 @@ function handlePlaySoundEffect(sound: string) {
 socket.value?.on('game:speedrundle:find-character', () => handlePlaySoundEffect(findCharacterSound));
 socket.value?.on('game:speedrundle:end-game', () => handlePlaySoundEffect(findCharacterSound));
 
-socket.value?.on("game:speedrundle:data", ({ data }: { data: any }) => { 
+socket.value?.on("game:speedrundle:data", ({ data }: { data: any }, target?: string) => {
   stateData.value.gameData = data;
 
-  userAnswers.value = gameData.value.usersAnswers?.find(
-    ({ playerId }) => playerId === currentUser.value._id
-  );
+  if (!target || target === currentUser.value._id)
+    userAnswers.value = gameData.value.usersAnswers?.find(
+      ({ playerId }) => playerId === currentUser.value._id
+    );
+
 
   if (allCharacters.value && allCharacters.value.length === 0)
     allCharacters.value = data.allCharacters ?? [];
@@ -224,16 +225,19 @@ watch(
 </script>
 
 <style scoped>
-.arrow-up, .arrow-down {
+.arrow-up,
+.arrow-down {
   position: relative;
 }
 
-.arrow-up *, .arrow-down * {
+.arrow-up *,
+.arrow-down * {
   position: relative;
   z-index: 1;
 }
 
-.arrow-up::before, .arrow-down::before {
+.arrow-up::before,
+.arrow-down::before {
   content: '';
   z-index: 0;
   position: absolute;
@@ -242,7 +246,7 @@ watch(
   top: 0;
   left: 0;
   background-repeat: no-repeat;
-  background-size: 50%;
+  background-size: 75% 75%;
   background-position: center;
   vertical-align: middle;
   opacity: 0.4;
