@@ -52,7 +52,7 @@ import { User as UserInterface } from '@/modules/auth/user';
 import { computed } from 'vue';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
-import {  ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
+import {  ILolCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
 import { formatLolCharacter } from './speedrundle.functions'
 
 const store = useAuthStore();

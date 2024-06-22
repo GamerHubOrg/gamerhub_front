@@ -10,8 +10,14 @@ export interface ISpeedrundleConfig extends IRoomConfig {
   nbRounds: number;
 }
 
-export interface ILolData {
-  dataType: "Lol";
+export type CharacterDataType = "league_of_legends" | "pokemon";
+
+export interface ICharacterData extends Record<string, any> {
+  dataType: CharacterDataType;
+}
+
+export interface ILolCharacterData extends ICharacterData {
+  dataType: "league_of_legends";
   splash: string;
   sprite: string;
   title: string;
@@ -20,6 +26,8 @@ export interface ILolData {
   ressource: string;
   range: string[];
   position: string[];
+  region: string;
+  releaseYear: number;
 }
 
 export interface ICharacter {
@@ -27,11 +35,11 @@ export interface ICharacter {
   name: string;
   lang: string;
   apiId?: string;
-  data: Record<any, any>;
+  data: ICharacterData;
 }
 
 export interface ILolCharacter extends ICharacter {
-  data: ILolData;
+  data: ILolCharacterData;
 }
 
 export type ISpeedrundleGameState = "guess";
@@ -97,3 +105,5 @@ export interface ISpeedrundleConfig extends IRoomConfig {
   nbRounds: number;
   theme: SpeedrundleTheme;
 }
+
+export type SpeedrundleAnswerClues = "true" | "false" | "partial" | "more" | "less"
