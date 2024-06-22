@@ -25,7 +25,7 @@
     <div v-if="playerState === 'finished'">
       <h3 class="text-xl text-center mb-2">Détails des scores</h3>
       <div class="flex gap-5 justify-center flex-wrap mb-2">
-        <div v-for="character in finishedCharactersData" class="flex flex-col items-center">
+        <div v-for="character in finishedCharactersData" :key="character.name" class="flex flex-col items-center">
           <img v-if="!!character.image" :src="character.image" />
           <p>{{ character.attempts }} essais</p>
         </div>
@@ -40,14 +40,14 @@
         <table class="border-separate bg-dark2 w-full">
           <thead>
             <tr>
-              <th v-for="column in gameData?.columns">
+              <th v-for="column in gameData?.columns" :key="column.name">
                 {{ column.name }}
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="guess in guessedCharacters.reverse()">
-              <th v-for="column in gameData?.columns" :class="getColumnClass(guess.id, column.key)">
+            <tr v-for="guess in reversedGuessedCharacters" :key="guess?.id">
+              <th v-for="column in gameData?.columns" :class="getColumnClass(guess.id, column.key)" :key="column.key">
                 <img v-if="column.type === 'image'" :src="guess[column.key as keyof object]" class="mx-auto" />
                 <p v-else>{{ guess[column.key as keyof object] }}</p>
               </th>
@@ -94,6 +94,7 @@ const allCharacters = ref<ICharacter[]>([]);
 const userAnswers = ref<ISpeedrundleAnswer>();
 
 const playerState = computed(() => userAnswers.value?.state)
+const reversedGuessedCharacters = computed(() => [...guessedCharacters.value].reverse());
 
 const currentCharacterToGuess = computed(() => {
   if (!userAnswers.value) return undefined;

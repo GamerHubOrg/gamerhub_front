@@ -16,7 +16,7 @@ export function compareLolGuessToAnswer(
   currentGuess: ILolCharacter,
   column: string
 ) : SpeedrundleAnswerClues {
-  const arraysColumns = ["tags", "range", "position"];
+  const arraysColumns = ["tags", "range", "position", "species"];
   const stringColumns = ["ressource", "gender", "region"];
 
 
@@ -51,6 +51,7 @@ export function formatLolCharacter(characterData: ILolCharacter) {
       ? "Féminin"
       : "Autre";
   const tags = characterData.data.tags.join(", ");
+  const species = characterData.data.species.join(", ");
   const ranges = characterData.data.range.map((e) => capitalizeFirstLetter(e));
   const range = ranges.length > 1 ? ranges.join(", ") : ranges[0];
   const position = characterData.data.position
@@ -63,6 +64,7 @@ export function formatLolCharacter(characterData: ILolCharacter) {
     gender,
     tags,
     ressource,
+    species,
     range,
     region,
     position,
