@@ -33,6 +33,16 @@
         </div>
       </div>
     </div>
+
+    <div class="mt-6">
+      <h3 class="text-xl text-center mb-2">Détails des scores</h3>
+      <div class="flex gap-5 justify-center flex-wrap mb-2">
+        <div v-for="character in finishedCharactersData" class="flex flex-col items-center">
+          <img v-if="!!character.image" :src="character.image" />
+          <p>{{ character.attempts }} essais</p>
+        </div>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -43,6 +53,7 @@ import { computed } from 'vue';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
 import {  ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
+import { formatLolCharacter } from './speedrundle.functions'
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -85,6 +96,16 @@ const usersResults = computed(() => {
   return results
 })
 
+const finishedCharactersData = computed(() => {
+  const userAnswers = gameData.value.usersAnswers.find(({ playerId }) => playerId === currentUser.value._id);
+  const { roundsData } = userAnswers || {};
+  return charactersToGuess.value.map((character, index) => ({
+    image: formatCharacter(character._id)?.sprite,
+    attempts: roundsData?.[index].guesses.length || 0,
+    score: roundsData?.[index].score || 0
+  }));
+});
+
 function getRankColor(rank: number) {
   switch (rank) {
     case 1:
@@ -95,6 +116,21 @@ function getRankColor(rank: number) {
       return 'text-glow text-yellow-600';
     default:
       return 'text-white';
+  }
+}
+
+function formatCharacter(id: string) {
+  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id) as
+    | ILolCharacter
+    | undefined;
+  if (!characterData) return undefined;
+
+  switch (roomData.value.config?.theme) {
+    case "league_of_legends":
+      return formatLolCharacter(characterData);
+
+    default:
+      break;
   }
 }
 </script>
