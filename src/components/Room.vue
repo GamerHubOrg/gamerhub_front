@@ -4,6 +4,7 @@ import { useAuthStore } from "@/modules/auth/auth.store";
 import { IRoomData } from "@/types/interfaces";
 import { useSocketStore } from '../modules/socket/socket.store';
 import { useRoute, useRouter } from "vue-router";
+import { toast, ToastType } from 'vue3-toastify';
 
 const router = useRouter()
 const route = useRoute();
@@ -59,6 +60,14 @@ function onUserNotAuth() {
   console.log("Veuillez vous connecter.")
 }
 
+function onRoomNotification(message: string, type: ToastType) {
+  toast(message, {
+      autoClose: 3000,
+      type,
+      theme: 'dark'
+  });
+}
+
 // Définition des listener du socket
 
 if (socket) {
@@ -67,9 +76,13 @@ if (socket) {
   socket.on("room:updated", onRoomUpdated);
   socket.on("room:started", onRoomStarted);
   socket.on("room:lobbied", onRoomBackToLobby);
-  socket.on("room:not-found", onRoomNotFound)
-  socket.on("user:not-auth", onUserNotAuth)
-  socket.on("room:deleted", onRoomDeleted)
+  socket.on("room:not-found", onRoomNotFound);
+  socket.on("user:not-auth", onUserNotAuth);
+  socket.on("room:deleted", onRoomDeleted);
+  socket.on("room:notifications:success", (message: string) => onRoomNotification(message, 'success'));
+  socket.on("room:notifications:info", (message: string) => onRoomNotification(message, 'info'));
+  socket.on("room:notifications:error", (message: string) => onRoomNotification(message, 'error'));
+  socket.on("room:notifications:warning", (message: string) => onRoomNotification(message, 'warning'));
 }
 
 watch(

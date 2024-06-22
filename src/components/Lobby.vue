@@ -101,7 +101,7 @@ const handleShareConfig = async (e: Event) => {
         await gameStore.publishConfig({ game: data.value.gameName, name: shareConfigName.value, config: config.value });
         shareConfigName.value = "";
         publishConfigModalOpen.value = false
-        toast("Config plublished successfully !", {
+        toast("Config published successfully !", {
             autoClose: 1000,
             type: 'success',
             theme: 'dark'
