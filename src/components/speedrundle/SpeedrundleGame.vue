@@ -4,7 +4,6 @@
     <p>
       Le thème de la partie est :
       <span class="font-semibold">{{ roomCong?.theme }} : {{ roomCong?.mode }}</span>
-      {{ currentCharacterToGuess?.name }}
     </p>
 
     <div class="absolute right-0 flex flex-col gap-1">
