@@ -70,10 +70,10 @@ import {
   ISpeedrundleAnswer,
   ISpeedrundleGameData,
   ISpeedrundleRoomData,
+  SpeedrundleAnswerClues,
 } from "./speedrundle.types";
-import { formatLolCharacter } from './speedrundle.functions'
+import { formatLolCharacter, compareLolGuessToAnswer } from './speedrundle.functions'
 import Select from "@/components/Select.vue";
-import { capitalizeFirstLetter } from "../../utils/functions";
 import findCharacterSound from '../../assets/games/speedrundle/sounds/find-character.wav'
 
 const store = useAuthStore();
@@ -142,58 +142,28 @@ const scores = computed(() => {
   return scoresObject;
 });
 
-function verifyArrayInclusion(array1: string[], array2: string[]) {
-  const allGood =
-    array1.every((tag) => array2.includes(tag)) &&
-    array2.every((tag) => array1.includes(tag));
-  if (allGood) return "true";
-  const someGood = allGood || array1.some((tag) => array2?.includes(tag));
-  if (someGood) return "partial";
-  return "false";
-}
 
-function getLolColumnClass(characterData: ILolCharacter, column: string) {
-  const arraysColumns = ["tags", "range", "position"];
-  const stringColumns = ["ressource", "gender"];
-  const red = "bg-red-500";
-  const green = "bg-green-500";
-  const orange = "bg-orange-500";
-
-  if (arraysColumns.includes(column)) {
-    const guess = characterData.data[column as keyof object];
-    const toGuess = currentCharacterToGuess.value?.data[column as keyof object] ?? [];
-    const value = verifyArrayInclusion(toGuess, guess);
-    return value === "true"
-      ? green
-      : value === "partial"
-        ? orange
-        : red;
-  }
-
-  if (stringColumns.includes(column)) {
-    const guess = characterData.data[column as keyof object];
-    const toGuess = currentCharacterToGuess.value?.data[column as keyof object];
-    return guess === toGuess ? green : red;
-  }
-
-  return characterData._id === currentCharacterToGuess.value?._id
-    ? green
-    : red;
-}
-
-function getColumnClass(id: string, column: string) {
-  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id) as
-    | ILolCharacter
-    | undefined;
-  if (!characterData) return "bg-red-500";
+function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClues {
+  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id);
+  if (!characterData || !currentCharacterToGuess.value) return "false";
 
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
-      return getLolColumnClass(characterData, column);
-
+      return compareLolGuessToAnswer(currentCharacterToGuess.value as ILolCharacter, characterData as ILolCharacter, column);
     default:
-      break;
+      return "false"
   }
+}
+
+function getColumnClass(id: string, column: string) {
+  const comparisonResult = compareGuessToAnswer(id, column);
+  return {
+    'bg-red-500': ['false', 'more', 'less'].includes(comparisonResult),
+    'bg-orange-500': comparisonResult === 'partial',
+    'bg-green-500': comparisonResult === 'true',
+    'arrow-up': comparisonResult === 'more',
+    'arrow-down': comparisonResult === 'less'
+  };
 }
 
 function formatCharacter(id: string) {
@@ -252,3 +222,37 @@ watch(
   }
 );
 </script>
+
+<style scoped>
+.arrow-up, .arrow-down {
+  position: relative;
+}
+
+.arrow-up *, .arrow-down * {
+  position: relative;
+  z-index: 1;
+}
+
+.arrow-up::before, .arrow-down::before {
+  content: '';
+  z-index: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+  vertical-align: middle;
+  opacity: 0.4;
+}
+
+.arrow-up::before {
+  background-image: url('../../assets/icons/arrow-up.svg');
+}
+
+.arrow-down::before {
+  background-image: url('../../assets/icons/arrow-down.svg');
+}
+</style>
