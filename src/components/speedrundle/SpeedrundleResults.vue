@@ -2,44 +2,50 @@
   <div class="text-white">
     <h1 class="text-center font-bold text-4xl">Résultats</h1>
 
-    <div class="flex flex-col mt-12 rounded-md overflow-hidden overflow-x-auto">
-      <div class="flex flex-row items-center justify-between gap-2 bg-dark2 p-3">
-        <span class="w-12">Rank</span>
-        <span class="w-56">Username</span>
-        <div class="flex flex-row items-center justify-between gap-2 w-full">
-          <span v-for="character in charactersToGuess" :key="character._id">
+    <table class="w-full mt-12 rounded-md">
+      <thead class="bg-dark2">
+        <tr>
+          <th class="py-3 rounded-tl-md">Rank</th>
+          <th>Username</th>
+          <th v-for="character in charactersToGuess" :key="character._id">
             {{ character.name }}
-          </span>
-          <span>Total</span>
-        </div>
-      </div>
+          </th>
+          <th class="rounded-tr-md">Total</th>
+        </tr>
+      </thead>
 
-      <div v-for="user in usersResults" :key="user._id">
-        <div class="flex flex-row items-center justify-between p-3 gap-2 bg-white bg-opacity-10">
-          <span class="text-3xl font-bold font-serif w-12 text-center" :class="getRankColor(user.rank)">{{ user.rank }}</span>
-          <div class="flex items-center gap-x-4 text-xs w-56">
-            <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-            <div class="font-medium leading-6 text-white">
-              <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
-              <span v-else class="text-green-400">Moi</span>
+      <tbody>
+        <tr v-for="user, i in usersResults" :key="user._id" class="bg-white bg-opacity-10">
+          <td class="" :class="{ 'rounded-bl-md': i === usersResults.length - 1 }">
+            <div class="text-3xl font-bold font-serif text-center" :class="getRankColor(user.rank)">{{ user.rank }}
             </div>
-          </div>
-          <div class="flex flex-row items-center justify-between gap-2 w-full">
-            <span v-for="character, i in charactersToGuess" :key="character._id">
-              {{ user.scores[i] }}
-            </span>
-            <span>{{ user.totalScore }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td>
+            <div class="flex items-center gap-x-4 text-xs w-fit mx-auto">
+              <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+              <div class="font-medium leading-6 text-white">
+                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
+                <span v-else class="text-green-400">Moi</span>
+              </div>
+            </div>
+          </td>
+          <td v-for="character, i in charactersToGuess" :key="character._id" class="text-center">
+            {{ user.scores[i] }}
+          </td>
+          <td class="text-center" :class="{ 'rounded-br-md': i === usersResults.length - 1 }">
+            {{ user.totalScore }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="mt-6">
       <h3 class="text-xl text-center mb-2">Détails des scores</h3>
       <div class="flex gap-5 justify-center flex-wrap mb-2">
         <div v-for="character in finishedCharactersData" class="flex flex-col items-center">
           <img v-if="!!character.image" :src="character.image" />
-          <p>{{ character.attempts }} essais</p>
+          <p v-if="character.abandon">Abandonné</p>
+          <p v-else>{{ character.attempts }} essais</p>
         </div>
       </div>
     </div>
@@ -52,7 +58,7 @@ import { User as UserInterface } from '@/modules/auth/user';
 import { computed } from 'vue';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
-import {  ILolCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
+import { ILolCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
 import { formatLolCharacter } from './speedrundle.functions'
 
 const store = useAuthStore();
@@ -91,7 +97,7 @@ const usersResults = computed(() => {
     }
     results[i].rank = currentRank
   }
-  
+
 
   return results
 })
@@ -102,7 +108,8 @@ const finishedCharactersData = computed(() => {
   return charactersToGuess.value.map((character, index) => ({
     image: formatCharacter(character._id)?.sprite,
     attempts: roundsData?.[index].guesses.length || 0,
-    score: roundsData?.[index].score || 0
+    score: roundsData?.[index].score || 0,
+    abandon : !roundsData?.[index].hasFound
   }));
 });
 
@@ -136,12 +143,6 @@ function formatCharacter(id: string) {
 </script>
 
 <style scoped>
-table,
-th,
-td {
-  @apply border border-black;
-}
-
 .text-glow {
   text-shadow: 0 0 8px currentColor;
 }

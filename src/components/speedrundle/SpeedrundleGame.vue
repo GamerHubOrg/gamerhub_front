@@ -22,20 +22,38 @@
       </div>
     </div>
 
+    <div
+      class="flex flex-col absolute right-0 bottom-1/2 translate-y-1/2 h-[300px] w-3 bg-red-500 rounded-tl rounded-bl">
+      <span v-for="n in nbRounds" class="relative flex-1 flex items-center"
+        :class="{ 'border-black border-b-2': n < nbRounds, 'bg-green-500': currentRound > n, 'rounded-tl': n === 1, 'rounded-bl': n === nbRounds }">
+
+        <div v-if="allUsersCurrentRound[n - 1]" class="absolute w-6 h-6 right-full mr-2">
+          <img v-if="allUsersCurrentRound[n - 1].length === 1" :key="allUsersCurrentRound[n - 1][0]"
+            :src="allUsersCurrentRound[n - 1][0]" class="w-full h-full rounded-full border border-white">
+          <span v-else
+            class="flex items-center justify-center w-full h-full font-bold bg-white rounded-full text-black border border-white">
+            {{ allUsersCurrentRound[n - 1].length }}</span>
+        </div>
+      </span>
+    </div>
+
     <div v-if="playerState === 'finished'">
       <h3 class="text-xl text-center mb-2">Détails des scores</h3>
       <div class="flex gap-5 justify-center flex-wrap mb-2">
-        <div v-for="character in finishedCharactersData" :key="character.name" class="flex flex-col items-center">
+        <div v-for="character in finishedCharactersData" :key="character.id" class="flex flex-col items-center">
           <img v-if="!!character.image" :src="character.image" />
-          <p>{{ character.attempts }} essais</p>
+          <p v-if="character.abandon">Abandonné</p>
+          <p v-else>{{ character.attempts }} essais</p>
         </div>
       </div>
       <p class="text-center">En attente des autres joueurs...</p>
     </div>
 
-    <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full">
+    <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full mr-16">
       <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
         :options="filteredCharacters" />
+      <Button type="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
+
       <div class="w-full">
         <table class="border-separate bg-dark2 w-full">
           <thead>
@@ -75,6 +93,8 @@ import {
 import { formatLolCharacter, compareLolGuessToAnswer } from './speedrundle.functions'
 import Select from "@/components/Select.vue";
 import findCharacterSound from '../../assets/games/speedrundle/sounds/find-character.wav'
+import giveUpCharacterSound from '../../assets/games/speedrundle/sounds/give-up-character.wav'
+import Button from "../Button.vue";
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -96,20 +116,33 @@ const userAnswers = ref<ISpeedrundleAnswer>();
 const playerState = computed(() => userAnswers.value?.state)
 const reversedGuessedCharacters = computed(() => [...guessedCharacters.value].reverse());
 
-const currentCharacterToGuess = computed(() => {
-  if (!userAnswers.value) return undefined;
-  const { currentRound } = userAnswers.value;
-  return charactersToGuess.value[currentRound - 1];
-});
+const nbRounds = computed(() => roomData.value.config?.nbRounds || 0)
+const currentRound = computed(() => userAnswers.value?.currentRound || 1)
+const currentCharacterToGuess = computed(() => charactersToGuess.value[currentRound.value - 1]);
+
+const allUsersCurrentRound = computed(() => {
+  const rounds: string[][] = [];
+  for (const { _id, picture } of roomData.value.users) {
+    if (!picture) continue;
+    const answers = gameData.value.usersAnswers.find(({ playerId }) => _id === playerId);
+    if (!answers || answers.state === "finished") continue;
+    const roundIndex = answers.currentRound - 1
+    rounds[roundIndex] = [...(rounds[roundIndex] || []), picture];
+  }
+
+  return rounds
+})
 
 const finishedCharactersData = computed(() => {
   if (playerState.value !== 'finished') return [];
 
   const { roundsData } = userAnswers.value || {};
   return charactersToGuess.value.map((character, index) => ({
+    id: character._id,
     image: formatCharacter(character._id)?.sprite,
     attempts: roundsData?.[index].guesses.length || 0,
-    score: roundsData?.[index].score || 0
+    score: roundsData?.[index].score || 0,
+    abandon : !roundsData?.[index].hasFound
   }));
 });
 
@@ -194,12 +227,21 @@ function handleSendCharacter() {
   characterGuessId.value = "";
 }
 
+function handleGiveUpCharacter() {
+  socket.value?.emit(
+    "game:speedrundle:give-up",
+    roomId.value,
+    currentUser.value._id,
+  );
+}
+
 function handlePlaySoundEffect(sound: string) {
   const wordAudio = new Audio(sound)
   wordAudio.volume = 0.05
   wordAudio.play();
 }
 
+socket.value?.on('game:speedrundle:give-up-character', () => handlePlaySoundEffect(giveUpCharacterSound));
 socket.value?.on('game:speedrundle:find-character', () => handlePlaySoundEffect(findCharacterSound));
 socket.value?.on('game:speedrundle:end-game', () => handlePlaySoundEffect(findCharacterSound));
 
