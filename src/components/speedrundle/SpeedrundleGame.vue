@@ -85,12 +85,13 @@ import { computed, ref, watch } from "vue";
 import {
   ICharacter,
   ILolCharacter,
+  IPokemonCharacter,
   ISpeedrundleAnswer,
   ISpeedrundleGameData,
   ISpeedrundleRoomData,
   SpeedrundleAnswerClues,
 } from "./speedrundle.types";
-import { formatLolCharacter, compareLolGuessToAnswer } from './speedrundle.functions'
+import { formatLolCharacter, compareLolGuessToAnswer, formatPokemonCharacter, comparePokemonGuessToAnswer } from './speedrundle.functions'
 import Select from "@/components/Select.vue";
 import findCharacterSound from '../../assets/games/speedrundle/sounds/find-character.wav'
 import giveUpCharacterSound from '../../assets/games/speedrundle/sounds/give-up-character.wav'
@@ -124,7 +125,7 @@ const allUsersCurrentRound = computed(() => {
   const rounds: string[][] = [];
   for (const { _id, picture } of roomData.value.users) {
     if (!picture) continue;
-    const answers = gameData.value.usersAnswers.find(({ playerId }) => _id === playerId);
+    const answers = gameData.value.usersAnswers?.find(({ playerId }) => _id === playerId);
     if (!answers || answers.state === "finished") continue;
     const roundIndex = answers.currentRound - 1
     rounds[roundIndex] = [...(rounds[roundIndex] || []), picture];
@@ -142,7 +143,7 @@ const finishedCharactersData = computed(() => {
     image: formatCharacter(character._id)?.sprite,
     attempts: roundsData?.[index].guesses.length || 0,
     score: roundsData?.[index].score || 0,
-    abandon : !roundsData?.[index].hasFound
+    abandon: !roundsData?.[index].hasFound
   }));
 });
 
@@ -184,6 +185,8 @@ function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClue
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
       return compareLolGuessToAnswer(currentCharacterToGuess.value as ILolCharacter, characterData as ILolCharacter, column);
+    case "pokemon":
+      return comparePokemonGuessToAnswer(currentCharacterToGuess.value as IPokemonCharacter, characterData as IPokemonCharacter, column);
     default:
       return "false"
   }
@@ -207,6 +210,8 @@ function formatCharacter(id: string) {
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
       return formatLolCharacter(characterData as ILolCharacter);
+    case "pokemon":
+      return formatPokemonCharacter(characterData as IPokemonCharacter);
 
     default:
       break;
@@ -256,6 +261,7 @@ socket.value?.on("game:speedrundle:data", ({ data }: { data: any }, target?: str
 
   if (allCharacters.value && allCharacters.value.length === 0)
     allCharacters.value = data.allCharacters ?? [];
+
 });
 
 watch(

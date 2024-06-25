@@ -58,8 +58,8 @@ import { User as UserInterface } from '@/modules/auth/user';
 import { computed } from 'vue';
 import { useSocketStore } from '../../modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
-import { ILolCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
-import { formatLolCharacter } from './speedrundle.functions'
+import { ILolCharacter, IPokemonCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
+import { formatLolCharacter, formatPokemonCharacter } from './speedrundle.functions'
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -109,7 +109,7 @@ const finishedCharactersData = computed(() => {
     image: formatCharacter(character._id)?.sprite,
     attempts: roundsData?.[index].guesses.length || 0,
     score: roundsData?.[index].score || 0,
-    abandon : !roundsData?.[index].hasFound
+    abandon: !roundsData?.[index].hasFound,
   }));
 });
 
@@ -127,14 +127,14 @@ function getRankColor(rank: number) {
 }
 
 function formatCharacter(id: string) {
-  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id) as
-    | ILolCharacter
-    | undefined;
+  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id);
   if (!characterData) return undefined;
 
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
-      return formatLolCharacter(characterData);
+      return formatLolCharacter(characterData as ILolCharacter);
+    case "pokemon":
+      return formatPokemonCharacter(characterData as IPokemonCharacter);
 
     default:
       break;

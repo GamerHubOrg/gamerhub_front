@@ -3,8 +3,8 @@
         <div class="border border-gray-300 bg-white rounded-md shadow-sm p-2 cursor-pointer flex items-center justify-between"
             @click="toggleDropdown()">
             <div class="flex items-center">
-                <img v-if="selectedOption.imageUrl" :src="selectedOption.imageUrl" alt=""
-                    class="w-6 h-6 rounded-full mr-2">
+                <img v-if="selectedOption.imageUrl" :src="selectedOption.imageUrl" alt="" class="rounded-full mr-2"
+                    :style="{ width: `${imageSize}px`, height: `${imageSize}px` }">
                 <input v-if="!hideSearch" v-model="searchQuery" @click="handleInputClick" type="text"
                     class="w-full p-2 border-b border-gray-300 focus:outline-none text-black" placeholder="Search...">
             </div>
@@ -21,7 +21,8 @@
             <div v-if="filteredOptions.length > 0 || !hideOptions">
                 <div v-for="option in filteredOptions" :key="option.value"
                     class="p-2 hover:bg-gray-100 cursor-pointer flex items-center" @click="selectOption(option)">
-                    <img v-if="!!option.imageUrl" :src="option.imageUrl" alt="" class="w-6 h-6 rounded-full mr-2">
+                    <img v-if="!!option.imageUrl" :src="option.imageUrl" alt="" class="rounded-full mr-2"
+                        :style="{ width: `${imageSize}px`, height: `${imageSize}px` }">
                     <span class="text-black">{{ option.label }}</span>
                 </div>
                 <div v-if="filteredOptions.length === 0 && !hideOptions" class="p-2 text-gray-400">No matching options
@@ -48,8 +49,10 @@ const props = defineProps<{
     hideOptions?: boolean;
     hideSearch?: boolean;
     queryStartsWith?: boolean;
+    imageSize?: number;
 }>();
 
+const imageSize = computed(() => props.imageSize || 24);
 const options = computed(() => props.options ?? [])
 
 const selectedOption = computed(() => {
@@ -70,9 +73,9 @@ const toggleDropdown = (value?: boolean) => {
     }
 };
 
-const handleInputClick = (e : Event) => {
+const handleInputClick = (e: Event) => {
     e.stopPropagation();
-    if(!showDropdown.value) toggleDropdown();
+    if (!showDropdown.value) toggleDropdown();
 }
 
 // Select the clicked option

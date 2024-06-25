@@ -16,6 +16,15 @@ export interface ICharacterData extends Record<string, any> {
   dataType: CharacterDataType;
 }
 
+export interface ICharacter {
+  _id: string;
+  name: string;
+  lang: string;
+  apiId: string;
+  data: ICharacterData;
+}
+
+
 export interface ILolCharacterData extends ICharacterData {
   dataType: "league_of_legends";
   splash: string;
@@ -30,12 +39,23 @@ export interface ILolCharacterData extends ICharacterData {
   releaseYear: number;
 }
 
-export interface ICharacter {
-  _id: string;
-  name: string;
-  lang: string;
-  apiId?: string;
-  data: ICharacterData;
+export interface IPokemonCharacterData extends ICharacterData {
+  dataType: "pokemon";
+  splash: string;
+  sprite: string;
+  types: string[];
+  height: number;
+  weight: number;
+  evolutionStage: number;
+  fullyEvolved: boolean;
+  color: string;
+  habitat: string;
+  generation: number;
+  status : string;
+}
+
+export interface IPokemonCharacter extends ICharacter {
+  data: IPokemonCharacterData;
 }
 
 export interface ILolCharacter extends ICharacter {
@@ -104,6 +124,7 @@ export interface ISpeedrundleGuess {
 export interface ISpeedrundleConfig extends IRoomConfig {
   nbRounds: number;
   theme: SpeedrundleTheme;
+  selectedGenerations? : number[]
 }
 
 export type SpeedrundleAnswerClues = "true" | "false" | "partial" | "more" | "less"
