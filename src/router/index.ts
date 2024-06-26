@@ -25,6 +25,12 @@ const routes = [
         meta: { requireAuth: false },
         component: () => import('../views/Community.vue'),
       },
+      {
+        path: '/premium',
+        name: 'premium',
+        meta: { requireAuth: false },
+        component: () => import('../views/Premium.vue'),
+      },
     ]
   },
   {

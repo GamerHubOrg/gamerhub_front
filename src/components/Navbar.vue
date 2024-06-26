@@ -37,13 +37,15 @@
             Community
           </Button>
         </router-link>
-        <Button>
-          <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 17.5H18M1 1.5L4 13.5H18L21 1.5L15 8.5L11 1.5L7 8.5L1 1.5Z" stroke="white" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Premium
-        </Button>
+        <router-link to="/premium">
+          <Button>
+            <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 17.5H18M1 1.5L4 13.5H18L21 1.5L15 8.5L11 1.5L7 8.5L1 1.5Z" stroke="white" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Premium
+          </Button>
+        </router-link>
 
         <div v-if="currentUser" class="flex flex-row items-center">
           <button type="button"
