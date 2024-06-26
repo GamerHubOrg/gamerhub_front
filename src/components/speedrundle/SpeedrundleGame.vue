@@ -85,12 +85,13 @@ import { computed, ref, watch } from "vue";
 import {
   ICharacter,
   ILolCharacter,
+  IPokemonCharacter,
   ISpeedrundleAnswer,
   ISpeedrundleGameData,
   ISpeedrundleRoomData,
   SpeedrundleAnswerClues,
 } from "./speedrundle.types";
-import { formatLolCharacter, compareLolGuessToAnswer } from './speedrundle.functions'
+import { formatLolCharacter, compareLolGuessToAnswer, formatPokemonCharacter, comparePokemonGuessToAnswer } from './speedrundle.functions'
 import Select from "@/components/Select.vue";
 import findCharacterSound from '../../assets/games/speedrundle/sounds/find-character.wav'
 import giveUpCharacterSound from '../../assets/games/speedrundle/sounds/give-up-character.wav'
@@ -108,14 +109,12 @@ const roomCong = computed(() => roomData.value.config);
 const gameData = computed(() => roomData.value.gameData as ISpeedrundleGameData);
 
 const characterGuessId = ref<string>("");
-const charactersToGuess = computed(() => gameData.value.charactersToGuess ?? []);
-const allCharacters = ref<ICharacter[]>([]);
-
 const userAnswers = ref<ISpeedrundleAnswer>();
 
+const charactersToGuess = ref<ICharacter[]>([]);
+const allCharacters = ref<ICharacter[]>([]);
 const playerState = computed(() => userAnswers.value?.state)
 const reversedGuessedCharacters = computed(() => [...guessedCharacters.value].reverse());
-
 const nbRounds = computed(() => roomData.value.config?.nbRounds || 0)
 const currentRound = computed(() => userAnswers.value?.currentRound || 1)
 const currentCharacterToGuess = computed(() => charactersToGuess.value[currentRound.value - 1]);
@@ -124,7 +123,7 @@ const allUsersCurrentRound = computed(() => {
   const rounds: string[][] = [];
   for (const { _id, picture } of roomData.value.users) {
     if (!picture) continue;
-    const answers = gameData.value.usersAnswers.find(({ playerId }) => _id === playerId);
+    const answers = gameData.value.usersAnswers?.find(({ playerId }) => _id === playerId);
     if (!answers || answers.state === "finished") continue;
     const roundIndex = answers.currentRound - 1
     rounds[roundIndex] = [...(rounds[roundIndex] || []), picture];
@@ -142,7 +141,7 @@ const finishedCharactersData = computed(() => {
     image: formatCharacter(character._id)?.sprite,
     attempts: roundsData?.[index].guesses.length || 0,
     score: roundsData?.[index].score || 0,
-    abandon : !roundsData?.[index].hasFound
+    abandon: !roundsData?.[index].hasFound
   }));
 });
 
@@ -178,12 +177,14 @@ const scores = computed(() => {
 
 
 function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClues {
-  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id);
+  const characterData = allCharacters.value.find(({ _id }) => _id === id);
   if (!characterData || !currentCharacterToGuess.value) return "false";
 
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
       return compareLolGuessToAnswer(currentCharacterToGuess.value as ILolCharacter, characterData as ILolCharacter, column);
+    case "pokemon":
+      return comparePokemonGuessToAnswer(currentCharacterToGuess.value as IPokemonCharacter, characterData as IPokemonCharacter, column);
     default:
       return "false"
   }
@@ -207,6 +208,8 @@ function formatCharacter(id: string) {
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
       return formatLolCharacter(characterData as ILolCharacter);
+    case "pokemon":
+      return formatPokemonCharacter(characterData as IPokemonCharacter);
 
     default:
       break;
@@ -246,16 +249,17 @@ socket.value?.on('game:speedrundle:find-character', () => handlePlaySoundEffect(
 socket.value?.on('game:speedrundle:end-game', () => handlePlaySoundEffect(findCharacterSound));
 
 socket.value?.on("game:speedrundle:data", ({ data }: { data: any }, target?: string) => {
-  stateData.value.gameData = data;
+  stateData.value.gameData = { ...gameData.value, ...data };
 
   if (!target || target === currentUser.value._id)
     userAnswers.value = gameData.value.usersAnswers?.find(
       ({ playerId }) => playerId === currentUser.value._id
     );
 
-
-  if (allCharacters.value && allCharacters.value.length === 0)
+  if (data.allCharacters && data.allCharacters.length > 0)
     allCharacters.value = data.allCharacters ?? [];
+  if (data.charactersToGuess && data.charactersToGuess.length > 0)
+    charactersToGuess.value = data.charactersToGuess ?? [];
 });
 
 watch(
@@ -264,6 +268,11 @@ watch(
     if (newVal) handleSendCharacter();
   }
 );
+
+watch(() => allCharacters.value, (newVal) => {
+  console.log("nbPokemons", newVal.length)
+  console.log("pokemon gen", newVal[0]?.data.generation)
+})
 </script>
 
 <style scoped>

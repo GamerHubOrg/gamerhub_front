@@ -1,5 +1,9 @@
 import { capitalizeFirstLetter } from "@/utils/functions";
-import { ILolCharacter, SpeedrundleAnswerClues } from "./speedrundle.types";
+import {
+  ILolCharacter,
+  IPokemonCharacter,
+  SpeedrundleAnswerClues,
+} from "./speedrundle.types";
 
 function verifyArrayInclusion(array1: string[], array2: string[]) {
   const allGood =
@@ -15,16 +19,15 @@ export function compareLolGuessToAnswer(
   characterToGuess: ILolCharacter,
   currentGuess: ILolCharacter,
   column: string
-) : SpeedrundleAnswerClues {
+): SpeedrundleAnswerClues {
   const arraysColumns = ["tags", "range", "position", "species"];
   const stringColumns = ["ressource", "gender", "region"];
-
 
   if (arraysColumns.includes(column)) {
     const guess = currentGuess.data[column as keyof object];
     const toGuess = characterToGuess.data[column as keyof object] ?? [];
     const value = verifyArrayInclusion(toGuess, guess);
-    return value
+    return value;
   }
 
   if (stringColumns.includes(column)) {
@@ -33,7 +36,7 @@ export function compareLolGuessToAnswer(
     return guess === toGuess ? "true" : "false";
   }
 
-  if(column === "releaseYear") {
+  if (column === "releaseYear") {
     const guess = currentGuess.data.releaseYear;
     const toGuess = characterToGuess.data.releaseYear;
     return guess === toGuess ? "true" : guess > toGuess ? "less" : "more";
@@ -41,6 +44,69 @@ export function compareLolGuessToAnswer(
 
   return currentGuess._id === characterToGuess._id ? "true" : "false";
 }
+
+export function comparePokemonGuessToAnswer(
+  characterToGuess: IPokemonCharacter,
+  currentGuess: IPokemonCharacter,
+  column: string
+): SpeedrundleAnswerClues { 
+  const stringColumns = [
+    "generation",
+    "color",
+    "fullyEvolved",
+    "habitat",
+    "status",
+  ];
+  const comparisonColumns = ["evolutionStage", "height", "weight"];
+
+  if (stringColumns.includes(column)) {
+    const guess = currentGuess.data[column];
+    const toGuess = characterToGuess.data[column];
+    return guess === toGuess ? "true" : "false";
+  }
+
+  if (comparisonColumns.includes(column)) {
+    const guess = currentGuess.data[column];
+    const toGuess = characterToGuess.data[column];
+    return guess === toGuess ? "true" : guess > toGuess ? "less" : "more";
+  }
+
+  if(["type1", "type2"].includes(column)) {
+    const n = parseInt(column.split("type")[1])
+    const guess = currentGuess.data.types[n-1];
+    const toGuess = characterToGuess.data.types[n-1];
+    
+    return guess === toGuess ? "true" : "false"
+  }
+
+  return currentGuess._id === characterToGuess._id ? "true" : "false";
+}
+
+export function formatPokemonCharacter(characterData: IPokemonCharacter) {
+  const sprite = characterData.data.sprite;
+  const { generation, evolutionStage, fullyEvolved, color, habitat, status } =
+    characterData.data;
+  const type1 = characterData.data.types[0] || "none";
+  const type2 = characterData.data.types[1] || "None";
+  const height = `${characterData.data.height} m`;
+  const weight = `${characterData.data.weight} kg`;
+
+  return {
+    id: characterData._id,
+    sprite,
+    type1: capitalizeFirstLetter(type1),
+    type2: capitalizeFirstLetter(type2),
+    generation,
+    color,
+    evolutionStage,
+    fullyEvolved : fullyEvolved ? "Yes" : "No",
+    habitat,
+    height,
+    weight,
+    status,
+  };
+}
+
 export function formatLolCharacter(characterData: ILolCharacter) {
   const sprite = characterData.data.sprite;
   const { ressource, region, releaseYear } = characterData.data;
@@ -68,6 +134,6 @@ export function formatLolCharacter(characterData: ILolCharacter) {
     range,
     region,
     position,
-    releaseYear
+    releaseYear,
   };
 }
