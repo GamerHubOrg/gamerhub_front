@@ -79,7 +79,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { IUndercoverConfig } from './undercover.types';
 import { areObjectsEquals } from '@/utils/functions';
 
-const emit = defineEmits(['update'])
+const emit = defineEmits(['update', 'change'])
 const props = defineProps({
     config: {
         type: Object,
@@ -110,6 +110,7 @@ watch(
     () => {
         if (!isOwner.value) return;
         if (timer.value) clearTimeout(timer.value)
+        emit('change')
         timer.value = setTimeout(() => emit('update', internalConfig.value), 500);
     },
     { deep: true }
