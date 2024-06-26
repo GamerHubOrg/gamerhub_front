@@ -29,14 +29,14 @@ const shareConfigName = ref<string>("");
 const config = computed(() => data.value.config ?? {});
 const currentUser = computed(() => store.getCurrentUser);
 const roomUsers = computed(() => data.value?.users ?? []);
-
+const isChangingConfig = ref(false);
 const publishConfigModalOpen = ref(false);
 const minimumPlayers = {
-    undercover: 1,
+    undercover: import.meta.env.PROD ? 3 : 1,
     speedrundle: 1
 };
 const isOwner = computed(() => roomUsers.value.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
-const canStartTheGame = computed(() => isOwner.value && roomUsers.value.length >= minimumPlayers[data.value.gameName as keyof object || ""]);
+const canStartTheGame = computed(() => !isChangingConfig.value && isOwner.value && roomUsers.value.length >= minimumPlayers[data.value.gameName as keyof object || ""]);
 const isGameStarted = computed(() => data.value.gameState !== 'lobby');
 
 const handleOpenLobby = () => {
@@ -59,7 +59,9 @@ const handleUpdateRoom = (conf: IRoomConfig) => {
     if (data.value.gameState !== 'lobby') {
         return;
     }
+
     socketStore.handleUpdateRoom(roomId.value, conf)
+    isChangingConfig.value = false;
 }
 
 const handleStartGame = () => {
@@ -221,9 +223,9 @@ onMounted(() => {
                     </select>
                 </div>
 
-                <UndercoverConfig v-if="data.gameName === 'undercover'" :config="config" @update="handleUpdateRoom" />
+                <UndercoverConfig v-if="data.gameName === 'undercover'" :config="config" @update="handleUpdateRoom" @change="isChangingConfig = true" />
                 <SpeedrundleConfig v-else-if="data.gameName === 'speedrundle'" :config="config"
-                    @update="handleUpdateRoom" />
+                    @update="handleUpdateRoom"  @change="isChangingConfig = true" />
             </div>
 
             <div class="flex flex-col gap-4 text-white mt-20">

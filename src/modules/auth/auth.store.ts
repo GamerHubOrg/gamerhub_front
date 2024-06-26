@@ -13,10 +13,14 @@ export const useAuthStore = defineStore('auth', {
   }) as State,
   getters: {
     getCurrentUser: (state) => state.currentUser,
+    getIsAlreadySubscribed: (state) => !!state.currentUser?.stripe?.subscriptionId || state.currentUser?.roles?.includes('admin'),
   },
   actions: {
     setCurrentUser(user?: User) {
-      this.currentUser = user;
+      this.currentUser = {
+        ...user,
+        picture: user?.picture || "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg",
+      } as User;
     },
     async logout() {
       await api.post('users/logout')
@@ -31,10 +35,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async getMe() {
       const { data } = await api.get('/users/me')
-      this.setCurrentUser({
-        ...data,
-        picture: data.picture || "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg",
-      });
+      this.setCurrentUser(data);
     },
     async fetchUser(userId: string) {
       const { data } = await api.get(`/users/${userId}`)
