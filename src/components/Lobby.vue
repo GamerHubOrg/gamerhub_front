@@ -214,7 +214,7 @@ onMounted(() => {
                 <h5 class="w-full text-center font-bold text-lg text-white">Settings</h5>
 
                 <div class="border border-dark3 rounded p-2 flex flex-row items-center gap-2 text-white">
-                    <label for="game" class="whitespace-nowrap font-semibold">Change game :</label>
+                    <label for="game" class="whitespace-nowrap font-semibold">Changer de jeu :</label>
                     <select id="game" class="bg-transparent w-full" v-model="updateGame" :disabled="!isOwner">
                         <option value="undercover">Undercover</option>
                         <option value="speedrundle">SpeedrunDLE</option>

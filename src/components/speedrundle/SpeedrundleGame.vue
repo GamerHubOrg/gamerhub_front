@@ -268,11 +268,6 @@ watch(
     if (newVal) handleSendCharacter();
   }
 );
-
-watch(() => allCharacters.value, (newVal) => {
-  console.log("nbPokemons", newVal.length)
-  console.log("pokemon gen", newVal[0]?.data.generation)
-})
 </script>
 
 <style scoped>

@@ -85,6 +85,9 @@ const selectOption = (option: IOption) => {
     emit('update', option.value);
 };
 
+const normalize = (str: string) =>
+    str.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
 // Get options based on search query
 const filteredOptions = computed(() => {
     if (props.hideOptions && searchQuery.value === '') {
@@ -92,10 +95,10 @@ const filteredOptions = computed(() => {
     }
     return options.value.filter(option => {
         if (props.queryStartsWith) {
-            return option.label.toLowerCase().startsWith(searchQuery.value.toLowerCase())
+            return normalize(option.label).startsWith(normalize(searchQuery.value))
         }
 
-        return option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+        return normalize(option.label).includes(normalize(searchQuery.value))
     }
     ).sort((a, b) => a.label.localeCompare(b.label));
 });
