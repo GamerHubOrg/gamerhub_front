@@ -22,9 +22,24 @@
             <div class="flex flex-wrap gap-2">
                 <div v-for="generation in 9" :key="generation">
                     <label>
-                        <input type="checkbox" :disabled="isConfigDisabled" :checked="internalConfig.selectedGenerations?.includes(generation)"
+                        <input type="checkbox" :disabled="isConfigDisabled"
+                            :checked="internalConfig.selectedGenerations?.includes(generation)"
                             @change="toggleGeneration(generation)" :value="generation" />
                         {{ generation }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="option-container !flex-col !items-start">
+            <label>Indices :</label>
+            <div class="flex flex-wrap gap-2">
+                <div v-for="{key, name} in columns" :key="key">
+                    <label>
+                        <input type="checkbox" :disabled="isConfigDisabled"
+                            :checked="internalConfig.selectedColumns?.includes(key)"
+                            @change="toggleColumn(key)" :value="key" />
+                        {{ name }}
                     </label>
                 </div>
             </div>
@@ -48,7 +63,7 @@
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed, onMounted, ref, watch } from 'vue';
-import { ISpeedrundleConfig } from './speedrundle.types';
+import { ISpeedrundleConfig, speedrundleColumns } from './speedrundle.types';
 import { areObjectsEquals } from '@/utils/functions';
 
 const emit = defineEmits(['update'])
@@ -67,8 +82,16 @@ const internalConfig = ref<ISpeedrundleConfig>({
     nbRounds: 1,
     mode: 'classic',
     theme: 'league_of_legends',
-    selectedGenerations: []
+    selectedGenerations: [],
+    selectedColumns: []
 });
+
+const columns = computed(() => {
+    const cols = speedrundleColumns[internalConfig.value.theme].filter(({isIcon}) => !isIcon);
+    internalConfig.value.selectedColumns = cols.map(({ key }) => key);
+    return cols;
+})
+
 const timer = ref();
 const data = computed(() => socketStore.getRoomData)
 
@@ -83,10 +106,17 @@ const toggleGeneration = (generation: number) => {
     } else internalConfig.value.selectedGenerations.push(generation)
 };
 
+const toggleColumn = (column: string) => {
+    if (!internalConfig.value.selectedColumns) return;
+    if (internalConfig.value.selectedColumns.includes(column)) {
+        internalConfig.value.selectedColumns = internalConfig.value.selectedColumns.filter((e) => e !== column)
+    } else internalConfig.value.selectedColumns.push(column)
+};
+
 watch(
     () => internalConfig.value,
     () => {
-        if (!isOwner.value) return;       
+        if (!isOwner.value) return;
         if (timer.value) clearTimeout(timer.value)
         timer.value = setTimeout(() => emit('update', internalConfig.value), 500);
     },
@@ -95,8 +125,8 @@ watch(
 
 watch(
     () => ({ ...props.config }),
-    () => {              
-        if (areObjectsEquals(internalConfig.value, props.config)) return;       
+    () => {
+        if (areObjectsEquals(internalConfig.value, props.config)) return;
         internalConfig.value = (props.config as ISpeedrundleConfig)
     },
     { deep: true }
