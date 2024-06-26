@@ -109,14 +109,12 @@ const roomCong = computed(() => roomData.value.config);
 const gameData = computed(() => roomData.value.gameData as ISpeedrundleGameData);
 
 const characterGuessId = ref<string>("");
-const charactersToGuess = computed(() => gameData.value.charactersToGuess ?? []);
-const allCharacters = ref<ICharacter[]>([]);
-
 const userAnswers = ref<ISpeedrundleAnswer>();
 
+const charactersToGuess = ref<ICharacter[]>([]);
+const allCharacters = ref<ICharacter[]>([]);
 const playerState = computed(() => userAnswers.value?.state)
 const reversedGuessedCharacters = computed(() => [...guessedCharacters.value].reverse());
-
 const nbRounds = computed(() => roomData.value.config?.nbRounds || 0)
 const currentRound = computed(() => userAnswers.value?.currentRound || 1)
 const currentCharacterToGuess = computed(() => charactersToGuess.value[currentRound.value - 1]);
@@ -179,7 +177,7 @@ const scores = computed(() => {
 
 
 function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClues {
-  const characterData = gameData.value.allCharacters.find(({ _id }) => _id === id);
+  const characterData = allCharacters.value.find(({ _id }) => _id === id);
   if (!characterData || !currentCharacterToGuess.value) return "false";
 
   switch (roomData.value.config?.theme) {
@@ -251,17 +249,17 @@ socket.value?.on('game:speedrundle:find-character', () => handlePlaySoundEffect(
 socket.value?.on('game:speedrundle:end-game', () => handlePlaySoundEffect(findCharacterSound));
 
 socket.value?.on("game:speedrundle:data", ({ data }: { data: any }, target?: string) => {
-  stateData.value.gameData = data;
+  stateData.value.gameData = { ...gameData.value, ...data };
 
   if (!target || target === currentUser.value._id)
     userAnswers.value = gameData.value.usersAnswers?.find(
       ({ playerId }) => playerId === currentUser.value._id
     );
 
-
-  if (allCharacters.value && allCharacters.value.length === 0)
+  if (data.allCharacters && data.allCharacters.length > 0)
     allCharacters.value = data.allCharacters ?? [];
-
+  if (data.charactersToGuess && data.charactersToGuess.length > 0)
+    charactersToGuess.value = data.charactersToGuess ?? [];
 });
 
 watch(
@@ -270,6 +268,11 @@ watch(
     if (newVal) handleSendCharacter();
   }
 );
+
+watch(() => allCharacters.value, (newVal) => {
+  console.log("nbPokemons", newVal.length)
+  console.log("pokemon gen", newVal[0]?.data.generation)
+})
 </script>
 
 <style scoped>

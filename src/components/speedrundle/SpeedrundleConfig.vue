@@ -22,7 +22,7 @@
             <div class="flex flex-wrap gap-2">
                 <div v-for="generation in 9" :key="generation">
                     <label>
-                        <input type="checkbox" :checked="internalConfig.selectedGenerations?.includes(generation)"
+                        <input type="checkbox" :disabled="isConfigDisabled" :checked="internalConfig.selectedGenerations?.includes(generation)"
                             @change="toggleGeneration(generation)" :value="generation" />
                         {{ generation }}
                     </label>
@@ -62,7 +62,6 @@ const props = defineProps({
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
-
 const internalConfig = ref<ISpeedrundleConfig>({
     maxPlayers: 6,
     nbRounds: 1,
@@ -80,14 +79,14 @@ const isConfigDisabled = computed(() => !isOwner.value || data.value.gameState !
 const toggleGeneration = (generation: number) => {
     if (!internalConfig.value.selectedGenerations) return;
     if (internalConfig.value.selectedGenerations.includes(generation)) {
-        internalConfig.value.selectedGenerations.filter((e) => e !== generation)
+        internalConfig.value.selectedGenerations = internalConfig.value.selectedGenerations.filter((e) => e !== generation)
     } else internalConfig.value.selectedGenerations.push(generation)
 };
 
 watch(
     () => internalConfig.value,
     () => {
-        if (!isOwner.value) return;
+        if (!isOwner.value) return;       
         if (timer.value) clearTimeout(timer.value)
         timer.value = setTimeout(() => emit('update', internalConfig.value), 500);
     },
@@ -96,8 +95,8 @@ watch(
 
 watch(
     () => ({ ...props.config }),
-    () => {
-        if (areObjectsEquals(internalConfig.value, props.config)) return;
+    () => {              
+        if (areObjectsEquals(internalConfig.value, props.config)) return;       
         internalConfig.value = (props.config as ISpeedrundleConfig)
     },
     { deep: true }

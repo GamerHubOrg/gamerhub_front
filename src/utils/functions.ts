@@ -4,7 +4,9 @@ export const areObjectsEquals = (obj1: object, obj2: object): boolean => {
   if (keys1.length !== keys2.length) return false;
   if (keys1.some((key) => !keys2.includes(key))) return false;
   for (const key of keys1) {
-    if (obj1[key as keyof object] !== obj2[key as keyof object]) return false;
+    const val1 : any = obj1[key as keyof object]
+    const val2 : any = obj2[key as keyof object]   
+    if (val1.toString() !== val2.toString()) return false;
   }
   return true;
 };
