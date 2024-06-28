@@ -16,7 +16,12 @@ export const useAuthStore = defineStore('auth', {
     getIsAlreadySubscribed: (state) => !!state.currentUser?.stripe?.subscriptionId || state.currentUser?.roles?.includes('admin'),
   },
   actions: {
-    setCurrentUser(user?: User) {
+    setCurrentUser(user?: User) { 
+      if (!user) {
+        this.currentUser = user;
+        return;
+      }
+
       this.currentUser = {
         ...user,
         picture: user?.picture || "https://www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg",
