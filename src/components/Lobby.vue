@@ -6,6 +6,7 @@ import { useSocketStore } from "../modules/socket/socket.store";
 import { useRouter } from "vue-router";
 import UndercoverConfig from "@/components/games/undercover/UndercoverConfig.vue";
 import SpeedrundleConfig from "@/components/games/speedrundle/SpeedrundleConfig.vue";
+import WerewolvesConfig from '@/components/werewolves/WerewolvesConfig.vue'
 import { useGamesStore } from "@/modules/games/games.store";
 import { toast } from "vue3-toastify";
 import Modal from "./Modal.vue";
@@ -56,6 +57,8 @@ const getMinimumPlayers = () => {
       return import.meta.env.PROD ? 3 : 1;
     case "speedrundle":
       return 1;
+    case "werewolves":
+      return import.meta.env.PROD ? 4 : 1;
     default:
       return 0;
   }
@@ -218,6 +221,7 @@ onMounted(() => {
           <select id="game" class="bg-dark3 w-full" v-model="createGame">
             <option value="undercover">Undercover</option>
             <option value="speedrundle">SpeedrunDLE</option>
+            <option value="werewolves">Werewolves</option>
           </select>
         </div>
         <button class="w-full bg-[#00A569] rounded-xl p-3 text-sm" @click="handleRoomStart">
@@ -291,12 +295,15 @@ onMounted(() => {
           <select id="game" class="bg-transparent w-full" v-model="updateGame" :disabled="isConfigDisabled">
             <option value="undercover" class="text-black">Undercover</option>
             <option value="speedrundle" class="text-black">SpeedrunDLE</option>
+            <option value="werewolves" class="text-black">Werewolves</option>
           </select>
         </div>
 
         <UndercoverConfig v-if="data.gameName === 'undercover'" :config="config" @update="handleUpdateRoom"
           @change="isChangingConfig = true" />
         <SpeedrundleConfig v-else-if="data.gameName === 'speedrundle'" :config="config" @update="handleUpdateRoom"
+          @change="isChangingConfig = true" />
+        <WerewolvesConfig v-else-if="data.gameName === 'werewolves'" :config="config" @update="handleUpdateRoom"
           @change="isChangingConfig = true" />
       </div>
 
