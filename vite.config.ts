@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
           "name": "GamerHub",
           "short_name": "GamerHub",
           "description": "GamerHub is a multiplayer online gaming platform",
-          "start_url": "/index.html",
+          "start_url": "/",
           "background_color": "#121212",
           "display": "standalone",
           "theme_color": "#232323",
