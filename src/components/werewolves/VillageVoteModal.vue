@@ -1,6 +1,6 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <VotePlayers :users="roomData.users" type="village" @vote="handleConfirmVote" />
+        <VotePlayers :users="aliveUsers" type="village" @vote="handleConfirmVote" />
     </Modal>
 </template>
 
@@ -29,6 +29,7 @@ const roomId = computed(() => socketStore.getRoomId);
 const currentUser = computed(() => store.getCurrentUser);
 const stateData = computed(() => socketStore.getRoomData)
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
+const aliveUsers = computed(() => roomData.value.users.filter((u) => u.role.isAlive));
 
 function handleConfirmVote(vote: string) {
     socket.value?.emit('game:werewolves:village:vote', { roomId: roomId.value, userId: currentUser.value?._id, vote });

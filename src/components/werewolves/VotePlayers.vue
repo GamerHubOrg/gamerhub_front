@@ -16,14 +16,14 @@
         </div>
 
         <div class="flex flex-col mt-6 gap-2">
-            <span v-for="vote in wolfVotes" :key="vote.playerId">
+            <span v-for="vote in votes" :key="vote.playerId">
                 {{ getPlayerName(vote.playerId) }} voted for {{ getPlayerName(vote.vote) }}
             </span>
         </div>
 
-        {{ tmpVotes }}
-        <p>----------</p>
-        {{ villageVotes }}
+        <p>tmp votes : {{ tmpVotes.length }}</p>
+        <p>wolf votes : {{ wolfVotes.length }}</p>
+        <p>village votes : {{ villageVotes.length }}</p>
 
         <button 
             class="bg-primary text-white w-full p-1 rounded mt-6 hover:bg-opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -76,6 +76,8 @@ const hasVoted = computed(() => {
 
     return !!wolfVotes.value.find((v) =>  (!v.turn || v.turn === gameData.value?.turn) &&  v.playerId === currentUser.value?._id);
 })
+
+const votes = computed(() => (props.type === 'village' ? villageVotes.value : wolfVotes.value).filter((v) => !v.turn || v.turn === gameData.value?.turn));
 
 function getPlayerName(userId?: string) {
     return props.users.find((u) => u._id === userId)?.username || 'unknwown';
