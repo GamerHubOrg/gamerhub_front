@@ -20,12 +20,33 @@
 
 <script setup lang="ts">
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { ref, watch } from 'vue';
 
-defineEmits(['close'])
-defineProps({
+const emit = defineEmits(['close'])
+const props = defineProps({
     open: {
         type: Boolean,
         default: false,
+    },
+    autoclose: {
+        type: Number,
+        default: undefined,
     }
 })
+
+const timer = ref();
+
+function handleSetAutocloseTimer() {
+    if (timer.value) clearTimeout(timer.value);
+    timer.value = setTimeout(() => emit('close'), props.autoclose);
+}
+
+watch(
+    () => props.open,
+    () => {
+        if (props.open && props.autoclose) handleSetAutocloseTimer();
+
+        if (!props.open) clearTimeout(timer.value);
+    }
+)
 </script>
