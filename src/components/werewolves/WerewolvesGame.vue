@@ -134,6 +134,7 @@ socket.value?.on('game:werewolves:state', () => {
 })
 
 socket.value?.on('game:werewolves:start', () => {
+  console.log("START GAME EMIT SOCKET");
   showDisplayRoleDialog.value = true;
 })
 

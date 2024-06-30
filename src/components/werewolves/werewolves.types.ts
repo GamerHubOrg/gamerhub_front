@@ -32,6 +32,8 @@ export interface WerewolfRole {
   power: {
     name: string;
     description: string;
+    killPotionUsed?: boolean;
+    savePotionUsed?: boolean;
   };
 }
 
