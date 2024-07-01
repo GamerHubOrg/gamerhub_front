@@ -1,5 +1,6 @@
 <template>
-  <div class="relative game-wrapper-background rounded-2xl p-6 min-h-[470px]" :style="{ backgroundImage: `url(${img})` }">
+  <div class="relative game-wrapper-background rounded-2xl p-6 min-h-[470px]"
+    :style="{ backgroundImage: `url(${img})` }">
     <div class="absolute inset-0 bg-gradient-to-bl from-transparent to-[#0000004A]"></div>
     <div class="flex flex-col justify-end h-full gap-2">
       <h2 class="text-white text-3xl font-bold">{{ name }}</h2>
@@ -10,12 +11,7 @@
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
 
-        <Button 
-          v-if="!roomId" 
-          type="primary" 
-          shape="squared"
-          @click="handleCreateRoom"
-        >
+        <Button v-if="!roomId" type="primary" shape="squared" @click="handleCreateRoom">
           Create room
         </Button>
       </div>
@@ -29,6 +25,7 @@ import Button from './Button.vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { useGamesStore } from '@/modules/games/games.store';
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
   name: {
@@ -62,9 +59,13 @@ const socketStore = useSocketStore();
 const gameStore = useGamesStore();
 const roomId = computed(() => socketStore.getRoomId)
 const currentUser = computed(() => store.getCurrentUser);
+const router = useRouter();
 
 function handleCreateRoom() {
-  if (!currentUser.value) return;
+  if (!currentUser.value) {
+    router.replace("/login")
+    return;
+  }
   socketStore.handleCreateRoom(currentUser.value, props.gameName)
   gameStore.setIsLobbyCollapsed(false);
 }

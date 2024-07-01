@@ -1,18 +1,21 @@
 <template>
-  <div class="flex flex-col items-center gap-7">
-    <h2 class="text-3xl">Speedrun Dle</h2>
-    <p>
-      Le thème de la partie est :
-      <span class="font-semibold">{{ roomCong?.theme }} : {{ roomCong?.mode }}</span>
-    </p>
+  <div class="flex flex-col items-center gap-7 mr-16">
+    <SpeedrundleHeader :config="roomConfig" />
 
     <div class="absolute right-0 flex flex-col gap-1">
-      <div v-for="user in roomData.users" :key="user.socket_id" class="flex justify-center items-center">
-        <div class="flex items-center gap-2 max-w-48 max-h-12 p-3 rounded-md" :class="{
-          'bg-lightgrey': currentUser?.email === user.email,
-          'bg-darkgrey': currentUser?.email !== user.email,
-          'border border-green-500': scores[user._id]?.state === 'finished'
-        }">
+      <div
+        v-for="user in roomData.users"
+        :key="user.socket_id"
+        class="flex justify-center items-center"
+      >
+        <div
+          class="flex items-center gap-2 max-w-48 max-h-12 p-3 rounded-md"
+          :class="{
+            'bg-lightgrey': currentUser?.email === user.email,
+            'bg-darkgrey': currentUser?.email !== user.email,
+            'border border-green-500': scores[user._id]?.state === 'finished',
+          }"
+        >
           <div class="max-h-12 max-w-12 text-xs truncate">
             <img :src="user.picture" class="w-full rounded-md" />
             <span class="text-xs truncate">{{ user.username }} </span>
@@ -23,16 +26,31 @@
     </div>
 
     <div
-      class="flex flex-col absolute right-0 bottom-1/2 translate-y-1/2 h-[300px] w-3 bg-red-500 rounded-tl rounded-bl">
-      <span v-for="n in nbRounds" class="relative flex-1 flex items-center"
-        :class="{ 'border-black border-b-2': n < nbRounds, 'bg-green-500': currentRound > n, 'rounded-tl': n === 1, 'rounded-bl': n === nbRounds }">
-
+      class="flex flex-col absolute right-0 bottom-1/2 translate-y-1/2 h-[300px] w-3 bg-red-500 rounded-tl rounded-bl"
+    >
+      <span
+        v-for="n in nbRounds"
+        class="relative flex-1 flex items-center"
+        :class="{
+          'border-black border-b-2': n < nbRounds,
+          'bg-green-500': currentRound > n,
+          'rounded-tl': n === 1,
+          'rounded-bl': n === nbRounds,
+        }"
+      >
         <div v-if="allUsersCurrentRound[n - 1]" class="absolute w-6 h-6 right-full mr-2">
-          <img v-if="allUsersCurrentRound[n - 1].length === 1" :key="allUsersCurrentRound[n - 1][0]"
-            :src="allUsersCurrentRound[n - 1][0]" class="w-full h-full rounded-full border border-white">
-          <span v-else
-            class="flex items-center justify-center w-full h-full font-bold bg-white rounded-full text-black border border-white">
-            {{ allUsersCurrentRound[n - 1].length }}</span>
+          <img
+            v-if="allUsersCurrentRound[n - 1].length === 1"
+            :key="allUsersCurrentRound[n - 1][0]"
+            :src="allUsersCurrentRound[n - 1][0]"
+            class="w-full h-full rounded-full border border-white"
+          />
+          <span
+            v-else
+            class="flex items-center justify-center w-full h-full font-bold bg-white rounded-full text-black border border-white"
+          >
+            {{ allUsersCurrentRound[n - 1].length }}</span
+          >
         </div>
       </span>
     </div>
@@ -40,7 +58,11 @@
     <div v-if="playerState === 'finished'">
       <h3 class="text-xl text-center mb-2">Détails des scores</h3>
       <div class="flex gap-5 justify-center flex-wrap mb-2">
-        <div v-for="character in finishedCharactersData" :key="character.id" class="flex flex-col items-center">
+        <div
+          v-for="character in finishedCharactersData"
+          :key="character.id"
+          class="flex flex-col items-center"
+        >
           <img v-if="!!character.image" :src="character.image" />
           <p v-if="character.abandon">Abandonné</p>
           <p v-else>{{ character.attempts }} essais</p>
@@ -49,10 +71,17 @@
       <p class="text-center">En attente des autres joueurs...</p>
     </div>
 
-    <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full mr-16">
-      <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
-        :options="filteredCharacters" />
-      <Button type="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
+    <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full">
+      <Select
+        :value="characterGuessId"
+        @update="handleCharacterSelect"
+        :hide-options="true"
+        :query-starts-with="true"
+        :options="filteredCharacters"
+      />
+      <Button type="danger" @click="handleGiveUpCharacter"
+        >Abandonner ce personnage</Button
+      >
 
       <div class="w-full">
         <table class="border-separate bg-dark2 w-full">
@@ -65,8 +94,16 @@
           </thead>
           <tbody>
             <tr v-for="guess in reversedGuessedCharacters" :key="guess?.id">
-              <th v-for="column in gameData?.columns" :class="getColumnClass(guess.id, column.key)" :key="column.key">
-                <img v-if="column.type === 'image'" :src="guess[column.key as keyof object]" class="mx-auto" />
+              <th
+                v-for="column in gameData?.columns"
+                :class="getColumnClass(guess.id, column.key)"
+                :key="column.key"
+              >
+                <img
+                  v-if="column.type === 'image'"
+                  :src="guess[column.key as keyof object]"
+                  class="mx-auto"
+                />
                 <p v-else>{{ guess[column.key as keyof object] }}</p>
               </th>
             </tr>
@@ -91,11 +128,18 @@ import {
   ISpeedrundleRoomData,
   SpeedrundleAnswerClues,
 } from "./speedrundle.types";
-import { formatLolCharacter, compareLolGuessToAnswer, formatPokemonCharacter, comparePokemonGuessToAnswer } from './speedrundle.functions'
+import {
+  formatLolCharacter,
+  compareLolGuessToAnswer,
+  formatPokemonCharacter,
+  comparePokemonGuessToAnswer,
+} from "./speedrundle.functions";
 import Select from "@/components/Select.vue";
-import findCharacterSound from '../../assets/games/speedrundle/sounds/find-character.wav'
-import giveUpCharacterSound from '../../assets/games/speedrundle/sounds/give-up-character.wav'
+import findCharacterSound from "../../assets/games/speedrundle/sounds/find-character.wav";
+import giveUpCharacterSound from "../../assets/games/speedrundle/sounds/give-up-character.wav";
 import Button from "../Button.vue";
+import { ISpeedrundleConfig } from "./speedrundle.types";
+import SpeedrundleHeader from "./components/SpeedrundleHeader.vue";
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -105,7 +149,7 @@ const roomId = computed(() => socketStore.getRoomId);
 const socket = computed(() => socketStore.getSocket);
 const currentUser = computed(() => store.getCurrentUser as User);
 const roomData = computed(() => stateData.value as ISpeedrundleRoomData);
-const roomCong = computed(() => roomData.value.config);
+const roomConfig = computed(() => roomData.value.config as ISpeedrundleConfig);
 const gameData = computed(() => roomData.value.gameData as ISpeedrundleGameData);
 
 const characterGuessId = ref<string>("");
@@ -113,11 +157,13 @@ const userAnswers = ref<ISpeedrundleAnswer>();
 
 const charactersToGuess = ref<ICharacter[]>([]);
 const allCharacters = ref<ICharacter[]>([]);
-const playerState = computed(() => userAnswers.value?.state)
+const playerState = computed(() => userAnswers.value?.state);
 const reversedGuessedCharacters = computed(() => [...guessedCharacters.value].reverse());
-const nbRounds = computed(() => roomData.value.config?.nbRounds || 0)
-const currentRound = computed(() => userAnswers.value?.currentRound || 1)
-const currentCharacterToGuess = computed(() => charactersToGuess.value[currentRound.value - 1]);
+const nbRounds = computed(() => roomData.value.config?.nbRounds || 0);
+const currentRound = computed(() => userAnswers.value?.currentRound || 1);
+const currentCharacterToGuess = computed(
+  () => charactersToGuess.value[currentRound.value - 1]
+);
 
 const allUsersCurrentRound = computed(() => {
   const rounds: string[][] = [];
@@ -125,15 +171,15 @@ const allUsersCurrentRound = computed(() => {
     if (!picture) continue;
     const answers = gameData.value.usersAnswers?.find(({ playerId }) => _id === playerId);
     if (!answers || answers.state === "finished") continue;
-    const roundIndex = answers.currentRound - 1
+    const roundIndex = answers.currentRound - 1;
     rounds[roundIndex] = [...(rounds[roundIndex] || []), picture];
   }
 
-  return rounds
-})
+  return rounds;
+});
 
 const finishedCharactersData = computed(() => {
-  if (playerState.value !== 'finished') return [];
+  if (playerState.value !== "finished") return [];
 
   const { roundsData } = userAnswers.value || {};
   return charactersToGuess.value.map((character, index) => ({
@@ -141,7 +187,7 @@ const finishedCharactersData = computed(() => {
     image: formatCharacter(character._id)?.sprite,
     attempts: roundsData?.[index].guesses.length || 0,
     score: roundsData?.[index].score || 0,
-    abandon: !roundsData?.[index].hasFound
+    abandon: !roundsData?.[index].hasFound,
   }));
 });
 
@@ -149,7 +195,8 @@ const guessedCharacters = computed(() => {
   if (!userAnswers.value) return [];
   const { roundsData, currentRound } = userAnswers.value;
   return (
-    roundsData[currentRound - 1].guesses.map((characterId) => formatCharacter(characterId))
+    roundsData[currentRound - 1].guesses
+      .map((characterId) => formatCharacter(characterId))
       .filter((e) => !!e) ?? []
   );
 });
@@ -163,18 +210,20 @@ const filteredCharacters = computed(() => {
 });
 
 const scores = computed(() => {
-  const scoresObject: Record<string, { score: number, state: "finished" | "playing" }> = {};
+  const scoresObject: Record<
+    string,
+    { score: number; state: "finished" | "playing" }
+  > = {};
   for (const { _id } of roomData.value.users) {
-    const key = _id as keyof object
+    const key = _id as keyof object;
     const answers = gameData.value.usersAnswers?.find((e) => _id === e.playerId);
-    const score = answers?.roundsData.reduce((prev, curr) => prev + curr.score, 0) || 0
-    const state = answers?.state || "playing"
-    scoresObject[key] = { score, state }
+    const score = answers?.roundsData.reduce((prev, curr) => prev + curr.score, 0) || 0;
+    const state = answers?.state || "playing";
+    scoresObject[key] = { score, state };
   }
 
   return scoresObject;
 });
-
 
 function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClues {
   const characterData = allCharacters.value.find(({ _id }) => _id === id);
@@ -182,22 +231,30 @@ function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClue
 
   switch (roomData.value.config?.theme) {
     case "league_of_legends":
-      return compareLolGuessToAnswer(currentCharacterToGuess.value as ILolCharacter, characterData as ILolCharacter, column);
+      return compareLolGuessToAnswer(
+        currentCharacterToGuess.value as ILolCharacter,
+        characterData as ILolCharacter,
+        column
+      );
     case "pokemon":
-      return comparePokemonGuessToAnswer(currentCharacterToGuess.value as IPokemonCharacter, characterData as IPokemonCharacter, column);
+      return comparePokemonGuessToAnswer(
+        currentCharacterToGuess.value as IPokemonCharacter,
+        characterData as IPokemonCharacter,
+        column
+      );
     default:
-      return "false"
+      return "false";
   }
 }
 
 function getColumnClass(id: string, column: string) {
   const comparisonResult = compareGuessToAnswer(id, column);
   return {
-    'bg-red-500': ['false', 'more', 'less'].includes(comparisonResult),
-    'bg-orange-500': comparisonResult === 'partial',
-    'bg-green-500': comparisonResult === 'true',
-    'arrow-up': comparisonResult === 'more',
-    'arrow-down': comparisonResult === 'less'
+    "bg-red-500": ["false", "more", "less"].includes(comparisonResult),
+    "bg-orange-500": comparisonResult === "partial",
+    "bg-green-500": comparisonResult === "true",
+    "arrow-up": comparisonResult === "more",
+    "arrow-down": comparisonResult === "less",
   };
 }
 
@@ -231,22 +288,24 @@ function handleSendCharacter() {
 }
 
 function handleGiveUpCharacter() {
-  socket.value?.emit(
-    "game:speedrundle:give-up",
-    roomId.value,
-    currentUser.value._id,
-  );
+  socket.value?.emit("game:speedrundle:give-up", roomId.value, currentUser.value._id);
 }
 
 function handlePlaySoundEffect(sound: string) {
-  const wordAudio = new Audio(sound)
-  wordAudio.volume = 0.05
+  const wordAudio = new Audio(sound);
+  wordAudio.volume = 0.05;
   wordAudio.play();
 }
 
-socket.value?.on('game:speedrundle:give-up-character', () => handlePlaySoundEffect(giveUpCharacterSound));
-socket.value?.on('game:speedrundle:find-character', () => handlePlaySoundEffect(findCharacterSound));
-socket.value?.on('game:speedrundle:end-game', () => handlePlaySoundEffect(findCharacterSound));
+socket.value?.on("game:speedrundle:give-up-character", () =>
+  handlePlaySoundEffect(giveUpCharacterSound)
+);
+socket.value?.on("game:speedrundle:find-character", () =>
+  handlePlaySoundEffect(findCharacterSound)
+);
+socket.value?.on("game:speedrundle:end-game", () =>
+  handlePlaySoundEffect(findCharacterSound)
+);
 
 socket.value?.on("game:speedrundle:data", ({ data }: { data: any }, target?: string) => {
   stateData.value.gameData = { ...gameData.value, ...data };
@@ -284,7 +343,7 @@ watch(
 
 .arrow-up::before,
 .arrow-down::before {
-  content: '';
+  content: "";
   z-index: 0;
   position: absolute;
   width: 100%;
@@ -299,10 +358,10 @@ watch(
 }
 
 .arrow-up::before {
-  background-image: url('../../assets/icons/arrow-up.svg');
+  background-image: url("../../assets/icons/arrow-up.svg");
 }
 
 .arrow-down::before {
-  background-image: url('../../assets/icons/arrow-down.svg');
+  background-image: url("../../assets/icons/arrow-down.svg");
 }
 </style>
