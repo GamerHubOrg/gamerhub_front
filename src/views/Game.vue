@@ -1,4 +1,3 @@
-
 <template>
   <Undercover v-if="data.gameName === 'undercover'" />
   <Speedrundle v-if="data.gameName === 'speedrundle'" />
@@ -9,7 +8,21 @@ import Undercover from '@/components/undercover/Undercover.vue';
 import Speedrundle from '@/components/speedrundle/Speedrundle.vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/modules/auth/auth.store';
 
 const socketStore = useSocketStore();
+const authStore = useAuthStore();
+const currentUser = computed(() => authStore.getCurrentUser)
 const data = computed(() => socketStore.getRoomData);
+const router = useRouter();
+
+if (!socketStore.getRoomId) {
+  const pathRoomId = router.currentRoute.value.fullPath.split("/")[1];
+  if (currentUser.value) {
+    socketStore.handleJoinRoom(currentUser.value, pathRoomId);
+  } else {
+    router.push("/")
+  }
+} 
 </script>

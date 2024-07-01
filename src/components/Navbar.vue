@@ -10,7 +10,7 @@
 
         <div v-if="roomId" class="flex items-center gap-2 rounded-full px-3 py-2" :class="{
         'bg-white bg-opacity-20': data.gameState === 'lobby',
-        'bg-primary bg-opacity-50': data.gameState !== 'lobby'
+        'bg-primary text-primary glow': data.gameState !== 'lobby'
       }">
           <svg v-if="data.gameState === 'lobby'" width="22" height="16" viewBox="0 0 22 16" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +22,7 @@
             <path
               d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
           </svg>
-          {{ data.users?.length }} players
+          <span class="text-white">{{ data.users?.length }} players</span>
         </div>
         <span v-else class="font-semibold">
           JOUER
@@ -155,3 +155,9 @@ async function handleLogout() {
   }
 }
 </script>
+
+<style scoped>
+.glow {
+  box-shadow: 0px 0px 10px 1px currentColor;
+}
+</style>
