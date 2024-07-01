@@ -45,6 +45,7 @@ export interface IWerewolvesGameData extends IGameData {
   tmpVotes: Partial<IWerewolvesVote>[];
   witchSaves?: IWerewolvesSave[];
   witchKills?: IWerewolvesKill[];
+  thiefUsers?: IWerewolvesPlayer[];
   couple?: IWerewolvesCouple;
   psychicWatch?: IWerewolvesWatchRole[];
   roleTurn?: TRoleName;
