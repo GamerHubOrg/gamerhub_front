@@ -21,10 +21,6 @@
             </span>
         </div>
 
-        <p>tmp votes : {{ tmpVotes.length }}</p>
-        <p>wolf votes : {{ wolfVotes.length }}</p>
-        <p>village votes : {{ villageVotes.length }}</p>
-
         <button 
             class="bg-primary text-white w-full p-1 rounded mt-6 hover:bg-opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
             @click="handleSendVote"

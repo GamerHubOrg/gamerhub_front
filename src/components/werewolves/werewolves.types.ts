@@ -5,7 +5,7 @@ export type IWerewolvesGameState = 'night' | 'day';
 export type IWerewolvesCamp = 'wolve' | 'villager' | 'solo';
 
 export interface IWerewolvesPlayer extends SocketUser {
-  role: WerewolfRole,
+  role: WerewolfRole;
 }
 
 export interface IWerewolvesRoomData extends IRoomData {
@@ -37,20 +37,44 @@ export interface WerewolfRole {
   };
 }
 
-export type TRoleName = 'Loup' | 'Sorcière' | 'Chasseur' | 'Voyante' | 'Villageois' | 'Voleur' | 'Cupidon';
+export type TRoleName = 'Village' | 'Loup' | 'Sorcière' | 'Chasseur' | 'Voyante' | 'Villageois' | 'Voleur' | 'Cupidon';
 
 export interface IWerewolvesGameData extends IGameData {
-  wolfVotes: IWerewolvesVote[],
-  villageVotes: IWerewolvesVote[],
-  tmpVotes: Partial<IWerewolvesVote>[],
+  wolfVotes: IWerewolvesVote[];
+  villageVotes: IWerewolvesVote[];
+  tmpVotes: Partial<IWerewolvesVote>[];
+  witchSaves?: IWerewolvesSave[];
+  witchKills?: IWerewolvesKill[];
+  couple?: IWerewolvesCouple;
+  psychicWatch?: IWerewolvesWatchRole[];
   roleTurn?: TRoleName;
   state: IWerewolvesGameState;
   campWin?: IWerewolvesCamp;
   turn: number;
 }
 
+export type IWerewolvesCouple = string[];
+
 export interface IWerewolvesVote {
   playerId: string;
   vote: string;
+  turn: number;
+}
+
+export interface IWerewolvesWatchRole {
+  playerId: string;
+  turn: number;
+  watch: string;
+}
+
+export interface IWerewolvesSave {
+  playerId: string;
+  save: string;
+  turn: number;
+}
+
+export interface IWerewolvesKill {
+  playerId: string;
+  kill: string;
   turn: number;
 }

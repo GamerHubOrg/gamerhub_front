@@ -15,8 +15,21 @@
           class="circle-child transition-transform" 
           :class="{'opacity-40 transform scale-90': !user.role?.isAlive}"
         >
-          <img :src="villagerImage" class="w-20" />
-          <span>{{ user.username }}</span>
+          <div v-if="!isUserRoleDiscovered(user)" class="flex flex-col items-center gap-1">
+            <div class="w-20 h-20 bg-black rounded-full border border-primary flex justify-center items-center text-white font-bold text-3xl">?</div>
+            <div class="flex flex-row items-center gap-1">
+              <span>{{ user.username }}</span> 
+              <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
+            </div>
+          </div>
+          <div v-else class="flex flex-col items-center">
+            <img :src="user.role?.picture" class="w-24 h-24 rounded-full" />
+            <div class="flex flex-row items-center gap-1">
+              <span>{{ user.username }}</span> 
+              <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
+            </div>
+            <span>({{ user.role.name }})</span>
+          </div>
         </div>
     </div>
 
@@ -45,6 +58,26 @@
       @close="showWitchPowerModal = false"
     />
 
+    <HunterPowerModal
+      :open="showHunterPowerModal"
+      @close="showHunterPowerModal = false"
+    />
+
+    <PsychicPowerModal
+      :open="showPsychicPowerModal"
+      @close="showPsychicPowerModal = false"
+    />
+
+    <CupidonPowerModal
+      :open="showCupidonPowerModal"
+      @close="showCupidonPowerModal = false"
+    />
+
+    <ThiefPowerModal
+      :open="showThiefPowerModal"
+      @close="showThiefPowerModal = false"
+    />
+
     <VillageVoteModal
       :open="showVillageVoteModal"
       @close="showVillageVoteModal = false"
@@ -56,14 +89,17 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import noCampfireImage from '@/assets/games/werewolves/images/no_campfire.gif';
 import campfireImage from '@/assets/games/werewolves/images/campfire.gif';
-import villagerImage from '@/assets/games/werewolves/images/villager.png';
 import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
-import { IWerewolvesConfig, IWerewolvesRoomData } from './werewolves.types';
+import { IWerewolvesConfig, IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
 import WolfPowerModal from './WolfPowerModal.vue';
 import WitchPowerModal from './WitchPowerModal.vue';
 import VillageVoteModal from './VillageVoteModal.vue';
+import HunterPowerModal from './HunterPowerModal.vue';
+import PsychicPowerModal from './PsychicPowerModal.vue';
+import CupidonPowerModal from './CupidonPowerModal.vue';
+import ThiefPowerModal from './ThiefPowerModal.vue';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -78,6 +114,7 @@ const gameState = computed(() => gameData.value?.state || 'night');
 const users = computed(() => roomData.value?.users || []);
 
 const currentUser = computed(() => store.getCurrentUser);
+const currentUserInCouple = computed(() => gameData.value?.couple?.includes(currentUser.value?._id as string))
 const currentUserRole = computed(() => users.value.find((user) => user._id === currentUser.value?._id)?.role)
 const currentRoleTurn = computed(() => gameData.value?.roleTurn);
 
@@ -88,6 +125,18 @@ const showStateDialog = ref(false);
 const showWolfPowerModal = ref(false);
 const showWitchPowerModal = ref(false);
 const showVillageVoteModal = ref(false);
+const showHunterPowerModal = ref(false);
+const showPsychicPowerModal = ref(false);
+const showCupidonPowerModal = ref(false);
+const showThiefPowerModal = ref(false);
+
+function isUserRoleDiscovered(user: IWerewolvesPlayer) {
+  const psychicWatch = gameData.value?.psychicWatch || [];
+  const isRoleDiscovered = psychicWatch.find((pw) => pw.watch === user._id);
+  const isPlayerDead = !user.role?.isAlive;
+
+  return currentUser.value?._id === user._id || (currentUserRole.value?.name === 'Voyante' && isRoleDiscovered) || isPlayerDead
+}
 
 function setPlayerRef(el: any) {
   playersRef.value.push(el)
@@ -109,24 +158,43 @@ function handleSetPlayersPosition() {
 }
 
 function handleNightPhase() {
-  if (gameState.value !== 'night') return;
+  if (gameState.value !== 'night' || currentUserRole.value?.name !== currentRoleTurn.value) return;
 
-  if (currentRoleTurn.value === 'Loup' && currentUserRole.value?.name === 'Loup') {
+  if (currentRoleTurn.value === 'Voyante') {
+    showPsychicPowerModal.value = true;
+  }
+
+  if (currentRoleTurn.value === 'Loup') {
     showWolfPowerModal.value = true;
   }
 
-  if (currentRoleTurn.value === 'Sorcière' && currentUserRole.value?.name === 'Sorcière') {
+  if (currentRoleTurn.value === 'Sorcière') {
     showWitchPowerModal.value = true;
+  }
+
+  if (currentRoleTurn.value === 'Cupidon') {
+    showCupidonPowerModal.value = true;
+  }
+
+  if (currentRoleTurn.value === 'Voleur') {
+    showThiefPowerModal.value = true;
   }
 }
 
 function handleDayPhase() {
   if (gameState.value !== 'day' || !currentRoleTurn.value) return;
 
-  showVillageVoteModal.value =  true;
+  if (currentRoleTurn.value === 'Village') {
+    showVillageVoteModal.value =  true;
+  }
+
+  if (currentRoleTurn.value === 'Chasseur' && currentUserRole.value?.name === currentRoleTurn.value) {
+    showHunterPowerModal.value = true;
+  }
 }
 
-socket.value?.on('game:werewolves:state', () => {
+socket.value?.on('game:werewolves:state', ({ data }) => {
+  socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
   showStateDialog.value = true;
   setTimeout(() => {
     handleNightPhase();
@@ -134,7 +202,6 @@ socket.value?.on('game:werewolves:state', () => {
 })
 
 socket.value?.on('game:werewolves:start', () => {
-  console.log("START GAME EMIT SOCKET");
   showDisplayRoleDialog.value = true;
 })
 
@@ -148,6 +215,10 @@ watch(
     showWolfPowerModal.value = false;
     showWitchPowerModal.value = false;
     showVillageVoteModal.value = false;
+    showHunterPowerModal.value =  false;
+    showPsychicPowerModal.value = false;
+    showCupidonPowerModal.value = false;
+    showThiefPowerModal.value = false;
     handleNightPhase();
     handleDayPhase();
   }
