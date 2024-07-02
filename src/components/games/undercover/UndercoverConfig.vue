@@ -5,7 +5,6 @@
       <select id="mode" :disabled="isConfigDisabled" v-model="internalConfig.mode">
         <option class="text-black" value="words">Mots</option>
         <option class="text-black" value="images">Images</option>
-        <option class="text-black" value="songs">Sons</option>
       </select>
     </div>
 
