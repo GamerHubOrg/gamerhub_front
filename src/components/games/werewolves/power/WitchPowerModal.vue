@@ -9,7 +9,7 @@
                 <span>{{ user.username }}</span>
 
                 <button 
-                    v-if="user.role.isBeingKilled && !isSavePotionUsed" 
+                    v-if="gameRoles[user._id].isBeingKilled && !isSavePotionUsed" 
                     class="bg-primary"
                     @click="() => handleSavePlayer(user._id)"
                 >
@@ -51,8 +51,9 @@ const roomId = computed(() => socketStore.getRoomId);
 const currentUser = computed(() => store.getCurrentUser);
 const stateData = computed(() => socketStore.getRoomData)
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
-const users = computed(() => roomData.value.users.filter((u) => u.role.isAlive));
-const currentUserRole = computed(() => users.value.find((user) => user._id === currentUser.value?._id)?.role)
+const gameRoles = computed(() => roomData.value.gameData?.roles || {});
+const users = computed(() => roomData.value.users.filter((u) => gameRoles.value[u._id].isAlive));
+const currentUserRole = computed(() => gameRoles.value[currentUser.value!._id])
 const isSavePotionUsed = computed(() => currentUserRole.value?.power.savePotionUsed);
 const isKillPotionUsed = computed(() => currentUserRole.value?.power.killPotionUsed);
 

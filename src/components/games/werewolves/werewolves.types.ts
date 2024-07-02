@@ -4,9 +4,7 @@ export type IWerewolvesGameState = 'night' | 'day';
 
 export type IWerewolvesCamp = 'wolve' | 'villager' | 'solo';
 
-export interface IWerewolvesPlayer extends SocketUser {
-  role: WerewolfRole;
-}
+export interface IWerewolvesPlayer extends SocketUser {}
 
 export interface IWerewolvesRoomData extends IRoomData {
   users: IWerewolvesPlayer[];
@@ -39,6 +37,8 @@ export interface WerewolfRole {
 
 export type TRoleName = 'Village' | 'Loup' | 'Sorcière' | 'Chasseur' | 'Voyante' | 'Villageois' | 'Voleur' | 'Cupidon';
 
+export type ILinkedWerewolfRoles = Record<string, WerewolfRole>;
+
 export interface IWerewolvesGameData extends IGameData {
   wolfVotes: IWerewolvesVote[];
   villageVotes: IWerewolvesVote[];
@@ -48,6 +48,7 @@ export interface IWerewolvesGameData extends IGameData {
   thiefUsers?: IWerewolvesPlayer[];
   couple?: IWerewolvesCouple;
   psychicWatch?: IWerewolvesWatchRole[];
+  roles: ILinkedWerewolfRoles;
   roleTurn?: TRoleName;
   state: IWerewolvesGameState;
   campWin?: IWerewolvesCamp;

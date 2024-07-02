@@ -49,7 +49,8 @@ const secondPlayer = ref();
 
 const stateData = computed(() => socketStore.getRoomData)
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
-const users = computed(() => roomData.value.users.filter((u) => u.role?.isAlive));
+const gameRoles = computed(() => roomData.value.gameData?.roles || {});
+const users = computed(() => roomData.value.users.filter((u) => gameRoles.value[u._id]?.isAlive));
 const availableFirstUsers = computed(() => users.value.filter((u) => u?._id !== secondPlayer.value));
 const availableSecondUsers = computed(() => users.value.filter((u) => u?._id !== firstPlayer.value));
 

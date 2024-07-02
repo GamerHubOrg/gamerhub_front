@@ -9,8 +9,8 @@
                 class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
                 @click="handleChooseRole(user._id)"
             >
-                <img :src="user.role.picture">
-                <span>{{ user.role.name }}</span>
+                <img :src="getRolePicture(gameRoles[user._id].picture)">
+                <span>{{ gameRoles[user._id].name }}</span>
             </div>
         </div>
     </Modal>
@@ -22,6 +22,7 @@ import { computed } from 'vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { IWerewolvesRoomData } from '../werewolves.types';
 import { useAuthStore } from '@/modules/auth/auth.store';
+import { getRolePicture } from '@/utils/functions';
 
 defineEmits(['close'])
 defineProps({
@@ -40,6 +41,7 @@ const roomId = computed(() => socketStore.getRoomId);
 const currentUser = computed(() => store.getCurrentUser);
 const stateData = computed(() => socketStore.getRoomData);
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
+const gameRoles = computed(() => roomData.value.gameData?.roles || {});
 const users = computed(() => roomData.value.gameData?.thiefUsers);
 
 function handleChooseRole(userId: string) {

@@ -14,7 +14,7 @@
           :key="user.username" 
           :ref="setPlayerRef"
           class="circle-child transition-transform" 
-          :class="{'opacity-40 transform scale-90': !user.role?.isAlive}"
+          :class="{'opacity-40 transform scale-90': !gameRoles[user._id]?.isAlive}"
         >
           <div v-if="!isUserRoleDiscovered(user)" class="flex flex-col items-center gap-1">
             <div class="w-20 h-20 bg-black rounded-full border border-primary flex justify-center items-center text-white font-bold text-3xl">?</div>
@@ -24,12 +24,12 @@
             </div>
           </div>
           <div v-else class="flex flex-col items-center">
-            <img :src="getRolePicture(user.role?.picture)" class="w-24 h-24 rounded-full" />
+            <img :src="getRolePicture(gameRoles[user._id]?.picture)" class="w-24 h-24 rounded-full" />
             <div class="flex flex-row items-center gap-1">
               <span>{{ user.username }}</span> 
               <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
             </div>
-            <span>({{ user.role?.name }})</span>
+            <span>({{ gameRoles[user._id]?.name }})</span>
           </div>
         </div>
     </div>
@@ -94,6 +94,7 @@ import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
 import { IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
+import { getRolePicture } from '@/utils/functions';
 import WolfPowerModal from './power/WolfPowerModal.vue';
 import WitchPowerModal from './power/WitchPowerModal.vue';
 import VillageVoteModal from './power/VillageVoteModal.vue';
@@ -111,11 +112,12 @@ const socket = computed(() => socketStore.getSocket)
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
 const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'night');
+const gameRoles = computed(() => gameData.value?.roles || {});
 const users = computed(() => roomData.value?.users || []);
 
 const currentUser = computed(() => store.getCurrentUser);
 const currentUserInCouple = computed(() => gameData.value?.couple?.includes(currentUser.value?._id as string))
-const currentUserRole = computed(() => users.value.find((user) => user._id === currentUser.value?._id)?.role)
+const currentUserRole = computed(() => gameRoles.value[currentUser.value!._id]);
 const currentRoleTurn = computed(() => gameData.value?.roleTurn);
 
 const playersContainer = ref();
@@ -131,15 +133,10 @@ const showCupidonPowerModal = ref(false);
 const showThiefPowerModal = ref(false);
 const nightPhaseTimer = ref();
 
-function getRolePicture(path?: string) {
-  const url = new URL(`${path}`, import.meta.url);
-  return url?.href;
-}
-
 function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const psychicWatch = gameData.value?.psychicWatch || [];
   const isRoleDiscovered = psychicWatch.find((pw) => pw.watch === user._id);
-  const isPlayerDead = !user.role?.isAlive;
+  const isPlayerDead = !gameRoles.value[user!._id]?.isAlive;
 
   return currentUser.value?._id === user._id || (currentUserRole.value?.name === 'Voyante' && isRoleDiscovered) || isPlayerDead
 }
