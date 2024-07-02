@@ -33,7 +33,7 @@
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed, onMounted, ref, watch } from 'vue';
-import { areObjectsEquals } from '@/utils/functions';
+import { areObjectsEquals, getRolePicture } from '@/utils/functions';
 import { IWerewolvesConfig } from './werewolves.types';
 import { rolesList } from './werewolves.constants';
 

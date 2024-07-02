@@ -94,6 +94,7 @@ import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
 import { IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
+import { getRolePicture } from '@/utils/functions';
 import WolfPowerModal from './power/WolfPowerModal.vue';
 import WitchPowerModal from './power/WitchPowerModal.vue';
 import VillageVoteModal from './power/VillageVoteModal.vue';
