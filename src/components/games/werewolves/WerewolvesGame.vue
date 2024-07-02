@@ -147,17 +147,19 @@ function setPlayerRef(el: any) {
 
 function handleSetPlayersPosition() {
   const parent = playersContainer.value;
-  const children = playersRef.value;
-  const radius = parent.offsetWidth / 2;
-  const childCount = children.length;
-  const angleStep = (2 * Math.PI) / childCount;
-  children.forEach((child, index) => {
-    const angle = index * angleStep;
-    const x = radius + radius * Math.cos(angle) - child.offsetWidth / 2;
-    const y = radius + radius * Math.sin(angle) - child.offsetHeight / 2;
-    child.style.left = `${x}px`;
-    child.style.top = `${y}px`;
-  });
+  if (parent) {
+    const children = playersRef.value;
+    const radius = parent.offsetWidth / 2;
+    const childCount = children.length;
+    const angleStep = (2 * Math.PI) / childCount;
+    children.forEach((child, index) => {
+      const angle = index * angleStep;
+      const x = radius + radius * Math.cos(angle) - child.offsetWidth / 2;
+      const y = radius + radius * Math.sin(angle) - child.offsetHeight / 2;
+      child.style.left = `${x}px`;
+      child.style.top = `${y}px`;
+    });
+  }
 }
 
 function handleNightPhase() {
@@ -205,6 +207,7 @@ socket.value?.on('game:werewolves:state', ({ data }) => {
 })
 
 socket.value?.on('game:werewolves:start', () => {
+  console.log("START GAME EVENT");
   showDisplayRoleDialog.value = true;
 })
 
