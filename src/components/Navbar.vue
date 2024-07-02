@@ -173,7 +173,7 @@
             </div>
           </div>
           <div class="mt-3 space-y-1">
-            <DisclosureButton as="a" href="#" class="flex items-center py-2 px-4 hover:bg-gray-100 text-base font-medium text-white">
+            <DisclosureButton as="a" href="/profile" class="flex items-center py-2 px-4 hover:bg-gray-100 text-base font-medium text-white">
               <svg
               class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
