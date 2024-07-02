@@ -91,9 +91,9 @@
               <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                 <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <MenuItem v-slot="{ active }">
-                    <a href="#"
+                    <router-link to="/profile"
                       :class="[active ? 'bg-gray-100' : '']"
-                      class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
+                      class="flex items-center py-2 px-4 text-sm text-black hover:bg-gray-100">
                     <svg
                         class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
@@ -101,11 +101,11 @@
                             d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    My profile</a>
+                    My profile</router-link>
                   </MenuItem>
                   <MenuItem>
                     <span
-                      class="block py-2 px-4 text-sm hover:bg-gray-100 cursor-pointer"
+                      class="block text-black py-2 px-4 text-sm hover:bg-gray-100 cursor-pointer"
                       @click="handleLogout">Sign out</span>
                   </MenuItem>
                 </MenuItems>
