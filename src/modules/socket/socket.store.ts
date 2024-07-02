@@ -63,18 +63,24 @@ export const useSocketStore = defineStore("socket", {
       this.roomId = "";
       this.data = {};
     },
-    handleStartGame(roomId: string) {
-      socket.emit("room:start", roomId);
-      socket.emit(`game:${this.data.gameName}:initialize`, roomId);
+    handleStartGame() {
+      socket.emit("room:start", this.roomId);
+      socket.emit(`game:${this.data.gameName}:initialize`, this.roomId);
     },
-    handleGoToLobby(roomId: string) {
-      socket.emit("room:lobby", roomId);
+    handleGoToLobby() {
+      socket.emit("room:lobby", this.roomId);
     },
-    handleUpdateRoom(roomId: string, config: IRoomConfig) {
-      socket.emit("room:update", roomId, config);
+    handleUpdateRoom(config: IRoomConfig) {
+      socket.emit("room:update", this.roomId, config);
     },
-    handleChangeGame(roomId: string, game: string) {
-      socket.emit("room:change-game", roomId, game);
+    handleChangeGame(game: string) {
+      socket.emit("room:change-game", this.roomId, game);
+    },
+    handlePromoteUser(userId : string) {
+      socket.emit("room:promote", this.roomId,userId)
+    },
+    handleKickUser(userId : string) {
+      socket.emit("room:kick", this.roomId, userId)
     },
   },
 });

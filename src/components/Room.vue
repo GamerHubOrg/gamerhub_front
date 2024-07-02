@@ -5,11 +5,13 @@ import { IRoomData } from "@/types/interfaces";
 import { useSocketStore } from '../modules/socket/socket.store';
 import { useRoute, useRouter } from "vue-router";
 import { toast, ToastType } from 'vue3-toastify';
+import { useGamesStore } from '@/modules/games/games.store';
 
 const router = useRouter()
 const route = useRoute();
 const store = useAuthStore();
 const socketStore = useSocketStore();
+const gameStore = useGamesStore()
 const roomStore = socketStore;
 const roomId = computed(() => roomStore.getRoomId)
 const data = computed(() => roomStore.getRoomData)
@@ -30,13 +32,15 @@ function onRoomJoined(roomId: string, data: IRoomData) {
   localStorage.setItem("roomId", roomId)
 }
 
-function onRoomUpdated(data: IRoomData) { 
+function onRoomUpdated(data: IRoomData) {
   socketStore.handleRoomUpdate({ data })
 }
 
 function onRoomStarted(data: IRoomData) {
   socketStore.handleRoomUpdate({ data })
   router.push(`/room/${roomId.value}`)
+  gameStore.setIsLobbyCollapsed(true);
+
 }
 
 function onRoomBackToLobby(data: IRoomData) {
@@ -48,12 +52,20 @@ function onRoomBackToLobby(data: IRoomData) {
 
 function onRoomDeleted(roomId: string) {
   socketStore.handleRoomUpdate({ roomId: "", data: {} })
-  alert(`La room ${roomId} a été supprimée.`);
+  onRoomNotification(`La room ${roomId} a été supprimée.`, "error");
+}
+
+function onRoomKicked() {
+  socketStore.handleRoomUpdate({ roomId: "", data: {} })
+  onRoomNotification("Tu as été kick de la room", "error");
 }
 
 function onRoomNotFound(roomId: string) {
   localStorage.removeItem("roomId")
-  console.log(`La room ${roomId} n'existe pas`);
+  console.log("not found");
+  
+  onRoomNotification(`La room ${roomId} n'existe pas`, "error");
+  router.push("/")
 }
 
 function onUserNotAuth() {
@@ -62,9 +74,9 @@ function onUserNotAuth() {
 
 function onRoomNotification(message: string, type: ToastType) {
   toast(message, {
-      autoClose: 3000,
-      type,
-      theme: 'dark'
+    autoClose: 3000,
+    type,
+    theme: 'dark'
   });
 }
 
@@ -78,6 +90,7 @@ if (socket) {
   socket.on("room:lobbied", onRoomBackToLobby);
   socket.on("room:not-found", onRoomNotFound);
   socket.on("user:not-auth", onUserNotAuth);
+  socket.on("room:kicked", onRoomKicked);
   socket.on("room:deleted", onRoomDeleted);
   socket.on("room:notifications:success", (message: string) => onRoomNotification(message, 'success'));
   socket.on("room:notifications:info", (message: string) => onRoomNotification(message, 'info'));
@@ -116,8 +129,8 @@ watch(
     <div v-if="areLogsExpanded" class="p-2">
       <div v-for="log in data.logs" class="flex">
         <p><span class="font-bold">{{ new Date(log.date).toLocaleString() }}</span> : <span>{{
-          log.message
-            }}</span>
+    log.message
+  }}</span>
         </p>
       </div>
     </div>

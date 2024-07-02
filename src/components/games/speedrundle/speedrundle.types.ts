@@ -2,7 +2,7 @@ import { IRoomConfig, IRoomData, IGameData } from "@/types/interfaces";
 
 export type SpeedrundleMode = "classic" | "less_trials";
 
-export type SpeedrundleTheme = "league_of_legends" | "pokemon" | "marvel";
+export type SpeedrundleTheme = "league_of_legends" | "pokemon";
 
 export interface ISpeedrundleConfig extends IRoomConfig {
   mode: SpeedrundleMode;
@@ -10,10 +10,8 @@ export interface ISpeedrundleConfig extends IRoomConfig {
   nbRounds: number;
 }
 
-export type CharacterDataType = "league_of_legends" | "pokemon";
-
 export interface ICharacterData extends Record<string, any> {
-  dataType: CharacterDataType;
+  dataType: SpeedrundleTheme;
 }
 
 export interface ICharacter {
@@ -157,7 +155,6 @@ const POKEMON_COLUMNS: IColumn[] = [
 
 export const speedrundleColumns: Record<SpeedrundleTheme, IColumn[]> = {
   league_of_legends: LEAGUE_OF_LEGENDS_COLUMNS,
-  marvel: [],
   pokemon: POKEMON_COLUMNS,
 };
 

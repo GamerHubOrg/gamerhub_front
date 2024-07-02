@@ -81,14 +81,14 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { User } from '@/modules/auth/user';
-import { useSocketStore } from '../../modules/socket/socket.store';
+import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed, ref } from 'vue';
 import { EyeSlashIcon } from '@heroicons/vue/24/solid';
 import { IUndercoverConfig, IUndercoverRoomData } from './undercover.types';
-import Modal from '../Modal.vue';
-import sendWordSound from '../../assets/games/undercover/sounds/send-word.wav'
-import newRoundSound from '../../assets/games/undercover/sounds/new-round.wav'
-import startGameSound from '../../assets/games/undercover/sounds/game-start.wav'
+import Modal from '@/components/Modal.vue';
+import sendWordSound from '@/assets/games/undercover/sounds/send-word.wav'
+import newRoundSound from '@/assets/games/undercover/sounds/new-round.wav'
+import startGameSound from '@/assets/games/undercover/sounds/game-start.wav'
 
 const store = useAuthStore();
 const socketStore = useSocketStore();

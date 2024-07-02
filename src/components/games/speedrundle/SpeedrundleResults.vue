@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { User as UserInterface } from '@/modules/auth/user';
 import { computed } from 'vue';
-import { useSocketStore } from '../../modules/socket/socket.store';
+import { useSocketStore } from '@/modules/socket/socket.store';
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { ILolCharacter, IPokemonCharacter, ISpeedrundleGameData, ISpeedrundleRoomData } from './speedrundle.types';
 import { formatLolCharacter, formatPokemonCharacter } from './speedrundle.functions'

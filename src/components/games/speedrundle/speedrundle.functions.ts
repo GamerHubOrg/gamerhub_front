@@ -1,4 +1,5 @@
 import { capitalizeFirstLetter } from "@/utils/functions";
+import { ICharacter, SpeedrundleTheme } from './speedrundle.types';
 import {
   ILolCharacter,
   IPokemonCharacter,
@@ -136,4 +137,19 @@ export function formatLolCharacter(characterData: ILolCharacter) {
     position,
     releaseYear,
   };
+}
+
+export function formatCharacter(allCharacters : ICharacter[], theme : SpeedrundleTheme,id: string) {
+  const characterData = allCharacters.find(({ _id }) => _id === id);
+  if (!characterData) return undefined;
+
+  switch (theme) {
+    case "league_of_legends":
+      return formatLolCharacter(characterData as ILolCharacter);
+    case "pokemon":
+      return formatPokemonCharacter(characterData as IPokemonCharacter);
+
+    default:
+      break;
+  }
 }
