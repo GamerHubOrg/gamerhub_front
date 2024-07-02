@@ -2,9 +2,6 @@
   <div class="flex flex-col items-center gap-12 text-white">
     <h2 class="text-3xl">Werewolves</h2>
 
-    {{ gameState }}
-    {{ currentRoleTurn }}
-
     <div ref="playersContainer" class="rounded-full w-5/6 md:w-3/4 lg:w-1/2 aspect-square position relative bg-dark2 flex justify-center items-center">
         <img v-if="gameState === 'night'" :src="noCampfireImage" />
         <img v-else :src="campfireImage" />
@@ -93,13 +90,13 @@ import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
 import { IWerewolvesConfig, IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
-import WolfPowerModal from './WolfPowerModal.vue';
-import WitchPowerModal from './WitchPowerModal.vue';
-import VillageVoteModal from './VillageVoteModal.vue';
-import HunterPowerModal from './HunterPowerModal.vue';
-import PsychicPowerModal from './PsychicPowerModal.vue';
-import CupidonPowerModal from './CupidonPowerModal.vue';
-import ThiefPowerModal from './ThiefPowerModal.vue';
+import WolfPowerModal from './power/WolfPowerModal.vue';
+import WitchPowerModal from './power/WitchPowerModal.vue';
+import VillageVoteModal from './power/VillageVoteModal.vue';
+import HunterPowerModal from './power/HunterPowerModal.vue';
+import PsychicPowerModal from './power/PsychicPowerModal.vue';
+import CupidonPowerModal from './power/CupidonPowerModal.vue';
+import ThiefPowerModal from './power/ThiefPowerModal.vue';
 
 const store = useAuthStore();
 const socketStore = useSocketStore();

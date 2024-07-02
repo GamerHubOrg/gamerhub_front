@@ -26,10 +26,10 @@
 </template>
 
 <script lang="ts" setup>
-import Modal from '../Modal.vue';
+import Modal from '@/components/Modal.vue';
 import { computed, ref, watch } from 'vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
-import { IWerewolvesRoomData } from './werewolves.types';
+import { IWerewolvesRoomData } from '../werewolves.types';
 
 defineEmits(['close'])
 defineProps({

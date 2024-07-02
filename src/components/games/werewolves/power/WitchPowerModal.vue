@@ -1,6 +1,6 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <span>Vous avez été tué. Emportez quelqu'un avec vous</span>
+        <span>Voulez vous utiliser votre potion de guérion ou votre potion de mort cette nuit ?</span>
         <div class="flex flex-row gap-2 flex-wrap mt-4">
             <div
                 v-for="user in users" :key="user._id" 
@@ -9,10 +9,18 @@
                 <span>{{ user.username }}</span>
 
                 <button 
+                    v-if="user.role.isBeingKilled && !isSavePotionUsed" 
+                    class="bg-primary"
+                    @click="() => handleSavePlayer(user._id)"
+                >
+                    Sauver
+                </button>
+                <button 
+                    v-else-if="!isKillPotionUsed" 
                     class="bg-red-400"
                     @click="() => handleKillPlayer(user._id)"
                 >
-                    Tirer
+                    Empoisonner
                 </button>
             </div>
         </div>
@@ -20,10 +28,10 @@
 </template>
 
 <script lang="ts" setup>
-import Modal from '../Modal.vue';
+import Modal from '@/components/Modal.vue';
 import { computed } from 'vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
-import { IWerewolvesRoomData } from './werewolves.types';
+import { IWerewolvesRoomData } from '../werewolves.types';
 import { useAuthStore } from '@/modules/auth/auth.store';
 
 defineEmits(['close'])
@@ -44,8 +52,15 @@ const currentUser = computed(() => store.getCurrentUser);
 const stateData = computed(() => socketStore.getRoomData)
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
 const users = computed(() => roomData.value.users.filter((u) => u.role.isAlive));
+const currentUserRole = computed(() => users.value.find((user) => user._id === currentUser.value?._id)?.role)
+const isSavePotionUsed = computed(() => currentUserRole.value?.power.savePotionUsed);
+const isKillPotionUsed = computed(() => currentUserRole.value?.power.killPotionUsed);
+
+function handleSavePlayer(userId: string) {
+    socket.value?.emit('game:werewolves:witch:save', { roomId: roomId.value, userId: currentUser.value?._id, save: userId });
+}
 
 function handleKillPlayer(userId: string) {
-    socket.value?.emit('game:werewolves:hunter:kill', { roomId: roomId.value, userId: currentUser.value?._id, kill: userId });
+    socket.value?.emit('game:werewolves:witch:kill', { roomId: roomId.value, userId: currentUser.value?._id, kill: userId });
 }
 </script>

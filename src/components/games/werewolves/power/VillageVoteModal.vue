@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts" setup>
-import Modal from '../Modal.vue';
-import VotePlayers from './VotePlayers.vue';
+import Modal from '@/components/Modal.vue';
+import VotePlayers from '../VotePlayers.vue';
 import { computed } from 'vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
-import { IWerewolvesRoomData } from './werewolves.types';
+import { IWerewolvesRoomData } from '../werewolves.types';
 import { useAuthStore } from '@/modules/auth/auth.store';
 
 defineEmits(['close'])
