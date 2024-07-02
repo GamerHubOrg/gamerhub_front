@@ -80,12 +80,14 @@ function getPlayerName(userId?: string) {
 }
 
 function handleSendVote() {
+    console.log("SEND VOTE")
     const userVote = tmpVotes.value.find((v) => v.playerId === currentUser.value?._id);
     emit('vote', userVote?.vote)
 }
 
 function handleSendVoteProposition(userId: string) {
     const alreadyVotedUser = tmpVotes.value.find((vote) => vote.vote === userId && vote.playerId === currentUser.value?._id)
+    console.log("SEND VOTE PROPOSITION")
     if (alreadyVotedUser) {
         socket.value?.emit('game:werewolves:vote:tmp', { roomId: roomId.value, userId: currentUser.value?._id, vote: undefined });
         return;

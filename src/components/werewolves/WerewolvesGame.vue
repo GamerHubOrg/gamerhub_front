@@ -2,7 +2,8 @@
   <div class="flex flex-col items-center gap-12 text-white">
     <h2 class="text-3xl">Werewolves</h2>
 
-    {{ gameData?.thiefRoles }}
+    {{ gameState }}
+    {{ currentRoleTurn }}
 
     <div ref="playersContainer" class="rounded-full w-5/6 md:w-3/4 lg:w-1/2 aspect-square position relative bg-dark2 flex justify-center items-center">
         <img v-if="gameState === 'night'" :src="noCampfireImage" />
@@ -27,7 +28,7 @@
               <span>{{ user.username }}</span> 
               <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
             </div>
-            <span>({{ user.role.name }})</span>
+            <span>({{ user.role?.name }})</span>
           </div>
         </div>
     </div>
@@ -128,6 +129,7 @@ const showHunterPowerModal = ref(false);
 const showPsychicPowerModal = ref(false);
 const showCupidonPowerModal = ref(false);
 const showThiefPowerModal = ref(false);
+const nightPhaseTimer = ref();
 
 function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const psychicWatch = gameData.value?.psychicWatch || [];
@@ -195,7 +197,7 @@ function handleDayPhase() {
 socket.value?.on('game:werewolves:state', ({ data }) => {
   socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
   showStateDialog.value = true;
-  setTimeout(() => {
+  nightPhaseTimer.value = setTimeout(() => {
     handleNightPhase();
   }, 1500)
 })
@@ -231,6 +233,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (nightPhaseTimer.value) clearTimeout(nightPhaseTimer.value);
   window.removeEventListener('resize', handleSetPlayersPosition);
 })
 </script>
