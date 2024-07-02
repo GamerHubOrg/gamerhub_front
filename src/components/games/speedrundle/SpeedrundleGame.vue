@@ -140,8 +140,6 @@ function getColumnClass(id: string, column: string) {
   };
 }
 
-
-
 function handleCharacterSelect(id: string) {
   characterGuessId.value = id;
 }
@@ -227,10 +225,10 @@ watch(
 }
 
 .arrow-up::before {
-  background-image: url("../../assets/icons/arrow-up.svg");
+  background-image: url("../../../assets/icons/arrow-up.svg");
 }
 
 .arrow-down::before {
-  background-image: url("../../assets/icons/arrow-down.svg");
+  background-image: url("../../../assets/icons/arrow-down.svg");
 }
 </style>
