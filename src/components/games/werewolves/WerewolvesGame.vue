@@ -2,6 +2,10 @@
   <div class="flex flex-col items-center gap-12 text-white">
     <h2 class="text-3xl">Werewolves</h2>
 
+    <p>Game phase: {{ gameState }}</p>
+    <p>currentRoleTurn: {{ currentRoleTurn }}</p>
+    <p>Game state: {{ roomData.gameState }}</p>
+
     <div ref="playersContainer" class="rounded-full w-5/6 md:w-3/4 lg:w-1/2 aspect-square position relative bg-dark2 flex justify-center items-center">
         <img v-if="gameState === 'night'" :src="noCampfireImage" />
         <img v-else :src="campfireImage" />
@@ -88,7 +92,7 @@ import noCampfireImage from '@/assets/games/werewolves/images/no_campfire.gif';
 import campfireImage from '@/assets/games/werewolves/images/campfire.gif';
 import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
-import { IWerewolvesConfig, IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
+import { IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
 import WolfPowerModal from './power/WolfPowerModal.vue';
 import WitchPowerModal from './power/WitchPowerModal.vue';
@@ -105,7 +109,6 @@ const stateData = computed(() => socketStore.getRoomData)
 const socket = computed(() => socketStore.getSocket)
 
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
-const config = computed(() => (roomData.value.config as IWerewolvesConfig));
 const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'night');
 const users = computed(() => roomData.value?.users || []);
