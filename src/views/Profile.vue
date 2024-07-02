@@ -106,7 +106,7 @@ const handleChangeUser = async (e: Event) => {
   try{
     e.preventDefault();
     await authStore.updateUser(user.value);
-    toast('Modification enregistrer', {
+    toast('Modifications enregistrées', {
       autoClose: 3000,
       type:'success',
       theme: 'dark'
