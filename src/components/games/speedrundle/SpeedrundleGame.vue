@@ -1,16 +1,14 @@
 <template>
-  <div class="flex flex-col items-center gap-7 mr-16">
+  <div class="flex flex-col items-center gap-7 mt-4">
     <SpeedrundleHeader :config="roomConfig" />
-    <SpeedrundleUserScore />
     <SpeedrundleGameProgress v-if="!!userAnswers" :user-answers="userAnswers" />
     <SpeedrundleScoreDetails v-if="!!userAnswers && playerState === 'finished'" :user-answers="userAnswers" />
 
-    <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full">
+    <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full mr-16 ml-16">
       <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
         :options="filteredCharacters" />
       <Button type="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
-
-      <div class="w-full">
+      <div class="w-full max-xl:h-[370px] max-xl:overflow-y-auto overflow-x-auto">
         <table class="border-separate bg-dark2 w-full">
           <thead>
             <tr>
@@ -30,6 +28,8 @@
         </table>
       </div>
     </div>
+
+    <SpeedrundleUserScore />
   </div>
 </template>
 

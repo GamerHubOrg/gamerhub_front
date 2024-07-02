@@ -1,18 +1,11 @@
 <template>
-    <div class="absolute right-0 flex flex-col gap-1">
-      <div
-        v-for="user in roomData.users"
-        :key="user.socket_id"
-        class="flex justify-center items-center"
-      >
-        <div
-          class="flex items-center gap-2 max-w-48 max-h-12 p-3 rounded-md"
-          :class="{
-            'bg-lightgrey': currentUser?.email === user.email,
-            'bg-darkgrey': currentUser?.email !== user.email,
-            'border border-green-500': scores[user._id]?.state === 'finished',
-          }"
-        >
+    <div class="flex gap-1 min-[700px]:absolute min-[700px]:top-20 min-[700px]:right-16 min-[700px]:flex-col min-[700px]:overflow-y-auto min-[700px]:h-[150px]">
+      <div v-for="user in roomData.users" :key="user.socket_id" class="flex justify-center items-center">
+        <div class="flex items-center gap-2 max-w-48 max-h-12 p-3 rounded-md" :class="{
+          'bg-lightgrey': currentUser?.email === user.email,
+          'bg-darkgrey': currentUser?.email !== user.email,
+          'border border-green-500': scores[user._id]?.state === 'finished'
+        }">
           <div class="max-h-12 max-w-12 text-xs truncate">
             <img :src="user.picture" class="w-full rounded-md" />
             <span class="text-xs truncate">{{ user.username }} </span>
