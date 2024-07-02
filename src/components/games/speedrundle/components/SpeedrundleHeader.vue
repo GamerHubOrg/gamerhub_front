@@ -1,7 +1,6 @@
 <template>
   <h2 class="text-3xl">Speedrun DLE</h2>
   <p>
-    Le thème de la partie est :
     <span class="font-semibold">{{ getThemeLabel() }} - {{ getModeLabel() }}</span>
   </p>
 </template>

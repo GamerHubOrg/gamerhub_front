@@ -308,7 +308,7 @@ onMounted(() => {
       </div>
 
 
-      <div class="flex flex-col gap-4 text-white mt-20">
+      <div class="flex flex-col gap-4 text-white mt-20 pb-4">
         <p class="italic">
           Nombre de joueurs minimums : {{ minimumPlayers }}
         </p>

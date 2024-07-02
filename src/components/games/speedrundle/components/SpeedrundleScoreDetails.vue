@@ -36,6 +36,6 @@ const finishedCharactersData = computed(() => {
     attempts: roundsData?.[index].guesses.length || 0,
     score: roundsData?.[index].score || 0,
     abandon: !roundsData?.[index].hasFound,
-  }));
+  }))|| [];
 });
 </script>
