@@ -4,8 +4,8 @@ import { IRoomConfig } from '@/types/interfaces';
 import { computed, ref, watch, onMounted } from "vue";
 import { useSocketStore } from "../modules/socket/socket.store";
 import { useRouter } from "vue-router";
-import UndercoverConfig from "@/components/undercover/UndercoverConfig.vue";
-import SpeedrundleConfig from "@/components/speedrundle/SpeedrundleConfig.vue";
+import UndercoverConfig from "@/components/games/undercover/UndercoverConfig.vue";
+import SpeedrundleConfig from "@/components/games/speedrundle/SpeedrundleConfig.vue";
 import { useGamesStore } from "@/modules/games/games.store";
 import { toast } from "vue3-toastify";
 import Modal from "./Modal.vue";
@@ -107,6 +107,10 @@ const handleKickUser = (id: string) => {
   socketStore.handleKickUser(id);
 };
 
+const handleRedirectToLogin = () => {
+  router.push("/login")
+}
+
 const handleRedirectGame = () => {
   router.push(`/room/${roomId.value}`)
 }
@@ -197,12 +201,13 @@ onMounted(() => {
       </button>
     </div>
 
-    <div v-if="!currentUser" class="flex items-center justify-center flex-col gap-4 text-white opacity-30 mt-20">
-      <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white">
+    <div v-if="!currentUser" class="flex items-center justify-center flex-col gap-4 text-white mt-20">
+      <svg class="opacity-30" width="100" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white">
         <path
           d="M40.1 467.1l-11.2 9c-3.2 2.5-7.1 3.9-11.1 3.9C8 480 0 472 0 462.2V192C0 86 86 0 192 0S384 86 384 192V462.2c0 9.8-8 17.8-17.8 17.8c-4 0-7.9-1.4-11.1-3.9l-11.2-9c-13.4-10.7-32.8-9-44.1 3.9L269.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6l-26.6-30.5c-12.7-14.6-35.4-14.6-48.2 0L141.3 506c-3.3 3.8-8.2 6-13.3 6s-9.9-2.2-13.3-6L84.2 471c-11.3-12.9-30.7-14.6-44.1-3.9zM160 192a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm96 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z" />
       </svg>
-      <span>You need to be authenticated in order to play games</span>
+      <span class="opacity-30">You need to be authenticated in order to play games</span>
+      <Button shape="squared" type="primary" @click="handleRedirectToLogin">Se connecter</Button>
     </div>
 
     <div v-else-if="!roomId" class="flex flex-col gap-8">
@@ -273,11 +278,11 @@ onMounted(() => {
           </div>
         </div>
 
-        <button v-if="data.gameState !== 'lobby'" type="submit"
-          class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:col-start-2"
+        <Button v-if="data.gameState !== 'lobby'" type="primary" shape="squared"
+          
           @click="handleRedirectGame">
           Rejoindre le jeu
-        </button>
+        </Button>
 
         <h5 class="w-full text-center font-bold text-lg text-white">Settings</h5>
 

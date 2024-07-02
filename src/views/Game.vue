@@ -4,8 +4,8 @@
 </template>
 
 <script lang="ts" setup>
-import Undercover from '@/components/undercover/Undercover.vue';
-import Speedrundle from '@/components/speedrundle/Speedrundle.vue';
+import Undercover from '@/components/games/undercover/Undercover.vue';
+import Speedrundle from '@/components/games/speedrundle/Speedrundle.vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -21,8 +21,6 @@ if (!socketStore.getRoomId) {
   const pathRoomId = router.currentRoute.value.fullPath.split("/")[1];
   if (currentUser.value) {
     socketStore.handleJoinRoom(currentUser.value, pathRoomId);
-  } else {
-    router.push("/")
   }
-} 
+}
 </script>

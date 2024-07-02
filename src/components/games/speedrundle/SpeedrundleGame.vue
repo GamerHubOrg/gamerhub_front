@@ -1,87 +1,14 @@
 <template>
   <div class="flex flex-col items-center gap-7 mr-16">
     <SpeedrundleHeader :config="roomConfig" />
-
-    <div class="absolute right-0 flex flex-col gap-1">
-      <div
-        v-for="user in roomData.users"
-        :key="user.socket_id"
-        class="flex justify-center items-center"
-      >
-        <div
-          class="flex items-center gap-2 max-w-48 max-h-12 p-3 rounded-md"
-          :class="{
-            'bg-lightgrey': currentUser?.email === user.email,
-            'bg-darkgrey': currentUser?.email !== user.email,
-            'border border-green-500': scores[user._id]?.state === 'finished',
-          }"
-        >
-          <div class="max-h-12 max-w-12 text-xs truncate">
-            <img :src="user.picture" class="w-full rounded-md" />
-            <span class="text-xs truncate">{{ user.username }} </span>
-          </div>
-          <span class="font-semibold text-xs">Score : {{ scores[user._id].score }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="flex flex-col absolute right-0 bottom-1/2 translate-y-1/2 h-[300px] w-3 bg-red-500 rounded-tl rounded-bl"
-    >
-      <span
-        v-for="n in nbRounds"
-        class="relative flex-1 flex items-center"
-        :class="{
-          'border-black border-b-2': n < nbRounds,
-          'bg-green-500': currentRound > n,
-          'rounded-tl': n === 1,
-          'rounded-bl': n === nbRounds,
-        }"
-      >
-        <div v-if="allUsersCurrentRound[n - 1]" class="absolute w-6 h-6 right-full mr-2">
-          <img
-            v-if="allUsersCurrentRound[n - 1].length === 1"
-            :key="allUsersCurrentRound[n - 1][0]"
-            :src="allUsersCurrentRound[n - 1][0]"
-            class="w-full h-full rounded-full border border-white"
-          />
-          <span
-            v-else
-            class="flex items-center justify-center w-full h-full font-bold bg-white rounded-full text-black border border-white"
-          >
-            {{ allUsersCurrentRound[n - 1].length }}</span
-          >
-        </div>
-      </span>
-    </div>
-
-    <div v-if="playerState === 'finished'">
-      <h3 class="text-xl text-center mb-2">Détails des scores</h3>
-      <div class="flex gap-5 justify-center flex-wrap mb-2">
-        <div
-          v-for="character in finishedCharactersData"
-          :key="character.id"
-          class="flex flex-col items-center"
-        >
-          <img v-if="!!character.image" :src="character.image" />
-          <p v-if="character.abandon">Abandonné</p>
-          <p v-else>{{ character.attempts }} essais</p>
-        </div>
-      </div>
-      <p class="text-center">En attente des autres joueurs...</p>
-    </div>
+    <SpeedrundleUserScore />
+    <SpeedrundleGameProgress v-if="!!userAnswers" :user-answers="userAnswers" />
+    <SpeedrundleScoreDetails v-if="!!userAnswers && playerState === 'finished'" :user-answers="userAnswers" />
 
     <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full">
-      <Select
-        :value="characterGuessId"
-        @update="handleCharacterSelect"
-        :hide-options="true"
-        :query-starts-with="true"
-        :options="filteredCharacters"
-      />
-      <Button type="danger" @click="handleGiveUpCharacter"
-        >Abandonner ce personnage</Button
-      >
+      <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
+        :options="filteredCharacters" />
+      <Button type="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
 
       <div class="w-full">
         <table class="border-separate bg-dark2 w-full">
@@ -94,16 +21,8 @@
           </thead>
           <tbody>
             <tr v-for="guess in reversedGuessedCharacters" :key="guess?.id">
-              <th
-                v-for="column in gameData?.columns"
-                :class="getColumnClass(guess.id, column.key)"
-                :key="column.key"
-              >
-                <img
-                  v-if="column.type === 'image'"
-                  :src="guess[column.key as keyof object]"
-                  class="mx-auto"
-                />
+              <th v-for="column in gameData?.columns" :class="getColumnClass(guess.id, column.key)" :key="column.key">
+                <img v-if="column.type === 'image'" :src="guess[column.key as keyof object]" class="mx-auto" />
                 <p v-else>{{ guess[column.key as keyof object] }}</p>
               </th>
             </tr>
@@ -117,7 +36,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/modules/auth/auth.store";
 import { User } from "@/modules/auth/user";
-import { useSocketStore } from "../../modules/socket/socket.store";
+import { useSocketStore } from "@/modules/socket/socket.store";
 import { computed, ref, watch } from "vue";
 import {
   ICharacter,
@@ -129,17 +48,20 @@ import {
   SpeedrundleAnswerClues,
 } from "./speedrundle.types";
 import {
-  formatLolCharacter,
   compareLolGuessToAnswer,
-  formatPokemonCharacter,
   comparePokemonGuessToAnswer,
+  formatCharacter,
 } from "./speedrundle.functions";
 import Select from "@/components/Select.vue";
-import findCharacterSound from "../../assets/games/speedrundle/sounds/find-character.wav";
-import giveUpCharacterSound from "../../assets/games/speedrundle/sounds/give-up-character.wav";
-import Button from "../Button.vue";
+import findCharacterSound from "@/assets/games/speedrundle/sounds/find-character.wav";
+import giveUpCharacterSound from "@/assets/games/speedrundle/sounds/give-up-character.wav";
+import Button from "@/components/Button.vue";
 import { ISpeedrundleConfig } from "./speedrundle.types";
 import SpeedrundleHeader from "./components/SpeedrundleHeader.vue";
+import SpeedrundleUserScore from "./components/SpeedrundleUserScore.vue";
+import SpeedrundleGameProgress from "./components/SpeedrundleGameProgress.vue";
+import SpeedrundleScoreDetails from "./components/SpeedrundleScoreDetails.vue";
+
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -159,44 +81,18 @@ const charactersToGuess = ref<ICharacter[]>([]);
 const allCharacters = ref<ICharacter[]>([]);
 const playerState = computed(() => userAnswers.value?.state);
 const reversedGuessedCharacters = computed(() => [...guessedCharacters.value].reverse());
-const nbRounds = computed(() => roomData.value.config?.nbRounds || 0);
 const currentRound = computed(() => userAnswers.value?.currentRound || 1);
 const currentCharacterToGuess = computed(
   () => charactersToGuess.value[currentRound.value - 1]
 );
 
-const allUsersCurrentRound = computed(() => {
-  const rounds: string[][] = [];
-  for (const { _id, picture } of roomData.value.users) {
-    if (!picture) continue;
-    const answers = gameData.value.usersAnswers?.find(({ playerId }) => _id === playerId);
-    if (!answers || answers.state === "finished") continue;
-    const roundIndex = answers.currentRound - 1;
-    rounds[roundIndex] = [...(rounds[roundIndex] || []), picture];
-  }
-
-  return rounds;
-});
-
-const finishedCharactersData = computed(() => {
-  if (playerState.value !== "finished") return [];
-
-  const { roundsData } = userAnswers.value || {};
-  return charactersToGuess.value.map((character, index) => ({
-    id: character._id,
-    image: formatCharacter(character._id)?.sprite,
-    attempts: roundsData?.[index].guesses.length || 0,
-    score: roundsData?.[index].score || 0,
-    abandon: !roundsData?.[index].hasFound,
-  }));
-});
 
 const guessedCharacters = computed(() => {
   if (!userAnswers.value) return [];
   const { roundsData, currentRound } = userAnswers.value;
   return (
     roundsData[currentRound - 1].guesses
-      .map((characterId) => formatCharacter(characterId))
+      .map((characterId) => formatCharacter(allCharacters.value, roomData.value.config?.theme!, characterId))
       .filter((e) => !!e) ?? []
   );
 });
@@ -209,21 +105,7 @@ const filteredCharacters = computed(() => {
     .map(({ _id, name, data }) => ({ value: _id, label: name, imageUrl: data.sprite }));
 });
 
-const scores = computed(() => {
-  const scoresObject: Record<
-    string,
-    { score: number; state: "finished" | "playing" }
-  > = {};
-  for (const { _id } of roomData.value.users) {
-    const key = _id as keyof object;
-    const answers = gameData.value.usersAnswers?.find((e) => _id === e.playerId);
-    const score = answers?.roundsData.reduce((prev, curr) => prev + curr.score, 0) || 0;
-    const state = answers?.state || "playing";
-    scoresObject[key] = { score, state };
-  }
 
-  return scoresObject;
-});
 
 function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClues {
   const characterData = allCharacters.value.find(({ _id }) => _id === id);
@@ -258,20 +140,7 @@ function getColumnClass(id: string, column: string) {
   };
 }
 
-function formatCharacter(id: string) {
-  const characterData = allCharacters.value.find(({ _id }) => _id === id);
-  if (!characterData) return undefined;
 
-  switch (roomData.value.config?.theme) {
-    case "league_of_legends":
-      return formatLolCharacter(characterData as ILolCharacter);
-    case "pokemon":
-      return formatPokemonCharacter(characterData as IPokemonCharacter);
-
-    default:
-      break;
-  }
-}
 
 function handleCharacterSelect(id: string) {
   characterGuessId.value = id;

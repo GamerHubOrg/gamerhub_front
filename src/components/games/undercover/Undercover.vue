@@ -1,6 +1,7 @@
 <template>
   <UndercoverGame v-if="data.gameState === 'started'" />
   <UndercoverResults v-else-if="data.gameState === 'results'" />
+  <GameLobby v-else />
 </template>
 
 <script setup lang="ts">

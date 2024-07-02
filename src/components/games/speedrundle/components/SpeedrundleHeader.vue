@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { ISpeedrundleConfig } from "../speedrundle.types";
 import { computed } from "vue";
-import { capitalizeFirstLetter } from "../../../utils/functions";
+import { capitalizeFirstLetter } from "@/utils/functions";
 
 const props = defineProps<{
   config: ISpeedrundleConfig;

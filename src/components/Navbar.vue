@@ -1,7 +1,7 @@
 <template>
   <nav class="px-8 py-4 fixed left-0 right-0 top-0 z-30 bg-dark1 text-white text-sm">
     <div class="flex flex-wrap justify-between items-center 3xl:max-w-screen-3xl w-full mx-auto 3xl:px-4 h-10">
-      <button class="flex items-center gap-4" @click="handleOpenLobby">
+      <button class="flex items-center gap-4 duration-200 hover:brightness-[85%]" @click="handleOpenLobby">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M7 1V19M3 1H17C18.1046 1 19 1.89543 19 3V17C19 18.1046 18.1046 19 17 19H3C1.89543 19 1 18.1046 1 17V3C1 1.89543 1.89543 1 3 1Z"
