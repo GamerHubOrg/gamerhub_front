@@ -164,7 +164,7 @@ function handleSetPlayersPosition() {
 }
 
 function handleNightPhase() {
-  if (gameState.value !== 'night' || currentUserRole.value?.name !== currentRoleTurn.value) return;
+  if (gameState.value !== 'night' || !currentUserRole.value?.isAlive || currentUserRole.value?.name !== currentRoleTurn.value) return;
 
   if (currentRoleTurn.value === 'Voyante') {
     showPsychicPowerModal.value = true;
@@ -188,7 +188,7 @@ function handleNightPhase() {
 }
 
 function handleDayPhase() {
-  if (gameState.value !== 'day' || !currentRoleTurn.value) return;
+  if (gameState.value !== 'day' || !currentUserRole.value?.isAlive || !currentRoleTurn.value) return;
 
   if (currentRoleTurn.value === 'Village') {
     showVillageVoteModal.value =  true;
