@@ -46,8 +46,11 @@ export const useAuthStore = defineStore('auth', {
       const { data } = await api.get(`/users/${userId}`)
       return data;
     },
-    async updateUser({username, email, password, imageUrl}: any) {
-      await api.patch(`/${this.currentUser?._id}`, {username, email, password, imageUrl})
+    async updateUser({username, email, picture}: any) {
+      await api.put(`/users/${this.currentUser?._id}`, {username, email, picture})
+    }, 
+    async updateUserPassword({oldPassword, newPassword, newPasswordConfirm } : any) {
+      await api.put(`/users/password/${this.currentUser?._id}`, {oldPassword, newPassword, newPasswordConfirm } )
     }
   }
 })
