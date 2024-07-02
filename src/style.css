@@ -18,3 +18,25 @@ body{
   color:white;
   background: #121212;
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #00a569 #232323;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #232323;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #00a569;
+    border-radius: 0px;
+    border: 1px solid #232323;
+  }
