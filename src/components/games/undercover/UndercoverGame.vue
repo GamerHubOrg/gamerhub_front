@@ -152,6 +152,8 @@ socket.value?.on('game:undercover:start', () => {
 })
 
 socket.value?.on("game:undercover:data", ({ logs, data }) => {
-    socketStore.handleRoomUpdate({ data: { ...roomData.value, logs, gameData: data } });
+    roomData.value.gameData = data;
+    roomData.value.logs = logs;
+    // socketStore.handleRoomUpdate({ data: { ...roomData.value, logs, gameData: data } });
 })
 </script>

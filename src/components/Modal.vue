@@ -38,7 +38,6 @@ const timer = ref();
 
 function handleSetAutocloseTimer() {
     if (timer.value) clearTimeout(timer.value);
-    console.log("SET TIMER FOR AUTOCLOSE")
     timer.value = setTimeout(() => emit('close'), props.autoclose);
 }
 

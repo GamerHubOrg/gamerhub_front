@@ -211,8 +211,9 @@ socket.value?.on('game:werewolves:start', () => {
   showDisplayRoleDialog.value = true;
 })
 
-socket.value?.on("game:werewolves:data", ({ logs, data }) => {
-  socketStore.handleRoomUpdate({ data: { ...roomData.value, logs, gameData: data } });
+socket.value?.on("game:werewolves:data", ({ data }) => {
+  // socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
+  roomData.value.gameData = data;
 })
 
 watch(
