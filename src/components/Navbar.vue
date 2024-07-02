@@ -89,12 +89,12 @@
                     <Button v-else type="primary" shape="squared" @click="handleConnect">Se connecter</Button>
                   </MenuButton>
                 </div>
-                <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-                  <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <transition v-if="currentUser" enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                  <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-dark2 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <MenuItem v-slot="{ active }">
                       <router-link to="/profile"
-                        :class="[active ? 'bg-gray-100' : '']"
-                        class="flex items-center py-2 px-4 text-sm text-black hover:bg-gray-100">
+                        :class="[active ? 'ring-gray-400' : '']"
+                        class="flex items-center py-2 px-4 text-sm hover:ring-gray-400">
                       <svg
                           class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                           xmlns="http://www.w3.org/2000/svg">
@@ -106,7 +106,7 @@
                     </MenuItem>
                     <MenuItem>
                       <span
-                        class="block text-black py-2 px-4 text-sm hover:bg-gray-100 cursor-pointer"
+                        class="block py-2 px-4 text-sm hover:ring-gray-400 cursor-pointer"
                         @click="handleLogout">Sign out</span>
                     </MenuItem>
                   </MenuItems>
@@ -133,7 +133,7 @@
     <DisclosurePanel class="md:hidden space-y-5 pb-3 pt-2  flex flex-col">
       <div>
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <DisclosureButton as="a" href="/" class="flex items-center py-2 hover:bg-gray-100 text-base font-medium text-white">
+        <DisclosureButton as="a" href="/" class="flex items-center py-2 hover:ring-gray-400 text-base font-medium text-white">
           <Button :selected="currentPath === '/'">
             <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -175,7 +175,7 @@
             </div>
           </div>
           <div class="mt-3 space-y-1">
-            <DisclosureButton as="a" href="/profile" class="flex items-center py-2 px-4 hover:bg-gray-100 text-base font-medium text-white">
+            <DisclosureButton as="a" href="/profile" class="flex items-center py-2 px-4 hover:ring-gray-400 text-base font-medium text-white">
               <svg
               class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
@@ -186,7 +186,7 @@
             My profile
             </DisclosureButton>
             <span
-            class="flex items-center py-2 px-4 hover:bg-gray-100 text-base font-medium text-white cursor-pointer"
+            class="flex items-center py-2 px-4 hover:ring-gray-400 text-base font-medium text-white cursor-pointer"
             @click="handleLogout">Sign out</span>
           </div>
       </div>
