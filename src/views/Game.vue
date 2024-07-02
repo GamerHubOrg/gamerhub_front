@@ -1,11 +1,13 @@
 <template>
   <Undercover v-if="data.gameName === 'undercover'" />
   <Speedrundle v-if="data.gameName === 'speedrundle'" />
+  <Werewolves v-if="data.gameName === 'werewolves'" />
 </template>
 
 <script lang="ts" setup>
 import Undercover from '@/components/games/undercover/Undercover.vue';
 import Speedrundle from '@/components/games/speedrundle/Speedrundle.vue';
+import Werewolves from '@/components/games/werewolves/Werewolves.vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';

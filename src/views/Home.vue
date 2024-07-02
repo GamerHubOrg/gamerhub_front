@@ -14,6 +14,13 @@
       time="10-30min" 
       :img="speedrundleImage" 
     />
+    <GameListItem 
+      name="Werewolves" 
+      nb-players="4-15"
+      game-name="werewolves"
+      time="10-40min" 
+      :img="werewolvesImage" 
+    />
   </div>
   
 </template>
@@ -22,5 +29,6 @@
 import GameListItem from "@/components/GameListItem.vue";
 
 import speedrundleImage from '@/assets/games/speedrundle.webp';
+import werewolvesImage from '@/assets/games/werewolves.webp';
 import undercoverImage from '@/assets/games/undercover.webp';
 </script>

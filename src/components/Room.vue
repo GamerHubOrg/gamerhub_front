@@ -61,9 +61,7 @@ function onRoomKicked() {
 }
 
 function onRoomNotFound(roomId: string) {
-  localStorage.removeItem("roomId")
-  console.log("not found");
-  
+  localStorage.removeItem("roomId")  
   onRoomNotification(`La room ${roomId} n'existe pas`, "error");
   router.push("/")
 }
