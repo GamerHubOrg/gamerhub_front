@@ -14,7 +14,7 @@
                 >
                   -
                 </button>
-                <span v-if="internalConfig.composition" class="text-sm px-3">{{ internalConfig.composition[role] || '0' }}</span>
+                <span class="text-sm px-3">{{ getRoleCount(role) }}</span>
                 <button 
                   class="bg-dark3 px-2 rounded w-full disabled:cursor-not-allowed"
                   :disabled="isConfigDisabled"
@@ -70,6 +70,11 @@ const maxRolesCount: Record<string, number> = {
   'witch': 1,
   'psychic': 1,
   'cupidon': 1,
+}
+
+function getRoleCount(role: string) {
+  if (!internalConfig.value?.composition) return 0;
+  return internalConfig.value.composition[role] || 0;
 }
 
 function handleChangeComposition(role: string, direction: number) {
