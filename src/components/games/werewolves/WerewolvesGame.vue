@@ -20,7 +20,7 @@
             </div>
           </div>
           <div v-else class="flex flex-col items-center">
-            <img :src="user.role?.picture" class="w-24 h-24 rounded-full" />
+            <img :src="getRolePicture(user.role?.picture)" class="w-24 h-24 rounded-full" />
             <div class="flex flex-row items-center gap-1">
               <span>{{ user.username }}</span> 
               <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
@@ -33,7 +33,7 @@
     <Modal :open="showDisplayRoleDialog" :autoclose="4000" @close="showDisplayRoleDialog = false">
       <div class="flex flex-col">
         <span>Voici votre role</span>
-        <img :src="currentUserRole?.picture" />
+        <img :src="getRolePicture(currentUserRole?.picture)" />
         {{ currentUserRole?.name }}
       </div>
     </Modal>
@@ -127,6 +127,11 @@ const showPsychicPowerModal = ref(false);
 const showCupidonPowerModal = ref(false);
 const showThiefPowerModal = ref(false);
 const nightPhaseTimer = ref();
+
+function getRolePicture(path?: string) {
+  const url = new URL(`${path}`, import.meta.url);
+  return url?.href;
+}
 
 function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const psychicWatch = gameData.value?.psychicWatch || [];
