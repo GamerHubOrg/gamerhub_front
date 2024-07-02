@@ -6,7 +6,7 @@ import { useSocketStore } from "../modules/socket/socket.store";
 import { useRouter } from "vue-router";
 import UndercoverConfig from "@/components/games/undercover/UndercoverConfig.vue";
 import SpeedrundleConfig from "@/components/games/speedrundle/SpeedrundleConfig.vue";
-import WerewolvesConfig from '@/components/werewolves/WerewolvesConfig.vue'
+import WerewolvesConfig from '@/components/games/werewolves/WerewolvesConfig.vue'
 import { useGamesStore } from "@/modules/games/games.store";
 import { toast } from "vue3-toastify";
 import Modal from "./Modal.vue";
