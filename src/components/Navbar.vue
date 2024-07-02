@@ -84,7 +84,7 @@
           </div>
           <ul class="py-1 text-gray-700" aria-labelledby="dropdown">
             <li>
-              <a href="#" class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
+              <router-link to="/profile" class="flex items-center py-2 px-4 text-sm hover:bg-gray-100">
                 <svg class="mr-2 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd"
