@@ -10,9 +10,9 @@
       <Button type="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
       <div class="w-full max-xl:h-[370px] max-xl:overflow-y-auto overflow-x-auto">
         <table class="border-separate bg-dark2 w-full">
-          <thead>
-            <tr>
-              <th v-for="column in gameData?.columns" :key="column.name">
+          <thead class="sticky bg-dark2 top-0 gap-0 z-10 p-0">
+            <tr class="p-0">
+              <th v-for="column in gameData?.columns" :key="column.name" class="p-0">
                 {{ column.name }}
               </th>
             </tr>

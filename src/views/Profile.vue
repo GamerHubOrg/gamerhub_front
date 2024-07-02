@@ -7,7 +7,7 @@
     </div>
 
     <form class="space-y-6"  @submit="handleChangeUser">
-      <div class="flex justify-center gap-4">
+      <div class="flex justify-center items-center flex-col profile-container">
         <div class="min-w-64">
           <label for="username" class="block text-sm font-medium leading-6 text-white">Username</label>
           <div class="mt-2">
