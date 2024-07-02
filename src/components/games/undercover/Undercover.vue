@@ -1,4 +1,5 @@
 <template>
+  {{ data.gameState }}
   <UndercoverGame v-if="data.gameState === 'started'" />
   <UndercoverResults v-else-if="data.gameState === 'results'" />
   <GameLobby v-else />
@@ -8,6 +9,7 @@
 import { useSocketStore } from '@/modules/socket/socket.store';
 import UndercoverGame from './UndercoverGame.vue';
 import UndercoverResults from './UndercoverResults.vue';
+import GameLobby from '../GameLobby.vue';
 import { computed, onMounted } from 'vue';
 
 const socketStore = useSocketStore();

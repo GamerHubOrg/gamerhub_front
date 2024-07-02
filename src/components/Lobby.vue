@@ -181,7 +181,8 @@ watch(
 watch(
   () => updateGame.value,
   (newVal, oldVal) => {
-    if (roomId.value && oldVal !== newVal)
+    const isGameDefined = !!oldVal && oldVal !== '';
+    if (roomId.value && isGameDefined && oldVal !== newVal && isOwner.value)
       socketStore.handleChangeGame(newVal);
   },
   { deep: true }

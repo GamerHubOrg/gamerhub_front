@@ -100,7 +100,6 @@ watch(
   [() => currentUser.value, () => socketStore.getConnected],
   () => {
     const roomId = localStorage.getItem("roomId")
-
     if (roomId && currentUser.value)
       socketStore.handleJoinRoom(currentUser.value, roomId)
   }

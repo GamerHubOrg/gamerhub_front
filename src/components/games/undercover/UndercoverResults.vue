@@ -67,7 +67,7 @@
             <div class="flex items-center gap-x-4 text-xs w-56">
               <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
               <div class="font-medium leading-6 text-white">
-                <span v-if="user._id !== currentUser._id">{{ user.username }}dsada sdadsa dsad</span>
+                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
                 <span v-else class="text-red-400">Moi</span>
               </div>
             </div>
