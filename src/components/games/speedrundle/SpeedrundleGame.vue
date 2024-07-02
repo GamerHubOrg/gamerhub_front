@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col items-center gap-7 mt-4">
+  <div class="flex flex-col items-center gap-7 mt-4 pb-10">
     <SpeedrundleHeader :config="roomConfig" />
     <SpeedrundleGameProgress v-if="!!userAnswers" :user-answers="userAnswers" />
-    <SpeedrundleScoreDetails v-if="!!userAnswers && playerState === 'finished'" :user-answers="userAnswers" />
+    <SpeedrundleScoreDetails v-if="!!userAnswers && playerState === 'finished'" :user-answers="userAnswers" :is-waiting="true" />
 
     <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full mr-16 ml-16">
       <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
