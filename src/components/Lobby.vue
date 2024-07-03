@@ -78,6 +78,7 @@ const handleUpdateRoom = (conf: IRoomConfig) => {
   }
 
   if (data.value.gameState !== "lobby") {
+    isChangingConfig.value = false;
     return;
   }
 
