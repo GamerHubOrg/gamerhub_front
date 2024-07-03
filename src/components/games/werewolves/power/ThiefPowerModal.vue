@@ -9,7 +9,7 @@
                 class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
                 @click="handleChooseRole(user._id)"
             >
-                <img :src="gameRoles[user._id].picture">
+                <img :src="getRolePicture(gameRoles[user._id].picture)">
                 <span>{{ gameRoles[user._id].name }}</span>
             </div>
         </div>
@@ -22,6 +22,7 @@ import { computed } from 'vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { IWerewolvesRoomData } from '../werewolves.types';
 import { useAuthStore } from '@/modules/auth/auth.store';
+import { getRolePicture } from '@/utils/functions';
 
 defineEmits(['close'])
 defineProps({

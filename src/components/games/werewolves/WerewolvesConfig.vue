@@ -5,7 +5,7 @@
           <div class="bg-dark1 rounded-lg p-3 grid grid-cols-3 gap-6 mt-2">
             <div v-for="role in Object.keys(rolesList)" :key="role" class="w-full flex flex-col items-center">
               <span class="text-sm">{{ rolesList[role] }}</span>
-              <img :src="`/assets/games/werewolves/images/icons/${role}.png`" class="w-24">
+              <img :src="getRolePicture(role)" class="w-24">
               <div class="flex flex-row items-center justify-center gap-1 bg-gray-600 p-1 rounded w-full">
                 <button 
                   class="bg-dark3 px-2 rounded w-full disabled:cursor-not-allowed" 
@@ -36,6 +36,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { areObjectsEquals } from '@/utils/functions';
 import { IWerewolvesConfig } from './werewolves.types';
 import { rolesList } from './werewolves.constants';
+import { getRolePicture } from '@/utils/functions';
 
 const emit = defineEmits(['update', 'change'])
 const props = defineProps({

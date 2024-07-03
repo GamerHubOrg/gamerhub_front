@@ -24,7 +24,7 @@
             </div>
           </div>
           <div v-else class="flex flex-col items-center">
-            <img :src="gameRoles[user._id]?.picture" class="w-24 h-24 rounded-full" />
+            <img :src="getRolePicture(gameRoles[user._id]?.picture)" class="w-24 h-24 rounded-full" />
             <div class="flex flex-row items-center gap-1">
               <span>{{ user.username }}</span> 
               <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
@@ -37,7 +37,7 @@
     <Modal :open="showDisplayRoleDialog" :autoclose="4000" @close="showDisplayRoleDialog = false">
       <div class="flex flex-col">
         <span>Voici votre role</span>
-        <img :src="currentUserRole?.picture" />
+        <img :src="getRolePicture(currentUserRole?.picture)" />
         {{ currentUserRole?.name }}
       </div>
     </Modal>
@@ -94,6 +94,7 @@ import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
 import { IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
+import { getRolePicture } from '@/utils/functions';
 import WolfPowerModal from './power/WolfPowerModal.vue';
 import WitchPowerModal from './power/WitchPowerModal.vue';
 import VillageVoteModal from './power/VillageVoteModal.vue';
