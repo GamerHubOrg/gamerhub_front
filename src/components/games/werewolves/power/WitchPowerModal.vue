@@ -16,7 +16,7 @@
                     Sauver
                 </button>
                 <button 
-                    v-else-if="!isKillPotionUsed" 
+                    v-else-if="gameRoles[user._id].isAlive && !isKillPotionUsed" 
                     class="bg-red-400"
                     @click="() => handleKillPlayer(user._id)"
                 >

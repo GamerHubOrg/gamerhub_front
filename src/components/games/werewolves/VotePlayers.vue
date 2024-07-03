@@ -5,7 +5,7 @@
                 v-for="user in users" :key="user._id" 
                 :user="user"
                 :type="type"
-                @click="() => handleSendVoteProposition(user._id)"
+                @click="() => !hasVoted && handleSendVoteProposition(user._id)"
             />
         </div>
 
