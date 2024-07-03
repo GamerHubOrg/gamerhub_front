@@ -36,7 +36,6 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { areObjectsEquals } from '@/utils/functions';
 import { IWerewolvesConfig } from './werewolves.types';
 import { rolesList } from './werewolves.constants';
-import { getRolePicture } from '@/utils/functions';
 
 const emit = defineEmits(['update', 'change'])
 const props = defineProps({

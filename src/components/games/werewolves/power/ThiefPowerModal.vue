@@ -22,7 +22,6 @@ import { computed } from 'vue';
 import { useSocketStore } from '@/modules/socket/socket.store';
 import { IWerewolvesRoomData } from '../werewolves.types';
 import { useAuthStore } from '@/modules/auth/auth.store';
-import { getRolePicture } from '@/utils/functions';
 
 defineEmits(['close'])
 defineProps({
