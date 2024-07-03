@@ -14,8 +14,3 @@ export const areObjectsEquals = (obj1: object, obj2: object): boolean => {
 export const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
-
-export const getRolePicture = (name?: string) => {
-  const url = new URL(`../assets/games/werewolves/images/icons/${name}.png`, import.meta.url);
-  return url?.href;
-}
