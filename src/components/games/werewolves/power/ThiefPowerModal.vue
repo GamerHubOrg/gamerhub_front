@@ -4,13 +4,13 @@
 
         <div class="flex flex-row gap-3 mt-6">
             <div 
-                v-for="user in users" 
-                :key="user._id" 
+                v-for="userId in usersIds" 
+                :key="userId" 
                 class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
-                @click="handleChooseRole(user._id)"
+                @click="handleChooseRole(userId)"
             >
-                <img :src="`/images/werewolves/icons/${gameRoles[user._id].picture}.png`">
-                <span>{{ gameRoles[user._id].name }}</span>
+                <img :src="`/images/werewolves/icons/${gameRoles[userId]?.picture}.png`">
+                <span>{{ gameRoles[userId]?.name }}</span>
             </div>
         </div>
     </Modal>
@@ -41,7 +41,7 @@ const currentUser = computed(() => store.getCurrentUser);
 const stateData = computed(() => socketStore.getRoomData);
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
 const gameRoles = computed(() => roomData.value.gameData?.roles || {});
-const users = computed(() => roomData.value.gameData?.thiefUsers);
+const usersIds = computed(() => roomData.value.gameData?.thiefUsers);
 
 function handleChooseRole(userId: string) {
     socket.value?.emit('game:werewolves:thief:choose', { roomId: roomId.value, userId: currentUser.value?._id , swap: userId });
