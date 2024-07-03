@@ -47,9 +47,18 @@ import { useAuthStore } from '@/modules/auth/auth.store';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
+import { toast } from 'vue3-toastify';
 
 const store = useAuthStore();
 const router = useRouter();
+
+// if(router.query.param){
+//   const param = router.query.param;
+//   console.log(param);
+//   if (param == 'userDeleted') {
+    
+//   }
+// }
 
 const form = ref({
   email: undefined,
