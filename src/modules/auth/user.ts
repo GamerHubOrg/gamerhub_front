@@ -12,4 +12,10 @@ export interface User {
   picture?: string;
   roles: string[];
   stripe: IStripeConfig;
-};
+}
+
+export interface IMinifiedUser {
+  _id: string;
+  username: string;
+  picture?: string;
+}
