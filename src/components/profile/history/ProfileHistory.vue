@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-col gap-3">
     <div v-for="record in gameRecords" class="flex flex-col gap-2">
-      <div class="flex rounded bg-lightgrey w-full h-[120px] overflow-hidden">
+      <div class="flex rounded bg-lightgrey w-full h-[110px] overflow-hidden">
         <SpeedrundleRecord
           v-if="record.gameName === 'speedrundle'"
           :record="record as ISpeedrundleRecord"
         />
         <div
           @click="toggleExpanded(record._id)"
-          class="cursor-pointer h-full w-8 bg-[#555] flex items-end justify-center"
+          class="cursor-pointer h-full w-8 min-w-[32px] bg-[#555] flex items-end justify-center"
         >
           <svg
             v-if="expandedRecord === record._id"

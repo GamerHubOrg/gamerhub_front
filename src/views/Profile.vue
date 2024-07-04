@@ -124,7 +124,7 @@ const tabs = ref([
   { name: "Profil", value: "profile" },
   { name: "Historique", value: "history" }
 ])
-const selectedTab = ref<string>("profile");
+const selectedTab = ref<string>("history");
 
 const handleChangeUser = async (e: Event) => {
   try {
