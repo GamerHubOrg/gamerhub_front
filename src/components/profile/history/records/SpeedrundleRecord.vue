@@ -2,7 +2,8 @@
     <div class="flex max-[800px]:flex-col w-full h-full min-[800px]:gap-5 relative after:absolute after:left-0 after:top-0 after:h-full after:w-2 after:bg-white"
         :class="{ 'after:bg-red-500': currentRank?.totalScore === 0, 'after:bg-yellow-500': currentRank?.rank === 1, 'after:bg-gray-300': currentRank?.rank === 2, 'after:bg-yellow-600': currentRank?.rank === 3 }">
         <div class="flex relative main">
-            <div class="text-xs min-[800px]:text-base flex h-full justify-between py-2 px-6 max-[800px]:items-center max-[800px]:w-full max-[800px]:justify-between min-[800px]:flex-col min-[800px]:w-[200px]">
+            <div
+                class="text-xs min-[800px]:text-base flex h-full justify-between py-2 px-6 max-[800px]:items-center max-[800px]:w-full max-[800px]:justify-between min-[800px]:flex-col min-[800px]:w-[200px]">
                 <div class="flex max-[800px]:gap-5 min-[800px]:flex-col">
                     <p>Speedrundle</p>
                     <i>Il y a {{ timeAgo }}</i>
@@ -13,9 +14,9 @@
             <span class="max-[800px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
         </div>
         <div class="text-xs h-full min-[800px]:text-base flex gap-5 px-2 max-[800px]:pl-5">
-            <div class="py-2">
+            <div class="py-1 min-[800px]:py-2">
                 <div class="mx-auto flex flex-col gap-2 justify-center w-[100px]">
-                    <div v-for="user in ranking.slice(0, 2)" class="flex items-center gap-1">
+                    <div v-for="user in ranking.slice(0, 3)" class="flex items-center gap-1">
                         <span>{{ user.rank }}</span>
                         -
                         <img :src="user.picture" class="w-5 h-5 rounded-full" />
@@ -27,7 +28,8 @@
             <div class="max-[550px]:hidden text-xs min-[800px]:text-sm py-2" v-if="currentRank">
                 <div class="w-[120px] min-[800px]:w-[140px] mx-auto">
                     <p>Total score : {{ currentRank.totalScore }}</p>
-                    <p>Average score : {{ currentRank.totalScore / (currentRank.scores.length || 1) }}</p>
+                    <p>Average score : {{ avgScore }}
+                    </p>
                     <p>Max score : {{ Math.max(...currentRank.scores) }}</p>
                     <p>Min score : {{ Math.min(...currentRank.scores) }}</p>
                 </div>
@@ -36,10 +38,11 @@
             <div class="py-2 text-xs">
                 <p class="mb-1 whitespace-nowrap truncate">Personnages à deviner :</p>
                 <div class="flex flex-wrap gap-1 max-h-[34px] min-[800px]:max-h-[68px] overflow-hidden">
-                    <div v-for="character in record.charactersData.slice(0,maxVisibleCharacters)">
+                    <div v-for="character in record.charactersData.slice(0, maxVisibleCharacters)">
                         <img :src="character.data?.sprite" class="w-8 h-8 rounded-full" />
                     </div>
-                    <div v-if="record.charactersData.length > maxVisibleCharacters" class="bg-white text-black font-bold w-8 h-8 rounded-full flex items-center justify-center">
+                    <div v-if="record.charactersData.length > maxVisibleCharacters"
+                        class="bg-white text-black font-bold w-8 h-8 rounded-full flex items-center justify-center">
                         +{{ record.charactersData.length - maxVisibleCharacters }}
                     </div>
                 </div>
@@ -58,12 +61,17 @@ const props = defineProps<{ record: ISpeedrundleRecord }>();
 const currentUser = computed(() => authStore.getCurrentUser);
 const ranking = computed(() => getRanking());
 const currentRank = computed(() => ranking.value.find(({ playerId }) => playerId === currentUser.value?._id))
-const maxVisibleCharacters= computed(() => {
-    const {innerWidth} = window;   
-    if(innerWidth < 855) return 4;
-    if(innerWidth < 1000) return 12;
-    if(innerWidth < 1500) return 20;
+const maxVisibleCharacters = computed(() => {
+    const { innerWidth } = window;
+    if (innerWidth < 855) return 4;
+    if (innerWidth < 1000) return 12;
+    if (innerWidth < 1500) return 20;
     return 30;
+})
+const avgScore = computed(() => {
+    if(!currentRank.value) return;
+    const value = currentRank.value.totalScore / (currentRank.value.scores.length || 1);
+    return Math.round(value)
 })
 
 const timeAgo = computed(() => getTimeAgo())
