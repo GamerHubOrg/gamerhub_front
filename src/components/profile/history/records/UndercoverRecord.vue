@@ -23,7 +23,7 @@
             <span class="h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
             <div class="flex flex-1 flex-col justify-center">
                 <p class="line-clamp-2">Civilian word : {{ record.civilianWord }}</p>
-                <p>Undercover word : {{ record.spyWord }}</p>
+                <p class="line-clamp-2">Undercover word : {{ record.spyWord }}</p>
             </div>
         </div>
     </div>
