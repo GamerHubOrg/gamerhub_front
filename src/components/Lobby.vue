@@ -222,7 +222,7 @@ onMounted(() => {
           <select id="game" class="bg-dark3 w-full" v-model="createGame">
             <option value="undercover">Undercover</option>
             <option value="speedrundle">SpeedrunDLE</option>
-            <option value="werewolves">Werewolves</option>
+            <!-- <option value="werewolves">Werewolves</option> -->
           </select>
         </div>
         <button class="w-full bg-[#00A569] rounded-xl p-3 text-sm" @click="handleRoomStart">
@@ -296,7 +296,7 @@ onMounted(() => {
           <select id="game" class="bg-transparent w-full" v-model="updateGame" :disabled="isConfigDisabled">
             <option value="undercover" class="text-black">Undercover</option>
             <option value="speedrundle" class="text-black">SpeedrunDLE</option>
-            <option value="werewolves" class="text-black">Werewolves</option>
+            <!-- <option value="werewolves" class="text-black">Werewolves</option> -->
           </select>
         </div>
 
