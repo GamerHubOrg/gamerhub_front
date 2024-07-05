@@ -2,7 +2,9 @@
   <div id="profile-history" class="flex flex-col gap-3">
     <div :id="'record-'+i" v-for="record, i in gameRecords" :key="record._id" class="flex flex-col gap-2">
       <div class="flex rounded bg-lightgrey w-full h-[120px] min-[800px]:h-[110px] overflow-hidden">
-        <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-'+i" :record="(record as ISpeedrundleRecord)" />
+        <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-' + i"
+          :record="(record as ISpeedrundleRecord)" />
+        <UndercoverRecord v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
         <div @click="toggleExpanded(record._id)"
           class="cursor-pointer h-full w-8 min-w-[32px] bg-[#555] flex items-end justify-center">
           <svg v-if="expandedRecord === record._id" xmlns="http://www.w3.org/2000/svg" width="20" fill="#999"
@@ -18,10 +20,13 @@
       </div>
       <div v-if="expandedRecord === record._id" class="rounded bg-lightgrey p-2">
         <SpeedrundleRecordDetails v-if="record.gameName === 'speedrundle'" :record="(record as ISpeedrundleRecord)" />
+        <UndercoverRecordDetails v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
       </div>
     </div>
     <div v-if="totalRecords && totalRecords > gameRecords.length" ref="loadMore" class="bg-lightgrey p-2 rounded">
-      <div v-if="isLoading" class="w-fit mx-auto"><Loader /></div>
+      <div v-if="isLoading" class="w-fit mx-auto">
+        <Loader />
+      </div>
       <div v-else class="flex gap-2 justify-center items-center cursor-pointer duration-200 hover:brightness-90">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="white" viewBox="0 0 512 512">
           <path
@@ -38,9 +43,11 @@ import { useAuthStore } from "@/modules/auth/auth.store";
 import { computed, onMounted, ref, watch } from "vue";
 import SpeedrundleRecord from "./records/SpeedrundleRecord.vue";
 import SpeedrundleRecordDetails from "./records/SpeedrundleRecordDetails.vue";
-import { ISpeedrundleRecord } from "@/modules/auth/gameRecords";
-import { useIntersectionObserver } from '@vueuse/core'
+import { ISpeedrundleRecord, IUndercoverRecord } from "@/modules/auth/gameRecords";
+import { useIntersectionObserver } from '@vueuse/core';
 import Loader from "@/components/Loader.vue";
+import UndercoverRecord from "./records/UndercoverRecord.vue";
+import UndercoverRecordDetails from "./records/UndercoverRecordDetails.vue";
 
 const authStore = useAuthStore();
 const gameRecords = computed(() => authStore.gameRecords || []);
@@ -49,7 +56,7 @@ const currentUser = computed(() => authStore.getCurrentUser);
 const hasBeenFetched = ref<boolean>();
 const expandedRecord = ref<string>("");
 const isLoading = ref<boolean>(false)
-const gamePerLoad = 3;
+const gamePerLoad = 20;
 
 const toggleExpanded = (recordId: string) => {
   if (expandedRecord.value === recordId) {
@@ -86,7 +93,6 @@ watch(
 
 onMounted(() => {
   if (!hasBeenFetched.value && currentUser.value) hasBeenFetched.value = false;
-
 });
 
 const loadMore = ref(null)
@@ -94,8 +100,8 @@ const loadMore = ref(null)
 useIntersectionObserver(
   loadMore,
   ([{ isIntersecting }]) => {
-    if(isIntersecting && hasBeenFetched.value === true) fetchMore()
+    if (isIntersecting && hasBeenFetched.value === true) fetchMore()
   },
-  {threshold : 1}
+  { threshold: 1 }
 )
 </script>

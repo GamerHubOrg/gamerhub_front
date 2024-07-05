@@ -5,15 +5,15 @@
             <div
                 class="text-xs min-[801px]:text-base flex h-full justify-between py-2 px-6 max-[800px]:items-center max-[800px]:w-full max-[800px]:justify-between min-[801px]:flex-col min-[801px]:w-[200px]">
                 <div class="flex max-[800px]:gap-5 min-[801px]:flex-col">
-                    <p>Speedrundle</p>
-                    <i>Il y a {{ timeAgo }}</i>
+                    <p class="font-bold">Speedrundle</p>
+                    <i>{{ timeAgo }} ago</i>
                 </div>
                 <hr class="max-[800px]:hidden opacity-30">
-                <p>Rang : {{ currentRank?.rank }}</p>
+                <p class="font-bold">Rang : {{ currentRank?.rank }}</p>
             </div>
             <span class="max-[800px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
         </div>
-        <div class="text-xs h-full min-[801px]:text-base flex gap-5 px-2 max-[800px]:pl-5">
+        <div class="text-xs h-full min-[801px]:text-base flex gap-5 max-[800px]:pl-5">
             <div class="py-1 min-[801px]:py-2">
                 <div class="mx-auto flex flex-col gap-2 justify-center w-[100px]">
                     <div v-for="user in ranking.slice(0, 3)" class="flex items-center gap-1">
@@ -36,7 +36,7 @@
             </div>
             <span class="h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
             <div :id="id+'-characters'" class="py-2 text-xs">
-                <p class="mb-1 whitespace-nowrap truncate">Personnages à deviner :</p>
+                <p class="mb-1 whitespace-nowrap truncate">Characters to guess :</p>
                 <div class="flex flex-wrap gap-1 max-h-[34px] min-[801px]:max-h-[68px] overflow-hidden">
                     <div v-for="character in record.charactersData.slice(0, maxVisibleCharacters)">
                         <img :src="character.data?.sprite" class="w-8 h-8 rounded-full" />
@@ -150,13 +150,13 @@ const getTimeAgo = () => {
     const days = Math.floor(hours / 24);
 
     if (days > 0) {
-        return `${days} jour${days > 1 ? 's' : ''}`;
+        return `${days} day${days > 1 ? 's' : ''}`;
     } else if (hours > 0) {
-        return `${hours} heure${hours > 1 ? 's' : ''}`;
+        return `${hours} hour${hours > 1 ? 's' : ''}`;
     } else if (minutes > 0) {
         return `${minutes} minute${minutes > 1 ? 's' : ''}`;
     } else {
-        return `${seconds} seconde${seconds > 1 ? 's' : ''}`;
+        return `${seconds} second${seconds > 1 ? 's' : ''}`;
     }
 }
 
