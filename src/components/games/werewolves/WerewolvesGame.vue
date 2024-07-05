@@ -206,7 +206,6 @@ socket.value?.on('game:werewolves:state', ({ data }) => {
 })
 
 socket.value?.on('game:werewolves:start', () => {
-  console.log("START GAME EVENT");
   showDisplayRoleDialog.value = true;
 })
 
