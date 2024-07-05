@@ -3,7 +3,7 @@ import {
   IColumn,
   ISpeedrundleAnswer,
 } from "@/components/games/speedrundle/speedrundle.types";
-import { IMinifiedUser, User } from "./user";
+import { IMinifiedUser } from "./user";
 
 export interface IGameRecord {
   _id: string;
@@ -20,3 +20,6 @@ export interface ISpeedrundleRecord extends IGameRecord {
   usersAnswers: ISpeedrundleAnswer[];
   charactersData: Partial<ICharacter>[];
 }
+
+
+export type GameRecord = IGameRecord | ISpeedrundleRecord;

@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { User } from "./user";
 import api from "@/services/api";
-import { IGameRecord } from "./gameRecords";
+import { GameRecord } from "./gameRecords";
 
 type State = {
   currentUser?: User;
-  gameRecords?: IGameRecord[];
+  gameRecords?: GameRecord[];
+  totalRecords?: number;
 };
 
 export const useAuthStore = defineStore("auth", {
@@ -13,6 +14,7 @@ export const useAuthStore = defineStore("auth", {
     ({
       currentUser: undefined,
       gameRecords: undefined,
+      totalRecords: undefined,
     } as State),
   getters: {
     getCurrentUser: (state) => state.currentUser,
@@ -20,6 +22,7 @@ export const useAuthStore = defineStore("auth", {
       !!state.currentUser?.stripe?.subscriptionId ||
       state.currentUser?.roles?.includes("admin"),
     getGameRecords: (state) => state.gameRecords,
+    getTotalRecords: (state) => state.totalRecords,
   },
   actions: {
     setCurrentUser(user?: User) {
@@ -77,10 +80,20 @@ export const useAuthStore = defineStore("auth", {
         newPasswordConfirm,
       });
     },
-    async fetchGameRecords() {
-      await api.get(`/gameRecords/user/${this.currentUser?._id}`).then((res) => {
-        this.gameRecords = res.data;
-      });
+    async fetchGameRecords(offset: number, limit: number) {
+      if(this.totalRecords && this.totalRecords === this.gameRecords?.length) return;
+      await api
+        .get(`/gameRecords/user/${this.currentUser?._id}`, {
+          params: {
+            offset,
+            limit,
+          },
+        })
+        .then((res) => {
+          const { records, totalRecords } = res.data;
+          this.totalRecords = totalRecords;
+          this.gameRecords = [...(this.gameRecords || []), ...records];
+        });
     },
   },
 });
