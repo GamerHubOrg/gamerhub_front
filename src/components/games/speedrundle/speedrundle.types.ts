@@ -86,10 +86,9 @@ export interface ISpeedrundleRoundData {
   score : number;
   hasFound : boolean;
   startDate : Date;
-
 }
 
-interface IColumn {
+export interface IColumn {
   name: string;
   key: string;
   type? : string
