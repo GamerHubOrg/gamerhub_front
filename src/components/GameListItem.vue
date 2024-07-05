@@ -1,5 +1,6 @@
 <template>
   <div class="relative game-wrapper-background rounded-2xl p-6 min-h-[470px]"
+    :class="disabled ? 'opacity-70' : 'opacity-100'"
     :style="{ backgroundImage: `url(${img})` }">
     <div class="absolute inset-0 bg-gradient-to-bl from-transparent to-[#0000004A]"></div>
     <div class="flex flex-col justify-end h-full gap-2">
@@ -10,10 +11,12 @@
           <p class="gameInfosShadow">{{ nbPlayers }} players</p>
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
-
-        <Button v-if="!roomId" type="primary" shape="squared" @click="handleCreateRoom">
+        <Button v-if="!disabled && !roomId" type="primary" shape="squared" @click="handleCreateRoom">
           Create room
         </Button>
+        <span v-else-if="disabled" class='gameInfosShadow absolute top-1/2 left-1/2 -translate-x-1/2 p-3 text-center'>
+          Le jeu n'est pas encore disponible pour le moment.
+        </span>
       </div>
     </div>
   </div>
@@ -51,6 +54,10 @@ const props = defineProps({
   img: {
     type: String,
     required: true
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 });
 
