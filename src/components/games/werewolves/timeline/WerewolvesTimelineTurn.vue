@@ -1,9 +1,21 @@
 <template>
-  <div class="flex flex-col gap-2 border-2 border-dark2 rounded-lg overflow-hidden">
-    <span class="p-3 bg-dark2">{{ turn }}{{ turn === 1 ? 'er' : 'e' }} tour</span>
-    <div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-2 border-4 border-dark2 rounded-lg overflow-hidden">
+    <div class="p-3 bg-dark2 cursor-pointer flex flex-row items-center justify-between gap-1" @click="handleCollapseTurn">
+      <span>{{ turn }}{{ turn === 1 ? 'er' : 'e' }} tour</span>
+      <div class="flex flex-row items-center gap-2">
+        <span 
+          class="text-white rounded px-2 py-1 bg-green-400 text-sm"
+          :class="{'bg-yellow-600': currentRoundTotalDeath === 1, 'bg-red-400': currentRoundTotalDeath > 1}"
+        >
+          {{ currentRoundTotalDeath }} morts
+        </span>
+      </div>
+      <ChevronDownIcon v-if="!collapsed" class="w-5 text-white" />
+      <ChevronRightIcon v-else class="w-5 text-white" />
+    </div>
+    <div v-if="!collapsed" class="flex flex-col gap-4">
       <div class="flex flex-col gap-3 p-3">
-        <span>Nuit {{ turn }}</span>
+        <span class="w-full bg-dark2 p-3 rounded-md">Nuit</span>
         <!-- Thief row -->
         <div v-if="hasThiefPlayed" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="thiefUser" :role="getPlayerSwapedRole(thiefUser?._id)" />
@@ -52,7 +64,15 @@
       </div>
 
       <div class="flex flex-col gap-3 p-3">
-        <span>Jour {{ turn }}</span>
+        <span class="w-full bg-dark2 p-3 rounded-md">Jour</span>
+        <!-- Couple dead night row -->
+        <div v-if="isCoupleDeadByNight" class="flex flex-row items-center gap-1">
+          <WerewolvesPlayerName :user="getPlayer(couplePlayerDead)" :role="getPlayerRole(couplePlayerDead)" /> 
+          <span>est mort cette nuit. Dans un élan de chagrin, </span>
+          <WerewolvesPlayerName :user="getPlayer(otherCouplePlayer)" :role="getPlayerRole(otherCouplePlayer)" />
+          <span>se donne la mort</span>
+        </div>
+
         <!-- Night Hunter row -->
         <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.vote !== hunterUser?._id" class="flex flex-row items-center gap-1">
           <span>Le chasseur est mort durant la nuit.</span>
@@ -73,23 +93,36 @@
           <span>a tiré sur</span>
           <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.kill)" :role="getPlayerRole(currentTurnHunterKill?.kill)" />
         </div>
+
+        <!-- Couple dead day row -->
+        <div v-if="isCoupleDeadByDay" class="flex flex-row items-center gap-1">
+          <WerewolvesPlayerName :user="getPlayer(couplePlayerDead)" :role="getPlayerRole(couplePlayerDead)" /> 
+          <span>est mort. Dans un élan de chagrin, </span>
+          <WerewolvesPlayerName :user="getPlayer(otherCouplePlayer)" :role="getPlayerRole(otherCouplePlayer)" />
+          <span>se donne la mort</span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { EWerewolvesRoleName, IWerewolvesGameData, IWerewolvesVote } from "../werewolves.types";
 import WerewolvesPlayerName from './WerewolvesPlayerName.vue';
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
+
 
 const props = defineProps<{
   gameData: IWerewolvesGameData,
   turn: number,
+  closed?: boolean
 }>()
 
 const gameRoles = computed(() => props.gameData.roles);
 const gameUsers = computed(() => props.gameData.usersThatPlayed);
+
+const collapsed = ref(true);
 
 const currentTurnPsychicWatch = computed(() => props.gameData.psychicWatch?.find((w) => w.turn === props.turn));
 const hasPsychicPlayed = computed(() => !!currentTurnPsychicWatch.value);
@@ -148,6 +181,36 @@ const swapedUser = computed(() => {
   const userId = Object.keys(swapedRoles.value).find((userId) => swapedRoles.value[userId]?.name !== EWerewolvesRoleName.thief);
   return gameUsers.value.find((u) => u._id === userId);
 });
+
+const hasWitchKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnWitchKill.value?.kill as string));
+const hasHunterKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnHunterKill.value?.kill as string));
+const isCoupleDeadByNight = computed(() => hasWitchKilledCouple.value || currentTurnWolvesVotes.value.some((v) => props.gameData.couple?.includes(v.vote)))
+const isCoupleDeadByDay = computed(() => currentTurnVillagerVotes.value.some((v) => props.gameData.couple?.includes(v.vote)) || hasHunterKilledCouple.value);
+const couplePlayerDead = computed(() => {
+  if (hasWitchKilledCouple.value) return currentTurnWitchKill.value?.kill;
+  if (hasHunterKilledCouple.value) return currentTurnHunterKill.value?.kill;
+  const wolvesVoteCouple = currentTurnWolvesVotes.value.find((v) => props.gameData.couple?.includes(v.vote));
+  if (wolvesVoteCouple) return wolvesVoteCouple.vote;
+  const villagerVoteCouple = currentTurnVillagerVotes.value.find((v) => props.gameData.couple?.includes(v.vote));
+  if (villagerVoteCouple) return villagerVoteCouple.vote;
+});
+const otherCouplePlayer = computed(() => props.gameData.couple?.find((userId: string) => userId !== couplePlayerDead.value));
+const isCoupleDead = computed(() => isCoupleDeadByDay.value || isCoupleDeadByNight.value);
+
+const currentRoundTotalDeath = computed(() => {
+  let count = 0;
+  if (hasWitchKilled.value) count++;
+  if (hasHunterKilled.value) count++;
+  if (hasWolvesVoted.value) count++;
+  if (hasVillageVoted.value) count++;
+  if (isCoupleDead.value) count++;
+  return count;
+})
+
+function handleCollapseTurn() {
+  collapsed.value = !collapsed.value;
+}
+
 function getPlayer(userId?: string) {
   return gameUsers.value.find((u) => u._id === userId);
 }
@@ -159,4 +222,8 @@ function getPlayerRole(userId: string = '') {
 function getPlayerSwapedRole(userId: string = '') {
   return swapedRoles.value[userId];
 }
+
+onMounted(() => {
+  collapsed.value = props.closed === true ? true : false
+})
 </script>

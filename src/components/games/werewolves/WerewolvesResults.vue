@@ -1,7 +1,6 @@
 <template>
-    <div class="text-white">
-      <h1 class="text-center font-bold text-3xl mb-6">Win : {{ gameData.campWin }}</h1>
-      
+    <div class="flex flex-col gap-6 mt-3">
+      <WerewolvesCampWin :game-data="gameData" />
       <WerewolvesTimeline :game-data="gameData" />
     </div>
   </template>
@@ -11,6 +10,7 @@
   import { IWerewolvesRoomData, IWerewolvesGameData } from './werewolves.types';
   import { useSocketStore } from '@/modules/socket/socket.store';
   import WerewolvesTimeline from '@/components/games/werewolves/timeline/WerewolvesTimeline.vue';
+  import WerewolvesCampWin from '@/components/games/werewolves/WerewolvesCampWin.vue';
   
   const socketStore = useSocketStore();
   const roomData = computed(() => (socketStore.getRoomData as IWerewolvesRoomData));

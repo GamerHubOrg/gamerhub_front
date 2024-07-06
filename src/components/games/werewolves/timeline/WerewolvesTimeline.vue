@@ -5,6 +5,7 @@
       :key="turn" 
       :game-data="gameData" 
       :turn="turn" 
+      :closed="turn > 1"
     />
   </div>
 </template>

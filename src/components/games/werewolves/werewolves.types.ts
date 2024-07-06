@@ -2,7 +2,7 @@ import { IGameData, IRoomData, SocketUser } from "@/types/interfaces";
 
 export type IWerewolvesGameState = 'night' | 'day';
 
-export type IWerewolvesCamp = 'wolve' | 'villager' | 'solo';
+export type IWerewolvesCamp = 'wolves' | 'village' | 'solo';
 
 export interface IWerewolvesPlayer extends SocketUser {}
 
