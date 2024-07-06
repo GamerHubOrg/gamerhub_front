@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-6 mt-3">
+    <div class="flex flex-col gap-6 mt-4">
       <WerewolvesCampWin :game-data="gameData" />
       <WerewolvesTimeline :game-data="gameData" />
     </div>

@@ -2,36 +2,52 @@
   <div class="flex flex-col items-center gap-12 text-white">
     <h2 class="text-3xl">Werewolves</h2>
 
-    <p>Game phase: {{ gameState }}</p>
-    <p>currentRoleTurn: {{ currentRoleTurn }}</p>
-    <p>Game state: {{ roomData.gameState }}</p>
+    <div v-if="gameState === 'night'" class="bg-blue-950 rounded-lg p-4 w-full flex flex-col gap-3 mb-10">
+      <div class="flex flex-row items-center gap-3">
+        <span class="font-bold text-2xl">Nuit 🌙</span>
+        <button v-if="currentUserRole?.name === currentRoleTurn && currentUserRole?.isAlive" class="bg-black bg-opacity-25 p-2 rounded-md text-sm" @click="handleNightPhase">Jouer mon tour</button>
+      </div>
+      <p v-if="currentRoleTurn === 'Voyante'">La voyante se réveille et regarde dans sa boule de cristal...</p>
+      <p v-if="currentRoleTurn === 'Sorcière'">La sorcière se réveille et prépare ses potions...</p>
+      <p v-if="currentRoleTurn === 'Voleur'">Le voleur se réveille, faites attention à vos affaires...</p>
+      <p v-if="currentRoleTurn === 'Cupidon'">Cupidon ouvre les yeux et décoche une fléche de son arc...</p>
+      <p v-if="currentRoleTurn === 'Loup'">Les loups se réveillent{{ gameData?.turn == 1 ? ', se découvrent ' : '' }} et choisissent leur proie...</p>
+    </div>
+    <div v-else-if="gameState === 'day'" class="bg-blue-500 rounded-lg p-4 w-full flex flex-col gap-3 mb-10">
+      <div class="flex flex-row items-center gap-3">
+        <span class="font-bold text-2xl">Jour ☀️</span>
+        <button v-if="(currentUserRole?.name === currentRoleTurn || currentRoleTurn === 'Village') && currentUserRole?.isAlive" class="bg-black bg-opacity-25 p-2 rounded-md text-sm" @click="handleDayPhase">Jouer mon tour</button>
+      </div>
+      <p v-if="currentRoleTurn === 'Village'">Les villageois se réveillent et se réunissent autour du feu pour élucider cette histoire de Loup-Garou infiltré au sein du village...</p>
+      <p v-if="currentRoleTurn === 'Chasseur'">Le chasseur est mort... Il va tirer sur quelqu'un pour l'entrainer dans chute</p>
+    </div>
 
     <div ref="playersContainer" class="rounded-full w-5/6 md:w-3/4 lg:w-1/2 aspect-square position relative bg-dark2 flex justify-center items-center">
-        <img v-if="gameState === 'night'" :src="noCampfireImage" />
-        <img v-else :src="campfireImage" />
-        <div 
-          v-for="user in users" 
-          :key="user.username" 
-          :ref="setPlayerRef"
-          class="circle-child transition-transform" 
-          :class="{'opacity-40 transform scale-90': !gameRoles[user._id]?.isAlive}"
-        >
-          <div v-if="!isUserRoleDiscovered(user)" class="flex flex-col items-center gap-1">
-            <div class="w-20 h-20 bg-black rounded-full border border-primary flex justify-center items-center text-white font-bold text-3xl">?</div>
-            <div class="flex flex-row items-center gap-1">
-              <span>{{ user.username }}</span> 
-              <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
-            </div>
-          </div>
-          <div v-else class="flex flex-col items-center">
-            <img :src="`/images/werewolves/icons/${gameRoles[user._id]?.picture}.png`" class="w-24 h-24 rounded-full" />
-            <div class="flex flex-row items-center gap-1">
-              <span>{{ user.username }}</span> 
-              <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
-            </div>
-            <span>({{ gameRoles[user._id]?.name }})</span>
+      <img v-if="gameState === 'night'" :src="noCampfireImage" />
+      <img v-else :src="campfireImage" />
+      <div 
+        v-for="user in users" 
+        :key="user.username" 
+        :ref="setPlayerRef"
+        class="circle-child transition-transform" 
+        :class="{'opacity-40 transform scale-90': !gameRoles[user._id]?.isAlive}"
+      >
+        <div v-if="!isUserRoleDiscovered(user)" class="flex flex-col items-center gap-1">
+          <div class="w-20 h-20 bg-black rounded-full border border-primary flex justify-center items-center text-white font-bold text-3xl">?</div>
+          <div class="flex flex-row items-center gap-1">
+            <span>{{ user.username }}</span> 
+            <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
           </div>
         </div>
+        <div v-else class="flex flex-col items-center">
+          <img :src="`/images/werewolves/icons/${gameRoles[user._id]?.picture}.png`" class="w-24 h-24 rounded-full" />
+          <div class="flex flex-row items-center gap-1">
+            <span>{{ user.username }}</span> 
+            <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
+          </div>
+          <span>({{ gameRoles[user._id]?.name }})</span>
+        </div>
+      </div>
     </div>
 
     <Modal :open="showDisplayRoleDialog" :autoclose="4000" @close="showDisplayRoleDialog = false">

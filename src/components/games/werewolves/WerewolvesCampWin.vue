@@ -1,11 +1,12 @@
 <template>
+  {{ campWin }}
   <div 
     class="rounded-lg p-4 flex flex-row items-center gap-4"
     :class="{
       'bg-red-400': campWin === 'wolves',
       'bg-primary': campWin === 'village',
       'bg-blue-950': campWin === 'solo',
-      'bg-gray-500': !campWin
+      'bg-gray-500': campWin === 'draw'
     }"
   >
     <img v-if="currentUserRole.camp === campWin" src="@/assets/games/werewolves/images/victory.svg" class="w-10" />
@@ -13,7 +14,7 @@
     <div>
       <span v-if="campWin === 'wolves'" class="font-bold text-2xl">Victoire des loups</span>
       <span v-else-if="campWin === 'village'" class="font-bold text-2xl">Victoire du village</span>
-      <span v-else-if="campWin === 'solo'" class="font-bold text-2xl">Victoire des loups</span>
+      <span v-else-if="campWin === 'solo'" class="font-bold text-2xl">Victoire du {role_solo}</span>
       <span v-else class="font-bold text-2xl">Egalité</span>
 
       <p v-if="campWin === 'wolves'">Tous les villageois sont morts, les loups remporte la partie !</p>
