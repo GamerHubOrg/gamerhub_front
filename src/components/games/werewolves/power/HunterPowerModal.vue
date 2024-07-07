@@ -1,19 +1,23 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <span>Vous avez été tué. Emportez quelqu'un avec vous</span>
-        <div class="flex flex-row gap-2 flex-wrap mt-4">
-            <div
-                v-for="user in users" :key="user._id" 
-                class="rounded-lg border p-2 flex flex-col justify-between items-center gap-2 cursor-pointer relative h-36 min-w-20"
-            >
-                <span>{{ user.username }}</span>
+        <div class="flex flex-col gap-2 mb-6">
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Chasseur</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">Vous avez été tué. Emportez quelqu'un avec vous</span>
 
-                <button 
-                    class="bg-red-400"
-                    @click="() => handleKillPlayer(user._id)"
+            <div class="players-grid mt-4">
+                <div
+                    v-for="user in users" :key="user._id" 
+                    class="rounded-md border-dark3 border-2 p-2 flex flex-col justify-between items-center gap-2 relative h-36 min-w-20"
                 >
-                    Tirer
-                </button>
+                    <div class="bg-dark3 h-full w-full text-center p-2 rounded">{{ user.username }}</div>
+
+                    <button 
+                        class="bg-red-500 rounded text-sm w-full px-2 py-1 hover:bg-red-400"
+                        @click="() => handleKillPlayer(user._id)"
+                    >
+                        Tirer
+                    </button>
+                </div>
             </div>
         </div>
     </Modal>
@@ -50,3 +54,11 @@ function handleKillPlayer(userId: string) {
     socket.value?.emit('game:werewolves:hunter:kill', { roomId: roomId.value, userId: currentUser.value?._id, kill: userId });
 }
 </script>
+
+<style lang="scss" scoped>
+.players-grid {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+}
+</style>

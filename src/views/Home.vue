@@ -20,7 +20,6 @@
       game-name="werewolves"
       time="10-40min" 
       :img="werewolvesImage" 
-      :disabled="isWerewolvesDisabled"
     />
   </div>
   
@@ -32,7 +31,4 @@ import GameListItem from "@/components/GameListItem.vue";
 import speedrundleImage from '@/assets/games/speedrundle.webp';
 import werewolvesImage from '@/assets/games/werewolves.webp';
 import undercoverImage from '@/assets/games/undercover.webp';
-import { computed } from "vue";
-
-const isWerewolvesDisabled = computed(() => import.meta.env.PROD);
 </script>

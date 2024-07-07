@@ -1,9 +1,10 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <div class="flex flex-col gap-4">
-            <span>Selectionnez votre victime pour cette nuit</span>
-            <VotePlayers :users="aliveUsers" @vote="handleConfirmVote" />
+        <div class="flex flex-col gap-2 mb-6">
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Loups</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">Selectionnez votre victime pour cette nuit</span>
         </div>
+        <VotePlayers :users="aliveUsers" @vote="handleConfirmVote" />
     </Modal>
 </template>
 

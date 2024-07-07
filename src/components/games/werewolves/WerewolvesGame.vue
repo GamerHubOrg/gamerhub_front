@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center gap-12 text-white">
     <h2 class="text-3xl">Werewolves</h2>
 
-    <WerewolvesGameState @play-day="handleDayPhase" @play-night="handleNightPhase" />
+    <WerewolvesGameState />
 
     <div ref="playersContainer" class="rounded-full w-5/6 md:w-3/4 lg:w-1/2 aspect-square position relative bg-dark2 flex justify-center items-center">
       <img v-if="gameState === 'night'" :src="noCampfireImage" />

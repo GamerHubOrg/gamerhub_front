@@ -1,5 +1,9 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
+        <div class="flex flex-col gap-2 mb-6">
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Village</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">Désignez la personne à éliminer</span>
+        </div>
         <VotePlayers :users="aliveUsers" type="village" @vote="handleConfirmVote" />
     </Modal>
 </template>

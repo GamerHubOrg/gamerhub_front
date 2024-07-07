@@ -1,16 +1,19 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <span>Choisissez un role pour jouer la partie :</span>
+        <div class="flex flex-col gap-2">
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Voleur</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">Choisissez un role pour jouer la partie</span>
 
-        <div class="flex flex-row gap-3 mt-6">
-            <div 
-                v-for="userId in usersIds" 
-                :key="userId" 
-                class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
-                @click="handleChooseRole(userId)"
-            >
-                <img :src="`/images/werewolves/icons/${gameRoles[userId]?.picture}.png`">
-                <span>{{ gameRoles[userId]?.name }}</span>
+            <div class="flex flex-row gap-3 mt-6">
+                <div 
+                    v-for="userId in usersIds" 
+                    :key="userId" 
+                    class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
+                    @click="handleChooseRole(userId)"
+                >
+                    <img :src="`/images/werewolves/icons/${gameRoles[userId]?.picture}.png`">
+                    <span>{{ gameRoles[userId]?.name }}</span>
+                </div>
             </div>
         </div>
     </Modal>

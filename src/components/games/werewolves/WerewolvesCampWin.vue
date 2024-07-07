@@ -1,12 +1,11 @@
 <template>
-  {{ campWin }}
   <div 
     class="rounded-lg p-4 flex flex-row items-center gap-4"
     :class="{
       'bg-red-400': campWin === 'wolves',
       'bg-primary': campWin === 'village',
       'bg-blue-950': campWin === 'solo',
-      'bg-gray-500': campWin === 'draw'
+      'bg-dark5': campWin === 'draw'
     }"
   >
     <img v-if="currentUserRole.camp === campWin" src="@/assets/games/werewolves/images/victory.svg" class="w-10" />
