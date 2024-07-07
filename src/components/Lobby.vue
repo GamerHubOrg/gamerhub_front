@@ -196,7 +196,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fixed left-0 top-0 p-6 h-full bg-dark2 z-50 w-full overflow-y-auto max-w-[480px] pb-6">
+  <div class="fixed left-0 top-0 p-6 h-full bg-dark2 z-50 w-full overflow-y-auto md:max-w-[480px] pb-6">
     <div class="flex flex-row items-center justify-between mb-5">
       <h3 class="text-white text-2xl font-bold">Game Room</h3>
       <button class="rounded bg-white bg-opacity-10 text-white p-2 text-sm" @click="handleOpenLobby">

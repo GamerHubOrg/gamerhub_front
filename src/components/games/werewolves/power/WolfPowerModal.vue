@@ -1,7 +1,9 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <span>Selectionnez votre victime pour cette nuit</span>
-        <VotePlayers :users="aliveUsers" @vote="handleConfirmVote" />
+        <div class="flex flex-col gap-4">
+            <span>Selectionnez votre victime pour cette nuit</span>
+            <VotePlayers :users="aliveUsers" @vote="handleConfirmVote" />
+        </div>
     </Modal>
 </template>
 
