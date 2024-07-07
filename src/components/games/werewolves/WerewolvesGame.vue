@@ -58,13 +58,6 @@
       </div>
     </Modal>
 
-    <Modal :open="showStateDialog" :autoclose="1300" @close="showStateDialog = false">
-      <div class="flex flex-col">
-        <span v-if="gameState === 'day'">Le village se reveille</span>
-        <span v-else-if="gameState === 'night'">Le village s'endort</span>
-      </div>
-    </Modal>
-
     <WolfPowerModal 
       :open="showWolfPowerModal" 
       @close="showWolfPowerModal = false"
@@ -138,7 +131,6 @@ const currentRoleTurn = computed(() => gameData.value?.roleTurn);
 const playersContainer = ref();
 const playersRef = ref<any[]>([]);
 const showDisplayRoleDialog = ref(false);
-const showStateDialog = ref(false);
 const showWolfPowerModal = ref(false);
 const showWitchPowerModal = ref(false);
 const showVillageVoteModal = ref(false);
@@ -152,8 +144,10 @@ function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const psychicWatch = gameData.value?.psychicWatch || [];
   const isRoleDiscovered = psychicWatch.find((pw) => pw.watch === user._id);
   const isPlayerDead = !gameRoles.value[user!._id]?.isAlive;
+  const gameTurn = gameData.value?.turn || 0;
+  const arePlayersWolves = gameTurn > 0 && currentUserRole.value?.name === 'Loup' && gameRoles.value[user!._id]?.name === 'Loup';
 
-  return currentUser.value?._id === user._id || (currentUserRole.value?.name === 'Voyante' && isRoleDiscovered) || isPlayerDead
+  return currentUser.value?._id === user._id || (currentUserRole.value?.name === 'Voyante' && isRoleDiscovered) || isPlayerDead || arePlayersWolves;
 }
 
 function setPlayerRef(el: any) {
@@ -215,7 +209,6 @@ function handleDayPhase() {
 
 socket.value?.on('game:werewolves:state', ({ data }) => {
   socketStore.handleRoomUpdate({ data: { ...roomData.value, gameData: data } });
-  showStateDialog.value = true;
   nightPhaseTimer.value = setTimeout(() => {
     handleNightPhase();
   }, 1500)

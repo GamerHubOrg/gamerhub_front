@@ -64,9 +64,8 @@ export const useSocketStore = defineStore("socket", {
       this.data = {};
     },
     handleStartGame() {
-      socket.emit("room:start", this.roomId, () => {
-        socket.emit(`game:${this.data.gameName}:initialize`, this.roomId);
-      });
+      socket.emit("room:start", this.roomId);
+      socket.emit(`game:${this.data.gameName}:initialize`, this.roomId);
     },
     handleGoToLobby() {
       socket.emit("room:lobby", this.roomId);
