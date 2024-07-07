@@ -27,6 +27,13 @@
                     </button>
                 </div>
             </div>
+
+            <button 
+                class="underline mt-4 border border-dark3 rounded p-2 hover:bg-dark3 transition-colors"
+                @click="handleSkip"
+            >
+                Ne rien faire
+            </button>
         </div>
     </Modal>
 </template>
@@ -67,6 +74,10 @@ function handleSavePlayer(userId: string) {
 
 function handleKillPlayer(userId: string) {
     socket.value?.emit('game:werewolves:witch:kill', { roomId: roomId.value, userId: currentUser.value?._id, kill: userId });
+}
+
+function handleSkip() {
+    socket.value?.emit('game:werewolves:witch:skip', { roomId: roomId.value });
 }
 </script>
 
