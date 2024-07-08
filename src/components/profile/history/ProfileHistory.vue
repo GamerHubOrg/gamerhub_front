@@ -19,6 +19,9 @@
         </div>
       </div>
       <div v-if="expandedRecord === record._id" class="rounded bg-lightgrey p-2">
+        <div v-if="!!record.config" class="flex">
+          <Button type="secondary" shape="squared" @click="expandedConfig = {gameName : record.gameName, ...record.config}">Voir la config</Button>
+        </div>
         <SpeedrundleRecordDetails v-if="record.gameName === 'speedrundle'" :record="(record as ISpeedrundleRecord)" />
         <UndercoverRecordDetails v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
       </div>
@@ -36,6 +39,7 @@
       </div>
     </div>
   </div>
+  <ConfigModal :open="!!expandedConfig" @close="expandedConfig = undefined" :config="expandedConfig" />
 </template>
 
 <script setup lang="ts">
@@ -49,6 +53,9 @@ import { useIntersectionObserver } from '@vueuse/core';
 import Loader from "@/components/Loader.vue";
 import UndercoverRecord from "./records/UndercoverRecord.vue";
 import UndercoverRecordDetails from "./records/UndercoverRecordDetails.vue";
+import Button from "@/components/Button.vue";
+import ConfigModal from '@/components/config/ConfigModal.vue';
+import { IRoomConfig } from '@/types/interfaces';
 
 const authStore = useAuthStore();
 const gameRecords = computed(() => authStore.gameRecords || []);
@@ -57,6 +64,7 @@ const currentUser = computed(() => authStore.getCurrentUser);
 const hasBeenFetched = ref<boolean>();
 const expandedRecord = ref<string>("");
 const isLoading = ref<boolean>(false)
+const expandedConfig = ref<IRoomConfig & {gameName : string} | undefined>()
 const gamePerLoad = 20;
 
 const toggleExpanded = (recordId: string) => {

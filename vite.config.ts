@@ -10,13 +10,13 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       vue(),
-      // VitePWA({ 
-      //   registerType: 'autoUpdate',
-      //   manifest:false,
-      //   devOptions: {
-      //     enabled: true
-      //   }
-      // })
+      VitePWA({ 
+        registerType: 'autoUpdate',
+        manifest:false,
+        devOptions: {
+          enabled: true
+        }
+      })
     ],
     server: {
       port: 5174
