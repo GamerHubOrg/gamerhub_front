@@ -58,7 +58,8 @@ const props = defineProps<{ selectedOptions: IOption[] }>()
 
 const gameFilters = [
     { value: "undercover", label: "Undercover" },
-    { value: "speedrundle", label: "Speedrundle" },
+    { value: "speedrundle", label: "SpeedrunDLE" },
+    { value: "werewolves", label: "Werewolves" },
 ]
 
 function handleFilterChange(selected: IOption) {

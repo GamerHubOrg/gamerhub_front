@@ -10,6 +10,7 @@ import {
   IUndercoverVote,
   IUndercoverWords,
 } from "@/components/games/undercover/undercover.types";
+import { IWerewolvesVote, IWerewolvesSave, IWerewolvesKill, IWerewolvesWatchRole, ILinkedWerewolfRoles, IWerewolvesCamp, IWerewolvesConfig } from "@/components/games/werewolves/werewolves.types";
 
 export interface IGameRecord {
   _id: string;
@@ -38,5 +39,22 @@ export interface IUndercoverRecord extends IGameRecord {
   campWin: string;
   config: IUndercoverConfig;
 }
+
+export interface IWerewolvesRecord extends IGameRecord {
+  wolfVotes?: IWerewolvesVote[];
+  villageVotes?: IWerewolvesVote[];
+  witchSaves?: IWerewolvesSave[];
+  witchKills?: IWerewolvesKill[];
+  hunterKills?: IWerewolvesKill[];
+  psychicWatch?: IWerewolvesWatchRole[];
+  roles: ILinkedWerewolfRoles;
+  swapedRoles?: ILinkedWerewolfRoles;
+  thiefUsers?: string[];
+  couple?: string[];
+  campWin?: IWerewolvesCamp;
+  usersThatPlayed?: string[];
+  config: IWerewolvesConfig;
+}
+
 
 export type GameRecord = IGameRecord | ISpeedrundleRecord | IUndercoverRecord;
