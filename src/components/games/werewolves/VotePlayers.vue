@@ -1,21 +1,21 @@
 <template>
     <div>
-        <div class="flex flex-row gap-2 flex-wrap">
+        <div class="players-grid">
             <VotePlayer
                 v-for="user in users" :key="user._id" 
                 :user="user"
                 :type="type"
-                @click="() => handleSendVoteProposition(user._id)"
+                @click="() => !hasVoted && handleSendVoteProposition(user._id)"
             />
         </div>
 
-        <div class="flex flex-col mt-6 gap-2">
+        <div class="flex flex-col mt-3 gap-2">
             <span v-for="vote in tmpVotes" :key="vote.playerId">
                 {{ getPlayerName(vote.playerId) }} want to vote for {{ getPlayerName(vote.vote) }}
             </span>
         </div>
 
-        <div class="flex flex-col mt-6 gap-2">
+        <div class="flex flex-col mt-3 gap-2">
             <span v-for="vote in votes" :key="vote.playerId">
                 {{ getPlayerName(vote.playerId) }} voted for {{ getPlayerName(vote.vote) }}
             </span>
@@ -94,3 +94,11 @@ function handleSendVoteProposition(userId: string) {
     socket.value?.emit('game:werewolves:vote:tmp', { roomId: roomId.value, userId: currentUser.value?._id, vote: userId });
 }
 </script>
+
+<style lang="scss" scoped>
+.players-grid {
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+}
+</style>

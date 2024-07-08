@@ -2,11 +2,9 @@ import { IGameData, IRoomData, SocketUser } from "@/types/interfaces";
 
 export type IWerewolvesGameState = 'night' | 'day';
 
-export type IWerewolvesCamp = 'wolve' | 'villager' | 'solo';
+export type IWerewolvesCamp = 'wolves' | 'village' | 'solo';
 
-export interface IWerewolvesPlayer extends SocketUser {
-  role: WerewolfRole;
-}
+export interface IWerewolvesPlayer extends SocketUser {}
 
 export interface IWerewolvesRoomData extends IRoomData {
   users: IWerewolvesPlayer[];
@@ -37,7 +35,17 @@ export interface WerewolfRole {
   };
 }
 
-export type TRoleName = 'Village' | 'Loup' | 'Sorcière' | 'Chasseur' | 'Voyante' | 'Villageois' | 'Voleur' | 'Cupidon';
+export enum EWerewolvesRoleName {
+  thief = 'Voleur',
+  wolf = 'Loup',
+  witch = 'Sorcière',
+  hunter = 'Chasseur',
+  psychic = 'Voyante',
+  villager = 'Villageois',
+  cupidon = 'Cupidon',
+}
+
+export type ILinkedWerewolfRoles = Record<string, WerewolfRole>;
 
 export interface IWerewolvesGameData extends IGameData {
   wolfVotes: IWerewolvesVote[];
@@ -45,13 +53,17 @@ export interface IWerewolvesGameData extends IGameData {
   tmpVotes: Partial<IWerewolvesVote>[];
   witchSaves?: IWerewolvesSave[];
   witchKills?: IWerewolvesKill[];
-  thiefUsers?: IWerewolvesPlayer[];
+  hunterKills?: IWerewolvesKill[];
+  thiefUsers?: string[];
   couple?: IWerewolvesCouple;
   psychicWatch?: IWerewolvesWatchRole[];
-  roleTurn?: TRoleName;
+  roles: ILinkedWerewolfRoles;
+  swapedRoles?: ILinkedWerewolfRoles;
+  roleTurn?: EWerewolvesRoleName | 'Village';
   state: IWerewolvesGameState;
   campWin?: IWerewolvesCamp;
   turn: number;
+  usersThatPlayed: IWerewolvesPlayer[];
 }
 
 export type IWerewolvesCouple = string[];

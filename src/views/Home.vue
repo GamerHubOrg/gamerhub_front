@@ -20,7 +20,6 @@
       game-name="werewolves"
       time="10-40min" 
       :img="werewolvesImage" 
-      :disabled="true"
     />
   </div>
   

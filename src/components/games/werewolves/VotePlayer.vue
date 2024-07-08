@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="rounded-lg border p-2 flex flex-row justify-between items-center gap-2 cursor-pointer relative h-36 min-w-20"
+        class="rounded-lg border p-2 flex flex-row justify-center items-center gap-2 cursor-pointer relative h-36 min-w-20"
     >
         <span v-if="votesNumber > 0" class="absolute right-0 transform translate-x-1/2 -translate-y-1/2 top-0 rounded-full bg-primary text-white py-0.5 px-2.5">{{ votesNumber }}</span>
         <span>{{ user.username }}</span>

@@ -3,9 +3,9 @@
       <div class="option-container flex flex-col">
           <label for="mode">Composition</label>
           <div class="bg-dark1 rounded-lg p-3 grid grid-cols-3 gap-6 mt-2">
-            <div v-for="role in Object.keys(rolesList)" :key="role" class="w-full flex flex-col items-center">
+            <div v-for="role in Object.values(rolesList)" :key="role" class="w-full flex flex-col items-center">
               <span class="text-sm">{{ rolesList[role] }}</span>
-              <img :src="getRolePicture(role)" class="w-24">
+              <img :src="`/images/werewolves/icons/${role}.png`" class="w-24">
               <div class="flex flex-row items-center justify-center gap-1 bg-gray-600 p-1 rounded w-full">
                 <button 
                   class="bg-dark3 px-2 rounded w-full disabled:cursor-not-allowed" 
@@ -85,11 +85,6 @@ function handleChangeComposition(role: string, direction: number) {
 
   internalConfig.value.composition[role] = roleCount + direction;
   internalConfig.value.maxPlayers = Object.values(internalConfig.value.composition).reduce((acc, count) => acc + count, 0);
-}
-
-function getRolePicture(role: string) {
-  const url = new URL(`/src/assets/games/werewolves/images/icons/${role}.png`, import.meta.url);
-  return url?.href;
 }
 
 watch(

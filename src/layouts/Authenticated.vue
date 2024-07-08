@@ -4,13 +4,13 @@
     <Lobby v-show="!isLobbyCollapsed"/>
 
     <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
-      <router-view/>
+      <router-view />
     </main>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Lobby from '../components/Lobby.vue';
 import Navbar from '../components/Navbar.vue';
 import {useAuthStore} from "../modules/auth/auth.store";

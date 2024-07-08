@@ -78,6 +78,7 @@ const handleUpdateRoom = (conf: IRoomConfig) => {
   }
 
   if (data.value.gameState !== "lobby") {
+    isChangingConfig.value = false;
     return;
   }
 
@@ -194,7 +195,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="fixed left-0 top-0 p-6 h-full bg-dark2 z-50 w-full overflow-y-auto max-w-[480px] pb-6">
+  <div class="fixed left-0 top-0 p-6 h-full bg-dark2 z-50 w-full overflow-y-auto md:max-w-[480px] pb-6">
     <div class="flex flex-row items-center justify-between mb-5">
       <h3 class="text-white text-2xl font-bold">Game Room</h3>
       <button class="rounded bg-white bg-opacity-10 text-white p-2 text-sm" @click="handleOpenLobby">
@@ -222,7 +223,7 @@ onMounted(() => {
           <select id="game" class="bg-dark3 w-full" v-model="createGame">
             <option value="undercover">Undercover</option>
             <option value="speedrundle">SpeedrunDLE</option>
-            <!-- <option value="werewolves">Werewolves</option> -->
+            <option value="werewolves">Werewolves</option>
           </select>
         </div>
         <button class="w-full bg-[#00A569] rounded-xl p-3 text-sm" @click="handleRoomStart">
@@ -296,7 +297,7 @@ onMounted(() => {
           <select id="game" class="bg-transparent w-full" v-model="updateGame" :disabled="isConfigDisabled">
             <option value="undercover" class="text-black">Undercover</option>
             <option value="speedrundle" class="text-black">SpeedrunDLE</option>
-            <!-- <option value="werewolves" class="text-black">Werewolves</option> -->
+            <option value="werewolves">Werewolves</option>
           </select>
         </div>
 

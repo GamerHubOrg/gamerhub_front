@@ -1,16 +1,19 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
-        <span>Choisissez un role pour jouer la partie :</span>
+        <div class="flex flex-col gap-2">
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Voleur</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">Choisissez un role pour jouer la partie</span>
 
-        <div class="flex flex-row gap-3 mt-6">
-            <div 
-                v-for="user in users" 
-                :key="user._id" 
-                class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
-                @click="handleChooseRole(user._id)"
-            >
-                <img :src="user.role.picture">
-                <span>{{ user.role.name }}</span>
+            <div class="flex flex-row gap-3 mt-6">
+                <div 
+                    v-for="userId in usersIds" 
+                    :key="userId" 
+                    class="border rounded border-dark5 flex flex-col items-center pb-3 cursor-pointer hover:bg-dark5 transition-colors"
+                    @click="handleChooseRole(userId)"
+                >
+                    <img :src="`/images/werewolves/icons/${gameRoles[userId]?.picture}.png`">
+                    <span>{{ gameRoles[userId]?.name }}</span>
+                </div>
             </div>
         </div>
     </Modal>
@@ -40,7 +43,8 @@ const roomId = computed(() => socketStore.getRoomId);
 const currentUser = computed(() => store.getCurrentUser);
 const stateData = computed(() => socketStore.getRoomData);
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
-const users = computed(() => roomData.value.gameData?.thiefUsers);
+const gameRoles = computed(() => roomData.value.gameData?.roles || {});
+const usersIds = computed(() => roomData.value.gameData?.thiefUsers);
 
 function handleChooseRole(userId: string) {
     socket.value?.emit('game:werewolves:thief:choose', { roomId: roomId.value, userId: currentUser.value?._id , swap: userId });

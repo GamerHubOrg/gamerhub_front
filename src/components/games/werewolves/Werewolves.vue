@@ -1,5 +1,4 @@
 <template>
-    <p>gameState: {{ data.gameState }}</p>
     <WerewolvesGame v-if="data.gameState === 'started'" />
     <WerewolvesResults v-else-if="data.gameState === 'results'" />
 </template>

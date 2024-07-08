@@ -74,6 +74,7 @@ export const useSocketStore = defineStore("socket", {
       socket.emit("room:update", this.roomId, config);
     },
     handleChangeGame(game: string) {
+      console.log("EMIT HANGE GAME EVENT");
       socket.emit("room:change-game", this.roomId, game);
     },
     handlePromoteUser(userId : string) {
