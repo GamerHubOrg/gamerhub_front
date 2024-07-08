@@ -62,23 +62,15 @@ export const useAuthStore = defineStore("auth", {
       const { data } = await api.get(`/users/${userId}`);
       return data;
     },
-    async updateUser({ username, email, picture }: any) {
-      await api.put(`/users/${this.currentUser?._id}`, {
-        username,
-        email,
-        picture,
-      });
+    async updateUser({username, email, picture}: any) {
+      await api.put(`/users/${this.currentUser?._id}`, {username, email, picture})
+    }, 
+    async updateUserPassword({oldPassword, newPassword, newPasswordConfirm } : any) {
+      await api.put(`/users/password/${this.currentUser?._id}`, {oldPassword, newPassword, newPasswordConfirm } )
     },
-    async updateUserPassword({
-      oldPassword,
-      newPassword,
-      newPasswordConfirm,
-    }: any) {
-      await api.put(`/users/password/${this.currentUser?._id}`, {
-        oldPassword,
-        newPassword,
-        newPasswordConfirm,
-      });
+    async deleteUser({password} : any) {
+      await api.post(`/users/delete/${this.currentUser?._id}`, {password})
+      this.currentUser = undefined;
     },
     async fetchGameRecords(offset: number, limit: number) {
       if(this.totalRecords && this.totalRecords === this.gameRecords?.length) return;
@@ -94,6 +86,6 @@ export const useAuthStore = defineStore("auth", {
           this.totalRecords = totalRecords;
           this.gameRecords = [...(this.gameRecords || []), ...records];
         });
-    },
+    }
   },
 });

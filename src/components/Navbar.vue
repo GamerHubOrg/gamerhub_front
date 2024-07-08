@@ -86,7 +86,7 @@
                         <img class="w-8 h-8 rounded-full" :src="currentUser?.picture" alt="user photo"/>
                       </button>
                     </div>
-                    <Button v-else type="primary" shape="squared" @click="handleConnect">Se connecter</Button>
+                    <Button v-else color="primary" shape="squared" @click="handleConnect">Se connecter</Button>
                   </MenuButton>
                 </div>
                 <transition v-if="currentUser" enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
@@ -190,7 +190,7 @@
             @click="handleLogout">Sign out</span>
           </div>
       </div>
-      <Button v-else type="primary" shape="squared" @click="handleConnect">Se connecter</Button>
+      <Button v-else color="primary" shape="squared" @click="handleConnect">Se connecter</Button>
     </DisclosurePanel>
   </Disclosure>
 </template>
