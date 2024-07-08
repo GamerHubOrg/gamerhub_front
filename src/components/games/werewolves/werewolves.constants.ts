@@ -11,11 +11,11 @@ export const rolesList: Record<EWerewolvesRoleName, any> = {
 }
 
 export const rolesColor: Record<EWerewolvesRoleName, string> = {
-    [EWerewolvesRoleName.wolf]: 'red-400',
-    [EWerewolvesRoleName.hunter]: 'orange-400',
-    [EWerewolvesRoleName.thief]: 'green-400',
-    [EWerewolvesRoleName.witch]: 'blue-400',
-    [EWerewolvesRoleName.psychic]: 'purple-400',
-    [EWerewolvesRoleName.cupidon]: 'pink-400',
-    [EWerewolvesRoleName.villager]: 'white',
+    [EWerewolvesRoleName.wolf]: 'rgb(248 113 113)',
+    [EWerewolvesRoleName.hunter]: 'rgb(251 146 60)',
+    [EWerewolvesRoleName.thief]: 'rgb(74 222 128)',
+    [EWerewolvesRoleName.witch]: 'rgb(96 165 250)',
+    [EWerewolvesRoleName.psychic]: 'rgb(192 132 252)',
+    [EWerewolvesRoleName.cupidon]: 'rgb(244 114 182)',
+    [EWerewolvesRoleName.villager]: 'rgb(255 255 255)',
 }

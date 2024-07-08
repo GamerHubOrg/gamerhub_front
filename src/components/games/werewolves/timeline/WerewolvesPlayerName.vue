@@ -6,8 +6,11 @@
           :src="`/images/werewolves/icons/${role?.picture}.png`"
           class="w-10"
         />
-        <span 
-          :class="{[`font-bold text-${roleColor}`]: true}"
+        <span
+          :style="{
+            color: roleColor,
+          }"
+          class="font-bold"
         >
           {{ user?.username }} ({{ role?.name }})
         </span>

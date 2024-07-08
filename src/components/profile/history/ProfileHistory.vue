@@ -1,6 +1,6 @@
 <template>
   <div id="profile-history" class="flex flex-col gap-3">
-    <div :id="'record-'+i" v-for="record, i in gameRecords" class="flex flex-col gap-2">
+    <div :id="'record-'+i" v-for="record, i in gameRecords" :key="record._id" class="flex flex-col gap-2">
       <div class="flex rounded bg-lightgrey w-full h-[120px] min-[800px]:h-[110px] overflow-hidden">
         <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-'+i" :record="(record as ISpeedrundleRecord)" />
         <div @click="toggleExpanded(record._id)"
