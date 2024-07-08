@@ -200,8 +200,8 @@ const currentRoundTotalDeath = computed(() => {
   let count = 0;
   if (hasWitchKilled.value) count++;
   if (hasHunterKilled.value) count++;
-  if (hasWolvesVoted.value) count++;
-  if (hasVillageVoted.value) count++;
+  if (hasWolvesVoted.value && !!wolvesMostVotedPlayer.value) count++;
+  if (hasVillageVoted.value && !!villageMostVotedPlayer.value) count++;
   if (isCoupleDead.value) count++;
   return count;
 })
