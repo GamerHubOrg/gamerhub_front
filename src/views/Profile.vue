@@ -112,6 +112,9 @@ import { toast } from 'vue3-toastify';
 import Modal from '../components/Modal.vue';
 import { useRouter } from 'vue-router';
 import Button from '@/components/Button.vue';
+import Tabs from '@/components/Tabs.vue';
+import ProfileHistory from '@/components/profile/history/ProfileHistory.vue';
+
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -135,6 +138,12 @@ const passwords = computed<any>(() => ({
   newPassword: '',
   newPasswordConfirm: ''
 }));
+
+const tabs = ref([
+  { name: "Profil", value: "profile" },
+  { name: "Historique", value: "history" }
+])
+const selectedTab = ref<string>("profile");
 
 
 const handleChangeUser = async (e: Event) => {
