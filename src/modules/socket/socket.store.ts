@@ -52,8 +52,8 @@ export const useSocketStore = defineStore("socket", {
       if (roomId !== undefined) this.roomId = roomId;
       if (data !== undefined) this.data = data;
     },
-    handleCreateRoom(user: User, gameName: string) {
-      socket.emit("room:create", gameName, user);
+    handleCreateRoom(user: User, gameName: string, config? : IRoomConfig) {
+      socket.emit("room:create", gameName, user, config);
     },
     handleJoinRoom(user: User, roomId: string) {
       socket.emit("room:join", roomId, user);
@@ -70,11 +70,10 @@ export const useSocketStore = defineStore("socket", {
     handleGoToLobby() {
       socket.emit("room:lobby", this.roomId);
     },
-    handleUpdateRoom(config: IRoomConfig) {
-      socket.emit("room:update", this.roomId, config);
+    handleUpdateRoom(config: IRoomConfig, gameName? : string) {
+      socket.emit("room:update", this.roomId, {config, gameName});
     },
     handleChangeGame(game: string) {
-      console.log("EMIT HANGE GAME EVENT");
       socket.emit("room:change-game", this.roomId, game);
     },
     handlePromoteUser(userId : string) {

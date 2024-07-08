@@ -95,5 +95,19 @@ export const useAuthStore = defineStore("auth", {
           this.gameRecords = [...(this.gameRecords || []), ...records];
         });
     },
+    async refreshGameRecords() {
+      await api
+        .get(`/gameRecords/user/${this.currentUser?._id}`, {
+          params: {
+            offset : 0,
+            limit : 20,
+          },
+        })
+        .then((res) => {
+          const { records, totalRecords } = res.data;
+          this.totalRecords = totalRecords;
+          this.gameRecords = records;
+        });
+    },
   },
 });
