@@ -2,16 +2,28 @@
   <div class="flex flex-col gap-3 text-white">
     <div class="option-container">
       <label for="mode">Mode de jeu :</label>
-      <select id="mode" :disabled="isConfigDisabled" v-model="internalConfig.mode">
+      <select
+        id="mode"
+        :disabled="isConfigDisabled"
+        v-model="internalConfig.mode"
+      >
         <option value="classic" class="text-black">Classic</option>
-        <option value="less_trials" class="text-black">Few trials possible</option>
+        <option value="less_trials" class="text-black">
+          Few trials possible
+        </option>
       </select>
     </div>
 
     <div class="option-container">
       <label for="theme">Thème :</label>
-      <select id="theme" :disabled="isConfigDisabled" v-model="internalConfig.theme">
-        <option class="text-black" value="league_of_legends">League Of Legends</option>
+      <select
+        id="theme"
+        :disabled="isConfigDisabled"
+        v-model="internalConfig.theme"
+      >
+        <option class="text-black" value="league_of_legends">
+          League Of Legends
+        </option>
         <option class="text-black" value="pokemon">Pokemon</option>
       </select>
     </div>
@@ -27,7 +39,9 @@
             <input
               type="checkbox"
               :disabled="isConfigDisabled"
-              :checked="internalConfig.selectedGenerations?.includes(generation)"
+              :checked="
+                internalConfig.selectedGenerations?.includes(generation)
+              "
               @change="toggleGeneration(generation)"
               :value="generation"
             />
@@ -113,7 +127,6 @@ const columns = computed(() => {
   const cols = speedrundleColumns[internalConfig.value.theme].filter(
     ({ isIcon }) => !isIcon
   );
-  internalConfig.value.selectedColumns = cols.map(({ key }) => key);
   return cols;
 });
 
@@ -133,18 +146,16 @@ const isConfigDisabled = computed(
 const toggleGeneration = (generation: number) => {
   if (!internalConfig.value.selectedGenerations) return;
   if (internalConfig.value.selectedGenerations.includes(generation)) {
-    internalConfig.value.selectedGenerations = internalConfig.value.selectedGenerations.filter(
-      (e) => e !== generation
-    );
+    internalConfig.value.selectedGenerations =
+      internalConfig.value.selectedGenerations.filter((e) => e !== generation);
   } else internalConfig.value.selectedGenerations.push(generation);
 };
 
 const toggleColumn = (column: string) => {
   if (!internalConfig.value.selectedColumns) return;
   if (internalConfig.value.selectedColumns.includes(column)) {
-    internalConfig.value.selectedColumns = internalConfig.value.selectedColumns.filter(
-      (e) => e !== column
-    );
+    internalConfig.value.selectedColumns =
+      internalConfig.value.selectedColumns.filter((e) => e !== column);
   } else internalConfig.value.selectedColumns.push(column);
 };
 

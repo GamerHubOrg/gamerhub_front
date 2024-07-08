@@ -1,5 +1,51 @@
 <template>
+  <PopoverGroup class="-mx-4 flex items-center divide-x divide-gray-200">
+                <Popover v-for="(section) in filters" :key="section.name" class="relative inline-block px-4 text-left">
+                  <PopoverButton
+                    class="group inline-flex justify-center text-sm font-medium text-gray-200 hover:text-gray-400">
+                    <span>{{ section.name }}</span>
+                    <span v-if="activeFilters.length > 0"
+                      class="ml-1.5 rounded bg-dark1 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-300">{{
+                    activeFilters.length }}</span>
+                    <ChevronDownIcon class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-white group-hover:text-gray-200"
+                      aria-hidden="true" />
+                  </PopoverButton>
+
+                  <transition enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                    <PopoverPanel
+                      class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-dark2 p-4 shadow-2xl ring-1 ring-gray-400 ring-opacity-5 focus:outline-none">
+                      <form class="space-y-4">
+                        <div v-for="(option, optionIdx) in section.options" :key="option.value"
+                          class="flex items-center">
+                          <input :id="`filter-${section.id}-${optionIdx}`" :name="`${section.id}[]`"
+                            :value="option.value" type="checkbox"
+                            class="h-4 w-4 rounded-md border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            @change="() => handleFilterChange(section, option)" />
+                          <label :for="`filter-${section.id}-${optionIdx}`"
+                            class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-400">{{ option.label
+                            }}</label>
+                        </div>
+                      </form>
+                    </PopoverPanel>
+                  </transition>
+                </Popover>
+              </PopoverGroup>
   <div id="profile-history" class="flex flex-col gap-3">
+    <div @click="refresh" ref="loadMore" class="bg-lightgrey p-2 rounded">
+      <div v-if="refreshLoading" class="w-fit mx-auto">
+        <Loader />
+      </div>
+      <div v-else class="flex gap-2 justify-center items-center cursor-pointer duration-200 hover:brightness-90">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="white" viewBox="0 0 512 512">
+          <path
+            d="M105.1 202.6c7.7-21.8 20.2-42.3 37.8-59.8c62.5-62.5 163.8-62.5 226.3 0L386.3 160H352c-17.7 0-32 14.3-32 32s14.3 32 32 32H463.5c0 0 0 0 0 0h.4c17.7 0 32-14.3 32-32V80c0-17.7-14.3-32-32-32s-32 14.3-32 32v35.2L414.4 97.6c-87.5-87.5-229.3-87.5-316.8 0C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5zM39 289.3c-5 1.5-9.8 4.2-13.7 8.2c-4 4-6.7 8.8-8.1 14c-.3 1.2-.6 2.5-.8 3.8c-.3 1.7-.4 3.4-.4 5.1V432c0 17.7 14.3 32 32 32s32-14.3 32-32V396.9l17.6 17.5 0 0c87.5 87.4 229.3 87.4 316.7 0c24.4-24.4 42.1-53.1 52.9-83.7c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.5 62.5-163.8 62.5-226.3 0l-.1-.1L125.6 352H160c17.7 0 32-14.3 32-32s-14.3-32-32-32H48.4c-1.6 0-3.2 .1-4.8 .3s-3.1 .5-4.6 1z" />
+        </svg>
+        <span>Actualiser</span>
+      </div>
+    </div>
     <div :id="'record-'+i" v-for="record, i in gameRecords" :key="record._id" class="flex flex-col gap-2">
       <div class="flex rounded bg-lightgrey w-full h-[120px] min-[800px]:h-[110px] overflow-hidden">
         <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-' + i"
@@ -26,8 +72,8 @@
         <UndercoverRecordDetails v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
       </div>
     </div>
-    <div v-if="totalRecords && totalRecords > gameRecords.length" ref="loadMore" class="bg-lightgrey p-2 rounded">
-      <div v-if="isLoading" class="w-fit mx-auto">
+    <div v-if="totalRecords && totalRecords> gameRecords.length" ref="loadMore" class="bg-lightgrey p-2 rounded">
+      <div v-if="fetchMoreLoading" class="w-fit mx-auto">
         <Loader />
       </div>
       <div v-else class="flex gap-2 justify-center items-center cursor-pointer duration-200 hover:brightness-90">
@@ -57,15 +103,62 @@ import Button from "@/components/Button.vue";
 import ConfigModal from '@/components/config/ConfigModal.vue';
 import { IRoomConfig } from '@/types/interfaces';
 
+interface IActiveFilter {
+  label: string;
+  key: string;
+  value: string;
+}
+
+interface IConfigFilterOption {
+  value: string;
+  label: string;
+}
+
+interface IConfigFilter {
+  id: string;
+  name: string;
+  options: IConfigFilterOption[];
+}
+
 const authStore = useAuthStore();
 const gameRecords = computed(() => authStore.gameRecords || []);
 const totalRecords = computed(() => authStore.totalRecords);
 const currentUser = computed(() => authStore.getCurrentUser);
 const hasBeenFetched = ref<boolean>();
 const expandedRecord = ref<string>("");
-const isLoading = ref<boolean>(false)
+const fetchMoreLoading = ref<boolean>(false)
+const refreshLoading = ref<boolean>(false)
 const expandedConfig = ref<IRoomConfig & {gameName : string} | undefined>()
+const firstScroll = ref<boolean>(false);
+  const activeFilters = ref<IActiveFilter[]>([]);
 const gamePerLoad = 20;
+
+const filters = [
+  {
+    id: "game",
+    name: "Games",
+    options: [
+      { value: "undercover", label: "Undercover" },
+      { value: "speedrundle", label: "Speedrundle" },
+    ],
+  },
+];
+
+function handleFilterChange(filter: IConfigFilter, option: IConfigFilterOption) {
+  const alreadyExist = !!activeFilters.value.find((f) => f.key === filter.id && f.value === option.value);
+  if (!alreadyExist) {
+    activeFilters.value.push({
+      label: option.label,
+      value: option.value,
+      key: filter.id
+    })
+    return;
+  }
+
+  activeFilters.value = [
+    ...activeFilters.value.filter((f) => f.key !== filter.id || f.value !== option.value),
+  ]
+}
 
 const toggleExpanded = (recordId: string) => {
   if (expandedRecord.value === recordId) {
@@ -76,9 +169,14 @@ const toggleExpanded = (recordId: string) => {
   expandedRecord.value = recordId;
 };
 
+const refresh = () => {
+  refreshLoading.value = true
+  authStore.refreshGameRecords().then(() => refreshLoading.value = false);
+}
+
 const fetchMore = () => {
-  isLoading.value = true
-  authStore.fetchGameRecords(gameRecords.value.length, gamePerLoad).finally(() => isLoading.value = false);
+  fetchMoreLoading.value = true
+  authStore.fetchGameRecords(gameRecords.value.length, gamePerLoad).finally(() => fetchMoreLoading.value = false);
   if (gameRecords.value.length === 0) hasBeenFetched.value = true;
 };
 
@@ -86,8 +184,9 @@ watch(
   () => hasBeenFetched.value,
   (val) => {
     if (val || !currentUser.value) return;
-    isLoading.value = true;
-    authStore.fetchGameRecords(0, gamePerLoad).finally(() => isLoading.value = false);
+    console.log("first fetch");
+    fetchMoreLoading.value = true;
+    authStore.fetchGameRecords(0, gamePerLoad).finally(() => fetchMoreLoading.value = false);
     hasBeenFetched.value = true;
   }
 );
@@ -109,7 +208,8 @@ const loadMore = ref(null)
 useIntersectionObserver(
   loadMore,
   ([{ isIntersecting }]) => {
-    if (isIntersecting && hasBeenFetched.value === true) fetchMore()
+    if (isIntersecting && hasBeenFetched.value === true && firstScroll.value === true) fetchMore()
+    firstScroll.value = true;
   },
   { threshold: 1 }
 )
