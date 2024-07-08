@@ -1,38 +1,6 @@
 <template>
-  <PopoverGroup class="-mx-4 flex items-center divide-x divide-gray-200">
-                <Popover v-for="(section) in filters" :key="section.name" class="relative inline-block px-4 text-left">
-                  <PopoverButton
-                    class="group inline-flex justify-center text-sm font-medium text-gray-200 hover:text-gray-400">
-                    <span>{{ section.name }}</span>
-                    <span v-if="activeFilters.length > 0"
-                      class="ml-1.5 rounded bg-dark1 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-300">{{
-                    activeFilters.length }}</span>
-                    <ChevronDownIcon class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-white group-hover:text-gray-200"
-                      aria-hidden="true" />
-                  </PopoverButton>
+  <GameSelector @change="handleChangeSelectedGames" :selectedOptions="selectedGames"  />
 
-                  <transition enter-active-class="transition ease-out duration-100"
-                    enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
-                    leave-active-class="transition ease-in duration-75"
-                    leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-                    <PopoverPanel
-                      class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-dark2 p-4 shadow-2xl ring-1 ring-gray-400 ring-opacity-5 focus:outline-none">
-                      <form class="space-y-4">
-                        <div v-for="(option, optionIdx) in section.options" :key="option.value"
-                          class="flex items-center">
-                          <input :id="`filter-${section.id}-${optionIdx}`" :name="`${section.id}[]`"
-                            :value="option.value" type="checkbox"
-                            class="h-4 w-4 rounded-md border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            @change="() => handleFilterChange(section, option)" />
-                          <label :for="`filter-${section.id}-${optionIdx}`"
-                            class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-400">{{ option.label
-                            }}</label>
-                        </div>
-                      </form>
-                    </PopoverPanel>
-                  </transition>
-                </Popover>
-              </PopoverGroup>
   <div id="profile-history" class="flex flex-col gap-3">
     <div @click="refresh" ref="loadMore" class="bg-lightgrey p-2 rounded">
       <div v-if="refreshLoading" class="w-fit mx-auto">
@@ -46,7 +14,7 @@
         <span>Actualiser</span>
       </div>
     </div>
-    <div :id="'record-'+i" v-for="record, i in gameRecords" :key="record._id" class="flex flex-col gap-2">
+    <div :id="'record-' + i" v-for="record, i in filteredRecords" :key="record._id" class="flex flex-col gap-2">
       <div class="flex rounded bg-lightgrey w-full h-[120px] min-[800px]:h-[110px] overflow-hidden">
         <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-' + i"
           :record="(record as ISpeedrundleRecord)" />
@@ -66,13 +34,14 @@
       </div>
       <div v-if="expandedRecord === record._id" class="rounded bg-lightgrey p-2">
         <div v-if="!!record.config" class="flex">
-          <Button type="secondary" shape="squared" @click="expandedConfig = {gameName : record.gameName, ...record.config}">Voir la config</Button>
+          <Button type="secondary" shape="squared"
+            @click="expandedConfig = { gameName: record.gameName, ...record.config }">Voir la config</Button>
         </div>
         <SpeedrundleRecordDetails v-if="record.gameName === 'speedrundle'" :record="(record as ISpeedrundleRecord)" />
         <UndercoverRecordDetails v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
       </div>
     </div>
-    <div v-if="totalRecords && totalRecords> gameRecords.length" ref="loadMore" class="bg-lightgrey p-2 rounded">
+    <div v-if="totalRecords && totalRecords > gameRecords.length" ref="loadMore" class="bg-lightgrey p-2 rounded">
       <div v-if="fetchMoreLoading" class="w-fit mx-auto">
         <Loader />
       </div>
@@ -93,7 +62,7 @@ import { useAuthStore } from "@/modules/auth/auth.store";
 import { computed, onMounted, ref, watch } from "vue";
 import SpeedrundleRecord from "./records/SpeedrundleRecord.vue";
 import SpeedrundleRecordDetails from "./records/SpeedrundleRecordDetails.vue";
-import { ISpeedrundleRecord, IUndercoverRecord } from "@/modules/auth/gameRecords";
+import { IGameRecord, ISpeedrundleRecord, IUndercoverRecord } from "@/modules/auth/gameRecords";
 import { useIntersectionObserver } from '@vueuse/core';
 //@ts-ignore
 import Loader from "@/components/Loader.vue";
@@ -102,63 +71,27 @@ import UndercoverRecordDetails from "./records/UndercoverRecordDetails.vue";
 import Button from "@/components/Button.vue";
 import ConfigModal from '@/components/config/ConfigModal.vue';
 import { IRoomConfig } from '@/types/interfaces';
-
-interface IActiveFilter {
-  label: string;
-  key: string;
-  value: string;
-}
-
-interface IConfigFilterOption {
-  value: string;
-  label: string;
-}
-
-interface IConfigFilter {
-  id: string;
-  name: string;
-  options: IConfigFilterOption[];
-}
+import GameSelector from "@/components/filters/games/GameSelector.vue";
+import { IOption } from "@/components/filters/games/game-filters.types";
 
 const authStore = useAuthStore();
-const gameRecords = computed(() => authStore.gameRecords || []);
+const gameRecords = computed<IGameRecord[]>(() => authStore.gameRecords || []);
 const totalRecords = computed(() => authStore.totalRecords);
 const currentUser = computed(() => authStore.getCurrentUser);
 const hasBeenFetched = ref<boolean>();
 const expandedRecord = ref<string>("");
 const fetchMoreLoading = ref<boolean>(false)
 const refreshLoading = ref<boolean>(false)
-const expandedConfig = ref<IRoomConfig & {gameName : string} | undefined>()
+const expandedConfig = ref<IRoomConfig & { gameName: string } | undefined>()
 const firstScroll = ref<boolean>(false);
-  const activeFilters = ref<IActiveFilter[]>([]);
+const selectedGames = ref<IOption[]>([])
 const gamePerLoad = 20;
+const filteredRecords = computed<IGameRecord[]>(() => {
+  if(selectedGames.value.length === 0) return gameRecords.value;
+  return gameRecords.value.filter(({gameName}) => selectedGames.value.some((e) => e.value === gameName));
+})
 
-const filters = [
-  {
-    id: "game",
-    name: "Games",
-    options: [
-      { value: "undercover", label: "Undercover" },
-      { value: "speedrundle", label: "Speedrundle" },
-    ],
-  },
-];
-
-function handleFilterChange(filter: IConfigFilter, option: IConfigFilterOption) {
-  const alreadyExist = !!activeFilters.value.find((f) => f.key === filter.id && f.value === option.value);
-  if (!alreadyExist) {
-    activeFilters.value.push({
-      label: option.label,
-      value: option.value,
-      key: filter.id
-    })
-    return;
-  }
-
-  activeFilters.value = [
-    ...activeFilters.value.filter((f) => f.key !== filter.id || f.value !== option.value),
-  ]
-}
+const handleChangeSelectedGames = (games: IOption[]) => selectedGames.value = games;
 
 const toggleExpanded = (recordId: string) => {
   if (expandedRecord.value === recordId) {
@@ -198,6 +131,8 @@ watch(
     hasBeenFetched.value = false;
   }
 );
+
+watch(() => selectedGames, (newVal) => console.log(newVal))
 
 onMounted(() => {
   if (!hasBeenFetched.value && currentUser.value) hasBeenFetched.value = false;
