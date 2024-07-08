@@ -19,6 +19,7 @@
         <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-' + i"
           :record="(record as ISpeedrundleRecord)" />
         <UndercoverRecord v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
+        <WerewolvesRecord v-else-if="record.gameName === 'werewolves'" :record="(record as IWerewolvesRecord)" />
         <div @click="toggleExpanded(record._id)"
           class="cursor-pointer h-full w-8 min-w-[32px] bg-[#555] flex items-end justify-center">
           <svg v-if="expandedRecord === record._id" xmlns="http://www.w3.org/2000/svg" width="20" fill="#999"
@@ -39,6 +40,7 @@
         </div>
         <SpeedrundleRecordDetails v-if="record.gameName === 'speedrundle'" :record="(record as ISpeedrundleRecord)" />
         <UndercoverRecordDetails v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
+        <WerewolvesRecordDetails v-else-if="record.gameName === 'werewolves'" :record="(record as IWerewolvesRecord)" />
       </div>
     </div>
     <div v-if="totalRecords && totalRecords > gameRecords.length" ref="loadMore" class="bg-lightgrey p-2 rounded">
@@ -62,7 +64,7 @@ import { useAuthStore } from "@/modules/auth/auth.store";
 import { computed, onMounted, ref, watch } from "vue";
 import SpeedrundleRecord from "./records/SpeedrundleRecord.vue";
 import SpeedrundleRecordDetails from "./records/SpeedrundleRecordDetails.vue";
-import { IGameRecord, ISpeedrundleRecord, IUndercoverRecord } from "@/modules/auth/gameRecords";
+import { IGameRecord, ISpeedrundleRecord, IUndercoverRecord, IWerewolvesRecord } from "@/modules/auth/gameRecords";
 import { useIntersectionObserver } from '@vueuse/core';
 //@ts-ignore
 import Loader from "@/components/Loader.vue";
@@ -73,6 +75,8 @@ import ConfigModal from '@/components/config/ConfigModal.vue';
 import { IRoomConfig } from '@/types/interfaces';
 import GameSelector from "@/components/filters/games/GameSelector.vue";
 import { IOption } from "@/components/filters/games/game-filters.types";
+import WerewolvesRecord from "./records/WerewolvesRecord.vue";
+import WerewolvesRecordDetails from "./records/WerewolvesRecordDetails.vue";
 
 const authStore = useAuthStore();
 const gameRecords = computed<IGameRecord[]>(() => authStore.gameRecords || []);
