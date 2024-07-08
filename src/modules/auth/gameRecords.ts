@@ -2,9 +2,14 @@ import {
   ICharacter,
   IColumn,
   ISpeedrundleAnswer,
+  ISpeedrundleConfig,
 } from "@/components/games/speedrundle/speedrundle.types";
 import { IMinifiedUser } from "./user";
-import { IUndercoverVote, IUndercoverWords } from "@/components/games/undercover/undercover.types";
+import {
+  IUndercoverConfig,
+  IUndercoverVote,
+  IUndercoverWords,
+} from "@/components/games/undercover/undercover.types";
 
 export interface IGameRecord {
   _id: string;
@@ -13,6 +18,7 @@ export interface IGameRecord {
   usersData: IMinifiedUser[];
   createdAt: Date;
   updatedAt: Date;
+  config: Record<string, any>;
 }
 
 export interface ISpeedrundleRecord extends IGameRecord {
@@ -20,6 +26,7 @@ export interface ISpeedrundleRecord extends IGameRecord {
   charactersToGuess: string[];
   usersAnswers: ISpeedrundleAnswer[];
   charactersData: Partial<ICharacter>[];
+  config: ISpeedrundleConfig;
 }
 
 export interface IUndercoverRecord extends IGameRecord {
@@ -29,7 +36,7 @@ export interface IUndercoverRecord extends IGameRecord {
   spyWord: string;
   undercoverPlayerIds: string[];
   campWin: string;
+  config: IUndercoverConfig;
 }
-
 
 export type GameRecord = IGameRecord | ISpeedrundleRecord | IUndercoverRecord;

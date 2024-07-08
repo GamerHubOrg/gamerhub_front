@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ISpeedrundleRecord } from '@/modules/auth/gameRecords';
+import {  ISpeedrundleRecord } from '@/modules/auth/gameRecords';
 import { useAuthStore } from '@/modules/auth/auth.store';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
