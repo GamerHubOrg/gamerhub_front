@@ -94,7 +94,6 @@
           <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.kill)" :role="getPlayerRole(currentTurnHunterKill?.kill)" />
         </div>
 
-        {{ villageMostVotedPlayer }}
         <!-- Couple dead day row -->
         <div v-if="isCoupleDeadByDay" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="getPlayer(couplePlayerDead)" :role="getPlayerRole(couplePlayerDead)" /> 
