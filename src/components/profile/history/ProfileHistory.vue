@@ -45,6 +45,7 @@ import SpeedrundleRecord from "./records/SpeedrundleRecord.vue";
 import SpeedrundleRecordDetails from "./records/SpeedrundleRecordDetails.vue";
 import { ISpeedrundleRecord, IUndercoverRecord } from "@/modules/auth/gameRecords";
 import { useIntersectionObserver } from '@vueuse/core';
+//@ts-ignore
 import Loader from "@/components/Loader.vue";
 import UndercoverRecord from "./records/UndercoverRecord.vue";
 import UndercoverRecordDetails from "./records/UndercoverRecordDetails.vue";
