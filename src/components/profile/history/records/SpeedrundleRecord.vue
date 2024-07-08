@@ -1,6 +1,6 @@
 <template>
     <div class="flex max-[800px]:flex-col w-full h-full min-[801px]:gap-5 relative after:absolute after:left-0 after:top-0 after:h-full after:w-2 after:bg-white"
-        :class="{ 'after:bg-red-500': currentRank?.totalScore === 0, 'after:bg-yellow-500': currentRank?.rank === 1, 'after:bg-gray-300': currentRank?.rank === 2, 'after:bg-yellow-600': currentRank?.rank === 3 }">
+        :class="{ 'after:bg-yellow-500': currentRank?.rank === 1, 'after:bg-gray-300': currentRank?.rank === 2, 'after:bg-yellow-600': currentRank?.rank === 3, 'after:!bg-red-500': currentRank?.totalScore === 0 }">
         <div class="flex relative main">
             <div
                 class="text-xs min-[801px]:text-base flex h-full justify-between py-2 px-6 max-[800px]:items-center max-[800px]:w-full max-[800px]:justify-between min-[801px]:flex-col min-[801px]:w-[200px]">
