@@ -69,11 +69,9 @@ export const useAuthStore = defineStore("auth", {
       await api.put(`/users/password/${this.currentUser?._id}`, {oldPassword, newPassword, newPasswordConfirm } )
     },
     async deleteUser({password} : any) {
-      await api.post(`/users/delete/${this.currentUser?._id}`, {password} ).then(()=>{
-        this.currentUser = undefined;
-        this.authToken = undefined;
-      })
-
+      await api.post(`/users/delete/${this.currentUser?._id}`, {password})
+      this.currentUser = undefined;
+      this.authToken = undefined;
     }
     async fetchGameRecords(offset: number, limit: number) {
       if(this.totalRecords && this.totalRecords === this.gameRecords?.length) return;

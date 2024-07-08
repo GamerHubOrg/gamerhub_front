@@ -6,8 +6,8 @@
 
     <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full mr-16 ml-16">
       <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
-        :options="filteredCharacters" class="z-20" />
-      <Button type="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
+        :options="filteredCharacters" />
+      <Button color="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
       <div class="w-full max-xl:h-[370px] max-xl:overflow-y-auto overflow-x-auto">
         <table class=" bg-dark2 w-full border-spacing-0 border-collapse">
           <thead class="sticky bg-dark2 top-[-1px] gap-0 z-10 p-0">

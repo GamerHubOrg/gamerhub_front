@@ -52,14 +52,6 @@ import { toast } from 'vue3-toastify';
 const store = useAuthStore();
 const router = useRouter();
 
-// if(router.query.param){
-//   const param = router.query.param;
-//   console.log(param);
-//   if (param == 'userDeleted') {
-    
-//   }
-// }
-
 const form = ref({
   email: undefined,
   password: undefined

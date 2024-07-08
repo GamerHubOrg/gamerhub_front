@@ -161,7 +161,7 @@
               </td>
               <td class="py-2 font-semibold table-cell">
                 <div class="flex text-xs">
-                  <Button type="primary">Jouer</Button>
+                  <Button color="primary">Jouer</Button>
                 </div>
               </td>
             </tr>

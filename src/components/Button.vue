@@ -23,7 +23,7 @@ const props = defineProps({
     type: Boolean,
     required: false
   },
-  type: {
+  color: {
     type: String,
     validator: (val: string) => ['primary', 'secondary', 'classic', 'danger'].includes(val),
     default: 'classic',
@@ -43,11 +43,11 @@ const props = defineProps({
 
 const buttonClass = computed(() => {
   let classes: Record<string, boolean> = {
-    'relative inline-flex items-center justify-center gap-1 bg-primary px-3 py-0.5 hover:brightness-[85%] duration-200': props.type === 'primary',
-    'relative inline-flex items-center justify-center gap-1 bg-secondary px-3 py-0.5 hover:brightness-[85%] duration-200': props.type === 'secondary',
-    'relative inline-flex items-center justify-center gap-1 px-3 py-0.5 hover:bg-zinc-800 duration-200': props.type === 'classic',
-    'relative inline-flex items-center justify-center gap-1 bg-red-600 px-3 py-0.5': props.type === 'danger',
-    'bg-zinc-800' : props.type === 'classic' && props.selected,
+    'relative inline-flex items-center justify-center gap-1 bg-primary px-3 py-0.5 hover:brightness-[85%] duration-200': props.color === 'primary',
+    'relative inline-flex items-center justify-center gap-1 bg-secondary px-3 py-0.5 hover:brightness-[85%] duration-200': props.color === 'secondary',
+    'relative inline-flex items-center justify-center gap-1 px-3 py-0.5 hover:bg-zinc-800 duration-200': props.color === 'classic',
+    'relative inline-flex items-center justify-center gap-1 bg-red-600 px-3 py-0.5': props.color === 'danger',
+    'bg-zinc-800' : props.color === 'classic' && props.selected,
   }
   classes = {
     ...classes,

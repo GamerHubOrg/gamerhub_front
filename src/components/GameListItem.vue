@@ -11,7 +11,8 @@
           <p class="gameInfosShadow">{{ nbPlayers }} players</p>
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
-        <Button v-if="!disabled && !roomId" type="primary" shape="squared" @click="handleCreateRoom">
+
+        <Button v-if="!roomId" color="primary" shape="squared" @click="handleCreateRoom">
           Create room
         </Button>
         <span v-else-if="disabled" class='gameInfosShadow absolute top-1/2 left-1/2 -translate-x-1/2 p-3 text-center'>
