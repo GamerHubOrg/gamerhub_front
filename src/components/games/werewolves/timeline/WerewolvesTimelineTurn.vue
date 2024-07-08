@@ -94,10 +94,11 @@
           <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.kill)" :role="getPlayerRole(currentTurnHunterKill?.kill)" />
         </div>
 
+        {{ villageMostVotedPlayer }}
         <!-- Couple dead day row -->
         <div v-if="isCoupleDeadByDay" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="getPlayer(couplePlayerDead)" :role="getPlayerRole(couplePlayerDead)" /> 
-          <span>est mort. Dans un élan de chagrin, </span>
+          <span>est mort par le village. Dans un élan de chagrin, </span>
           <WerewolvesPlayerName :user="getPlayer(otherCouplePlayer)" :role="getPlayerRole(otherCouplePlayer)" />
           <span>se donne la mort</span>
         </div>
@@ -184,15 +185,13 @@ const swapedUser = computed(() => {
 
 const hasWitchKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnWitchKill.value?.kill as string));
 const hasHunterKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnHunterKill.value?.kill as string));
-const isCoupleDeadByNight = computed(() => hasWitchKilledCouple.value || currentTurnWolvesVotes.value.some((v) => props.gameData.couple?.includes(v.vote)))
-const isCoupleDeadByDay = computed(() => currentTurnVillagerVotes.value.some((v) => props.gameData.couple?.includes(v.vote)) || hasHunterKilledCouple.value);
+const isCoupleDeadByNight = computed(() => hasWitchKilledCouple.value || props.gameData.couple?.includes(wolvesMostVotedPlayer.value?.vote))
+const isCoupleDeadByDay = computed(() => hasHunterKilledCouple.value || props.gameData.couple?.includes(villageMostVotedPlayer.value?.vote));
 const couplePlayerDead = computed(() => {
   if (hasWitchKilledCouple.value) return currentTurnWitchKill.value?.kill;
   if (hasHunterKilledCouple.value) return currentTurnHunterKill.value?.kill;
-  const wolvesVoteCouple = currentTurnWolvesVotes.value.find((v) => props.gameData.couple?.includes(v.vote));
-  if (wolvesVoteCouple) return wolvesVoteCouple.vote;
-  const villagerVoteCouple = currentTurnVillagerVotes.value.find((v) => props.gameData.couple?.includes(v.vote));
-  if (villagerVoteCouple) return villagerVoteCouple.vote;
+  if (isCoupleDeadByNight) return wolvesMostVotedPlayer.value?.vote;
+  if (isCoupleDeadByDay) return villageMostVotedPlayer.value?.vote;
 });
 const otherCouplePlayer = computed(() => props.gameData.couple?.find((userId: string) => userId !== couplePlayerDead.value));
 const isCoupleDead = computed(() => isCoupleDeadByDay.value || isCoupleDeadByNight.value);
