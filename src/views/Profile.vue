@@ -127,7 +127,6 @@ import ProfileHistory from '@/components/profile/history/ProfileHistory.vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-
 const router = useRouter();
 const authStore = useAuthStore();
 
