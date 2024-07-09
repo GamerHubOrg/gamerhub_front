@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/modules/auth/auth.store";
 import { IRoomConfig } from '@/types/interfaces';
-import { computed, ref, watch, onMounted, toRaw } from "vue";
+import { computed, ref, watch, onMounted } from "vue";
 import { useSocketStore } from "../modules/socket/socket.store";
 import { useRouter } from "vue-router";
 import UndercoverConfig from "@/components/games/undercover/UndercoverConfig.vue";
@@ -24,11 +24,7 @@ const createGame = ref<string>("undercover");
 const joinRoom = ref<string>("");
 const updateGame = ref<string>("");
 
-const config = computed(() => {
-  // debugger;
-  
-  return data.value.config ?? {}
-});
+const config = computed(() => data.value.config ?? {});
 const currentUser = computed(() => store.getCurrentUser);
 const roomUsers = computed(() => data.value?.users ?? []);
 const isChangingConfig = ref(false);
