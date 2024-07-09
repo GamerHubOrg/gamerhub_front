@@ -4,7 +4,7 @@
           <label for="mode">Composition</label>
           <div class="bg-dark1 rounded-lg p-3 grid grid-cols-3 gap-6 mt-2">
             <div v-for="role in Object.values(rolesList)" :key="role" class="w-full flex flex-col items-center">
-              <span class="text-sm">{{ rolesList[role] }}</span>
+              <span class="text-sm">{{ rolesList[role as keyof object] }}</span>
               <img :src="`/images/werewolves/icons/${role}.png`" class="w-24">
               <div class="flex flex-row items-center justify-center gap-1 bg-gray-600 p-1 rounded w-full">
                 <button 

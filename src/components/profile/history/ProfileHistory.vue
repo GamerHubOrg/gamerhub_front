@@ -15,7 +15,7 @@
       </div>
     </div>
     <div :id="'record-' + i" v-for="record, i in filteredRecords" :key="record._id" class="flex flex-col gap-2">
-      <div class="flex rounded bg-lightgrey w-full h-[120px] min-[800px]:h-[110px] overflow-hidden">
+      <div class="flex rounded bg-lightgrey w-full h-[142px] min-[800px]:h-[110px] overflow-hidden">
         <SpeedrundleRecord v-if="record.gameName === 'speedrundle'" :id="'record-' + i"
           :record="(record as ISpeedrundleRecord)" />
         <UndercoverRecord v-else-if="record.gameName === 'undercover'" :record="(record as IUndercoverRecord)" />
