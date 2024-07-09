@@ -4,7 +4,7 @@
       <div class="flex flex-col items-center relative">
         <div class="w-full">
           <div
-            class="my-2 p-1 flex border border-gray-700 bg-gray-800 rounded"
+            class="my-2 p-1 flex border border-dark5 bg-dark2 rounded"
           >
             <div class="flex flex-auto flex-wrap">
               <div
@@ -39,7 +39,7 @@
               </div>
             </div>
             <div
-              class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-700"
+              class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-dark5"
             >
               <button
                 class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none"
@@ -68,13 +68,13 @@
         </div>
         <div
           v-if="!isMenuCollapsed"
-          class="absolute shadow top-100 bg-gray-800 z-40 w-full lef-0 rounded max-h-select overflow-y-auto"
+          class="absolute shadow top-100 bg-dark2 z-40 w-full lef-0 rounded max-h-select overflow-y-auto"
         >
           <div class="flex flex-col w-full">
             <div
               v-for="option in options"
               :key="option.value"
-              class="cursor-pointer w-full border-gray-700 rounded-t border-b hover:bg-gray-600"
+              class="cursor-pointer w-full border-dark5 rounded-t border-b hover:bg-dark5"
               @click="() => selectOption(option)"
             >
               <div

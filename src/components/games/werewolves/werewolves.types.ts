@@ -48,15 +48,15 @@ export enum EWerewolvesRoleName {
 export type ILinkedWerewolfRoles = Record<string, WerewolfRole>;
 
 export interface IWerewolvesGameData extends IGameData {
-  wolfVotes: IWerewolvesVote[];
-  villageVotes: IWerewolvesVote[];
-  tmpVotes: Partial<IWerewolvesVote>[];
-  witchSaves?: IWerewolvesSave[];
-  witchKills?: IWerewolvesKill[];
-  hunterKills?: IWerewolvesKill[];
+  wolfVotes: IWerewolvesTarget[];
+  villageVotes: IWerewolvesTarget[];
+  tmpVotes: Partial<IWerewolvesTarget>[];
+  witchSaves?: IWerewolvesTarget[];
+  witchKills?: IWerewolvesTarget[];
+  hunterKills?: IWerewolvesTarget[];
   thiefUsers?: string[];
   couple?: IWerewolvesCouple;
-  psychicWatch?: IWerewolvesWatchRole[];
+  psychicWatch?: IWerewolvesTarget[];
   roles: ILinkedWerewolfRoles;
   swapedRoles?: ILinkedWerewolfRoles;
   roleTurn?: EWerewolvesRoleName | 'Village';
@@ -68,26 +68,8 @@ export interface IWerewolvesGameData extends IGameData {
 
 export type IWerewolvesCouple = string[];
 
-export interface IWerewolvesVote {
+export interface IWerewolvesTarget {
   playerId: string;
-  vote: string;
-  turn: number;
-}
-
-export interface IWerewolvesWatchRole {
-  playerId: string;
-  turn: number;
-  watch: string;
-}
-
-export interface IWerewolvesSave {
-  playerId: string;
-  save: string;
-  turn: number;
-}
-
-export interface IWerewolvesKill {
-  playerId: string;
-  kill: string;
+  target: string;
   turn: number;
 }

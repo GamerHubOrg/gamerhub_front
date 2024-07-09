@@ -47,6 +47,6 @@ const gameRoles = computed(() => roomData.value.gameData?.roles || {});
 const usersIds = computed(() => roomData.value.gameData?.thiefUsers);
 
 function handleChooseRole(userId: string) {
-    socket.value?.emit('game:werewolves:thief:choose', { roomId: roomId.value, userId: currentUser.value?._id , swap: userId });
+    socket.value?.emit('game:werewolves:thief:choose', { roomId: roomId.value, userId: currentUser.value?._id , target: userId });
 }
 </script>

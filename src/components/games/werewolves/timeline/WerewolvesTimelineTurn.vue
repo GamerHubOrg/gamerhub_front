@@ -39,27 +39,27 @@
         <div v-if="hasPsychicPlayed" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="psychicUser" :role="getPlayerRole(psychicUser?._id)" /> 
           <span>a regardé le role de</span>
-          <WerewolvesPlayerName :user="getPlayer(currentTurnPsychicWatch?.watch)" :role="getPlayerRole(currentTurnPsychicWatch?.watch)" />
+          <WerewolvesPlayerName :user="getPlayer(currentTurnPsychicWatch?.target)" :role="getPlayerRole(currentTurnPsychicWatch?.target)" />
         </div>
 
         <!-- Wolves row -->
         <div v-if="hasWolvesVoted && wolvesMostVotedPlayer" class="flex flex-row items-center gap-1">
           <span>Les loups ont décidés de tuer</span>
-          <WerewolvesPlayerName :user="getPlayer(wolvesMostVotedPlayer.vote)" :role="getPlayerRole(wolvesMostVotedPlayer.vote)" /> 
+          <WerewolvesPlayerName :user="getPlayer(wolvesMostVotedPlayer.target)" :role="getPlayerRole(wolvesMostVotedPlayer.target)" /> 
         </div>
 
         <!-- Witch kill row -->
         <div v-if="hasWitchKilled" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="witchUser" :role="getPlayerRole(witchUser?._id)" /> 
           <span>utilisé une potion pour tuer</span>
-          <WerewolvesPlayerName :user="getPlayer(currentTurnWitchKill?.kill)" :role="getPlayerRole(currentTurnWitchKill?.kill)" />
+          <WerewolvesPlayerName :user="getPlayer(currentTurnWitchKill?.target)" :role="getPlayerRole(currentTurnWitchKill?.target)" />
         </div>
 
         <!-- Witch save row -->
         <div v-if="hasWitchSaved" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="witchUser" :role="getPlayerRole(witchUser?._id)" /> 
           <span>utilisé une potion pour sauver</span>
-          <WerewolvesPlayerName :user="getPlayer(currentTurnWitchSave?.save)" :role="getPlayerRole(currentTurnWitchSave?.save)" />
+          <WerewolvesPlayerName :user="getPlayer(currentTurnWitchSave?.target)" :role="getPlayerRole(currentTurnWitchSave?.target)" />
         </div>
       </div>
 
@@ -74,24 +74,24 @@
         </div>
 
         <!-- Night Hunter row -->
-        <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.vote !== hunterUser?._id" class="flex flex-row items-center gap-1">
+        <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.target !== hunterUser?._id" class="flex flex-row items-center gap-1">
           <span>Le chasseur est mort durant la nuit.</span>
           <WerewolvesPlayerName :user="hunterUser" :role="getPlayerRole(hunterUser?._id)" /> 
           <span>a tiré sur</span>
-          <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.kill)" :role="getPlayerRole(currentTurnHunterKill?.kill)" />
+          <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.target)" :role="getPlayerRole(currentTurnHunterKill?.target)" />
         </div>
 
         <!-- Villages row -->
         <div v-if="hasVillageVoted && villageMostVotedPlayer" class="flex flex-row items-center gap-1">
           <span>Les villageois ont décidés de tuer</span>
-          <WerewolvesPlayerName :user="getPlayer(villageMostVotedPlayer.vote)" :role="getPlayerRole(villageMostVotedPlayer.vote)" /> 
+          <WerewolvesPlayerName :user="getPlayer(villageMostVotedPlayer.target)" :role="getPlayerRole(villageMostVotedPlayer.target)" /> 
         </div>
 
         <!-- Day Hunter row -->
-        <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.vote === hunterUser?._id" class="flex flex-row items-center gap-1">
+        <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.target === hunterUser?._id" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="hunterUser" :role="getPlayerRole(hunterUser?._id)" /> 
           <span>a tiré sur</span>
-          <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.kill)" :role="getPlayerRole(currentTurnHunterKill?.kill)" />
+          <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.target)" :role="getPlayerRole(currentTurnHunterKill?.target)" />
         </div>
 
         <!-- Couple dead day row -->
@@ -108,7 +108,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
-import { EWerewolvesRoleName, IWerewolvesGameData, IWerewolvesVote } from "../werewolves.types";
+import { EWerewolvesRoleName, IWerewolvesGameData, IWerewolvesTarget } from "../werewolves.types";
 import WerewolvesPlayerName from './WerewolvesPlayerName.vue';
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
 
@@ -142,10 +142,10 @@ const witchUser = computed(() => {
 
 const currentTurnWolvesVotes = computed(() => props.gameData.wolfVotes?.filter((w) => w.turn === props.turn) || [])
 const hasWolvesVoted = computed(() => currentTurnWolvesVotes.value.length > 0);
-const wolvesMostVotedPlayer = currentTurnWolvesVotes.value.reduce((acc: any, vote: IWerewolvesVote) => {
-  const voteNumber = currentTurnWolvesVotes.value.filter((v) => v.vote === vote.vote).length;
+const wolvesMostVotedPlayer = currentTurnWolvesVotes.value.reduce((acc: any, vote: IWerewolvesTarget) => {
+  const voteNumber = currentTurnWolvesVotes.value.filter((v) => v.target === vote.target).length;
   if (!acc) return undefined
-  if (acc.count > 0 && acc.count === voteNumber && acc.vote !== vote.vote) return undefined;
+  if (acc.count > 0 && acc.count === voteNumber && acc.target !== vote.target) return undefined;
   return acc.count > voteNumber ? acc : { ...vote, count: voteNumber };
   }, { count: 0 })
 
@@ -158,10 +158,10 @@ const hunterUser = computed(() => {
 
 const currentTurnVillagerVotes = computed(() => props.gameData.villageVotes?.filter((w) => w.turn === props.turn) || []);
 const hasVillageVoted = computed(() => currentTurnVillagerVotes.value.length > 0);
-const villageMostVotedPlayer = currentTurnVillagerVotes.value.reduce((acc: any, vote: IWerewolvesVote) => {
-  const voteNumber = currentTurnVillagerVotes.value.filter((v) => v.vote === vote.vote).length;
+const villageMostVotedPlayer = currentTurnVillagerVotes.value.reduce((acc: any, vote: IWerewolvesTarget) => {
+  const voteNumber = currentTurnVillagerVotes.value.filter((v) => v.target === vote.target).length;
   if (!acc) return undefined
-  if (acc.count > 0 && acc.count === voteNumber && acc.vote !== vote.vote) return undefined;
+  if (acc.count > 0 && acc.count === voteNumber && acc.target !== vote.target) return undefined;
   return acc.count > voteNumber ? acc : { ...vote, count: voteNumber };
 }, { count: 0 })
 
@@ -182,15 +182,15 @@ const swapedUser = computed(() => {
   return gameUsers.value.find((u) => u._id === userId);
 });
 
-const hasWitchKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnWitchKill.value?.kill as string));
-const hasHunterKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnHunterKill.value?.kill as string));
-const isCoupleDeadByNight = computed(() => hasWitchKilledCouple.value || props.gameData.couple?.includes(wolvesMostVotedPlayer.value?.vote))
-const isCoupleDeadByDay = computed(() => hasHunterKilledCouple.value || props.gameData.couple?.includes(villageMostVotedPlayer.value?.vote));
+const hasWitchKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnWitchKill.value?.target as string));
+const hasHunterKilledCouple = computed(() => props.gameData.couple?.includes(currentTurnHunterKill.value?.target as string));
+const isCoupleDeadByNight = computed(() => hasWitchKilledCouple.value || props.gameData.couple?.includes(wolvesMostVotedPlayer.value?.target))
+const isCoupleDeadByDay = computed(() => hasHunterKilledCouple.value || props.gameData.couple?.includes(villageMostVotedPlayer.value?.target));
 const couplePlayerDead = computed(() => {
-  if (hasWitchKilledCouple.value) return currentTurnWitchKill.value?.kill;
-  if (hasHunterKilledCouple.value) return currentTurnHunterKill.value?.kill;
-  if (isCoupleDeadByNight) return wolvesMostVotedPlayer.value?.vote;
-  if (isCoupleDeadByDay) return villageMostVotedPlayer.value?.vote;
+  if (hasWitchKilledCouple.value) return currentTurnWitchKill.value?.target;
+  if (hasHunterKilledCouple.value) return currentTurnHunterKill.value?.target;
+  if (isCoupleDeadByNight) return wolvesMostVotedPlayer.value?.target;
+  if (isCoupleDeadByDay) return villageMostVotedPlayer.value?.target;
 });
 const otherCouplePlayer = computed(() => props.gameData.couple?.find((userId: string) => userId !== couplePlayerDead.value));
 const isCoupleDead = computed(() => isCoupleDeadByDay.value || isCoupleDeadByNight.value);

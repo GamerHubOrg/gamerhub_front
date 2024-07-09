@@ -8,7 +8,7 @@ interface SocketState {
   roomId: string;
   data: Partial<IRoomData>;
   socket: Socket<any, any> | undefined;
-  liveGames: Partial<IRoomData>[];
+  liveGames: any[];
 }
 
 const URL = import.meta.env.VITE_API_URL;

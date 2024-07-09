@@ -37,6 +37,6 @@ const gameRoles = computed(() => roomData.value.gameData?.roles || {});
 const aliveUsers = computed(() => roomData.value.users.filter((u) => gameRoles.value[u._id].isAlive));
 
 function handleConfirmVote(vote: string) {
-    socket.value?.emit('game:werewolves:village:vote', { roomId: roomId.value, userId: currentUser.value?._id, vote });
+    socket.value?.emit('game:werewolves:village:vote', { roomId: roomId.value, userId: currentUser.value?._id, target: vote });
 }
 </script>

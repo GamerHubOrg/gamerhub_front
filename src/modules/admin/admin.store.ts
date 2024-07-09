@@ -26,6 +26,13 @@ export const useAdminStore = defineStore("admin", {
     setUsers(users: IUsersList) {
       this.users = users;
     },
+    addUsers(users: IUsersList) {
+      this.users.total = users.total;
+      this.users.list = [
+        ...this.users.list,
+        ...users.list
+      ]
+    },
     async fetchUsers({ offset, limit }: { offset?: number, limit?: number }) {
       if (this.users.total && this.users.total === this.users.list?.length) return;
 
@@ -35,7 +42,7 @@ export const useAdminStore = defineStore("admin", {
           limit,
         },
       });
-      this.setUsers(data);
+      this.addUsers(data);
     },
     async updateUser({ _id: userId, email, username, picture, roles, subscribedAt }: Partial<User>) {
         const { data: updatedUser } = await api.patch(`/admin/users/${userId}`, { email, username, picture, roles, subscribedAt });

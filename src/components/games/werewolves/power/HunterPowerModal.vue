@@ -51,7 +51,7 @@ const gameRoles = computed(() => roomData.value.gameData?.roles || {});
 const users = computed(() => roomData.value.users.filter((u) => gameRoles.value[u._id].isAlive));
 
 function handleKillPlayer(userId: string) {
-    socket.value?.emit('game:werewolves:hunter:kill', { roomId: roomId.value, userId: currentUser.value?._id, kill: userId });
+    socket.value?.emit('game:werewolves:hunter:kill', { roomId: roomId.value, userId: currentUser.value?._id, target: userId });
 }
 </script>
 

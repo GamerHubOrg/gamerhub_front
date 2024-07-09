@@ -12,7 +12,7 @@
           type="text"
           id="username"
           placeholder="johndoe"
-          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-gray-700 bg-gray-800 text-white"
+          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-dark5 bg-dark2 text-white"
         />
       </div>
 
@@ -26,7 +26,7 @@
           type="email"
           id="email"
           placeholder="john@doe.com"
-          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-gray-700 bg-gray-800 text-white"
+          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-dark5 bg-dark2 text-white"
         />
       </div>
 
@@ -41,7 +41,7 @@
           v-model="userForm.subscribedAt"
           type="date"
           id="subscribedAt"
-          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-gray-700 bg-gray-800 text-white"
+          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-dark5 bg-dark2 text-white"
         />
       </div>
 
@@ -54,7 +54,7 @@
           v-model="userForm.picture"
           type="text"
           id="picture"
-          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-gray-700 bg-gray-800 text-white"
+          class="mt-1 w-full rounded-md shadow-sm sm:text-sm border-dark5 bg-dark2 text-white"
         />
       </div>
 

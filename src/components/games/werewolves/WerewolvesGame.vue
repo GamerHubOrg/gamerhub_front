@@ -74,7 +74,7 @@ const showDisplayRoleDialog = ref(false);
 
 function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const psychicWatch = gameData.value?.psychicWatch || [];
-  const isRoleDiscovered = psychicWatch.find((pw) => pw.watch === user._id);
+  const isRoleDiscovered = psychicWatch.find((pw) => pw.target === user._id);
   const isPlayerDead = !gameRoles.value[user!._id]?.isAlive;
   const gameTurn = gameData.value?.turn || 0;
   const arePlayersWolves = gameTurn > 0 && currentUserRole.value?.name === 'Loup' && gameRoles.value[user!._id]?.name === 'Loup';

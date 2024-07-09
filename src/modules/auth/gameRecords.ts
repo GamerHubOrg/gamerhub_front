@@ -10,7 +10,7 @@ import {
   IUndercoverVote,
   IUndercoverWords,
 } from "@/components/games/undercover/undercover.types";
-import { IWerewolvesVote, IWerewolvesSave, IWerewolvesKill, IWerewolvesWatchRole, ILinkedWerewolfRoles, IWerewolvesCamp, IWerewolvesConfig } from "@/components/games/werewolves/werewolves.types";
+import { IWerewolvesTarget, ILinkedWerewolfRoles, IWerewolvesCamp, IWerewolvesConfig } from "@/components/games/werewolves/werewolves.types";
 
 export interface IGameRecord {
   _id: string;
@@ -41,12 +41,12 @@ export interface IUndercoverRecord extends IGameRecord {
 }
 
 export interface IWerewolvesRecord extends IGameRecord {
-  wolfVotes?: IWerewolvesVote[];
-  villageVotes?: IWerewolvesVote[];
-  witchSaves?: IWerewolvesSave[];
-  witchKills?: IWerewolvesKill[];
-  hunterKills?: IWerewolvesKill[];
-  psychicWatch?: IWerewolvesWatchRole[];
+  wolfVotes?: IWerewolvesTarget[];
+  villageVotes?: IWerewolvesTarget[];
+  witchSaves?: IWerewolvesTarget[];
+  witchKills?: IWerewolvesTarget[];
+  hunterKills?: IWerewolvesTarget[];
+  psychicWatch?: IWerewolvesTarget[];
   roles: ILinkedWerewolfRoles;
   swapedRoles?: ILinkedWerewolfRoles;
   thiefUsers?: string[];
@@ -55,6 +55,5 @@ export interface IWerewolvesRecord extends IGameRecord {
   usersThatPlayed?: string[];
   config: IWerewolvesConfig;
 }
-
 
 export type GameRecord = IGameRecord | ISpeedrundleRecord | IUndercoverRecord;

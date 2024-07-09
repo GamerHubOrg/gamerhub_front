@@ -11,13 +11,13 @@
 
         <div class="flex flex-col mt-3 gap-2">
             <span v-for="vote in tmpVotes" :key="vote.playerId">
-                {{ getPlayerName(vote.playerId) }} want to vote for {{ getPlayerName(vote.vote) }}
+                {{ getPlayerName(vote.playerId) }} want to vote for {{ getPlayerName(vote.target) }}
             </span>
         </div>
 
         <div class="flex flex-col mt-3 gap-2">
             <span v-for="vote in votes" :key="vote.playerId">
-                {{ getPlayerName(vote.playerId) }} voted for {{ getPlayerName(vote.vote) }}
+                {{ getPlayerName(vote.playerId) }} voted for {{ getPlayerName(vote.target) }}
             </span>
         </div>
 
@@ -81,17 +81,17 @@ function getPlayerName(userId?: string) {
 
 function handleSendVote() {
     const userVote = tmpVotes.value.find((v) => v.playerId === currentUser.value?._id);
-    emit('vote', userVote?.vote)
+    emit('vote', userVote?.target)
 }
 
 function handleSendVoteProposition(userId: string) {
-    const alreadyVotedUser = tmpVotes.value.find((vote) => vote.vote === userId && vote.playerId === currentUser.value?._id)
+    const alreadyVotedUser = tmpVotes.value.find((vote) => vote.target === userId && vote.playerId === currentUser.value?._id)
     if (alreadyVotedUser) {
-        socket.value?.emit('game:werewolves:vote:tmp', { roomId: roomId.value, userId: currentUser.value?._id, vote: undefined });
+        socket.value?.emit('game:werewolves:vote:tmp', { roomId: roomId.value, userId: currentUser.value?._id, target: undefined });
         return;
     }
 
-    socket.value?.emit('game:werewolves:vote:tmp', { roomId: roomId.value, userId: currentUser.value?._id, vote: userId });
+    socket.value?.emit('game:werewolves:vote:tmp', { roomId: roomId.value, userId: currentUser.value?._id, target: userId });
 }
 </script>
 
