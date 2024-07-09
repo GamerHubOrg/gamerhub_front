@@ -2,118 +2,88 @@
   <div>
     <div>
       <h2 class="text-3xl font-bold tracki text-center mt-12 sm:text-5xl">
-        Pricing
+        {{ $t("premium.title") }}
       </h2>
       <p class="max-w-3xl mx-auto mt-4 text-xl text-center">
-        Get started on our free plan and upgrade when you are ready.
+        {{ $t("premium.getStarted") }}
       </p>
     </div>
-    <div
-      class="mt-24 container space-y-12 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-x-8"
-    >
-      <div
-        class="relative p-8 border border-gray-200 rounded-2xl shadow-sm flex flex-col"
-      >
+    <div class="mt-24 container space-y-12 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-x-8">
+      <div class="relative p-8 border border-gray-200 rounded-2xl shadow-sm flex flex-col">
         <div class="flex-1">
-          <h3 class="text-xl font-semibold">Free</h3>
+          <h3 class="text-xl font-semibold">{{ $t("premium.plans.free.name") }}</h3>
           <p class="mt-4 flex items-baseline">
-            <span class="text-5xl font-extrabold tracking-tight">0€</span
-            ><span class="ml-1 text-xl font-semibold">/month</span>
+            <span class="text-5xl font-extrabold tracking-tight">0 €</span><span class="ml-1 text-xl font-semibold">/{{
+              $t("premium.month") }}</span>
           </p>
-          <p class="mt-6">You just want to discover</p>
+          <p class="mt-6">{{ $t("premium.plans.free.description") }}</p>
           <ul role="list" class="mt-6 space-y-6">
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Access published games</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.accessGames") }}</span>
             </li>
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Play default gamemodes</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.defaultModes") }}</span>
             </li>
             <li class="flex">
-              <XMarkIcon class="flex-shrink-0 w-6 h-6 text-red-400" /><span
-                class="ml-3"
-                >Extensive customization of game settings</span
-              >
+              <XMarkIcon class="flex-shrink-0 w-6 h-6 text-red-400" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.custom") }}</span>
             </li>
             <li class="flex">
-              <XMarkIcon class="flex-shrink-0 w-6 h-6 text-red-400" /><span
-                class="ml-3"
-                >Beta access to new games</span
-              >
+              <XMarkIcon class="flex-shrink-0 w-6 h-6 text-red-400" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.beta") }}</span>
             </li>
             <li class="flex">
-              <XMarkIcon class="flex-shrink-0 w-6 h-6 text-red-400" /><span
-                class="ml-3"
-                >Publish configs to community</span
-              >
+              <XMarkIcon class="flex-shrink-0 w-6 h-6 text-red-400" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.config") }}</span>
             </li>
           </ul>
         </div>
         <button
-          class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium cursor-not-allowed"
-        >
-          Default plan
+          class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium cursor-not-allowed">
+          {{ $t("premium.plans.free.button") }}
         </button>
       </div>
-      <div
-        class="relative p-8 border border-gray-200 rounded-2xl shadow-sm flex flex-col"
-      >
+      <div class="relative p-8 border border-gray-200 rounded-2xl shadow-sm flex flex-col">
         <div class="flex-1">
-          <h3 class="text-xl font-semibold">Premium</h3>
+          <h3 class="text-xl font-semibold">{{ $t("premium.plans.premium.name") }}</h3>
           <p
-            class="absolute top-0 py-1.5 px-4 bg-emerald-500 text-white rounded-full text-xs font-semibold uppercase tracking-wide transform -translate-y-1/2"
-          >
-            Most popular
+            class="absolute top-0 py-1.5 px-4 bg-emerald-500 text-white rounded-full text-xs font-semibold uppercase tracking-wide transform -translate-y-1/2">
+            {{ $t("premium.mostPopular") }}
           </p>
           <p class="mt-4 flex items-baseline">
-            <span class="text-5xl font-extrabold tracking-tight">99€</span
-            ><span class="ml-1 text-xl font-semibold">/month</span>
+            <span class="text-5xl font-extrabold tracking-tight">99 €</span><span class="ml-1 text-xl font-semibold">/{{
+              $t("premium.month") }}</span>
           </p>
-          <p class="mt-6">You want to have the full experience</p>
+          <p class="mt-6">{{ $t("premium.plans.premium.description") }}</p>
           <ul role="list" class="mt-6 space-y-6">
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Access published games</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.accessGames") }}</span>
             </li>
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Play default gamemodes</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.defaultModes") }}</span>
             </li>
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Extensive customization of game settings</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.custom") }}</span>
             </li>
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Beta access to new games</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.beta") }}</span>
             </li>
             <li class="flex">
-              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span
-                class="ml-3"
-                >Publish configs to community</span
-              >
+              <CheckIcon class="flex-shrink-0 w-6 h-6 text-primary" /><span class="ml-3">{{
+                $t("premium.plansFunctionnalities.config") }}</span>
             </li>
           </ul>
         </div>
         <button
           class="bg-emerald-500 text-white hover:bg-emerald-600 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium disabled:opacity-60 disabled:cursor-not-allowed"
-          :disabled="isAlreadySubscribed"
-          @click="handleStartSubscription"
-        >
-          {{ !isAlreadySubscribed ? 'Choose this plan' : 'Already subscribed' }}
+          :disabled="isAlreadySubscribed" @click="handleStartSubscription">
+          {{ $tc("premium.plans.premium.button", isAlreadySubscribed ? 2 : 1) }}
         </button>
       </div>
     </div>

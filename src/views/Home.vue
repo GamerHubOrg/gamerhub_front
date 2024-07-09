@@ -26,7 +26,6 @@
 
 <script lang="ts" setup>
 import GameListItem from "@/components/GameListItem.vue";
-
 import speedrundleImage from "@/assets/games/speedrundle.webp";
 import werewolvesImage from "@/assets/games/werewolves.webp";
 import undercoverImage from "@/assets/games/undercover.webp";
