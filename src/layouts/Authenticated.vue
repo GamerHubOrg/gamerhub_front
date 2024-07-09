@@ -22,6 +22,7 @@ const gamesStore = useGamesStore();
 const router = useRouter();
 const route = useRoute();
 const routeNeedAuth = computed(() => route.meta?.requireAuth || false);
+const currentUser = computed(() => store.currentUser);
 
 const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
 
@@ -44,7 +45,7 @@ onMounted(async () => {
 watch(
   () => route.fullPath,
   () => {
-    if (routeNeedAuth.value) {
+    if (routeNeedAuth.value && !currentUser.value) {
       router.replace("login");
     }
   }

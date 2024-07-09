@@ -85,8 +85,8 @@ export const useSocketStore = defineStore("socket", {
     handlePromoteUser(userId : string) {
       socket.emit("room:promote", this.roomId,userId)
     },
-    handleKickUser(userId : string) {
-      socket.emit("room:kick", this.roomId, userId)
+    handleKickUser(userId : string, roomId?: string) {
+      socket.emit("room:kick", roomId ?? this.roomId, userId)
     },
   },
 });
