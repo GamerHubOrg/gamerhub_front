@@ -8,6 +8,7 @@ interface SocketState {
   roomId: string;
   data: Partial<IRoomData>;
   socket: Socket<any, any> | undefined;
+  liveGames: Partial<IRoomData>[];
 }
 
 const URL = import.meta.env.VITE_API_URL;
@@ -20,12 +21,14 @@ export const useSocketStore = defineStore("socket", {
       roomId: "",
       data: {},
       socket: undefined,
+      liveGames: [],
     } as SocketState),
   getters: {
     getConnected: (state) => state.connected,
     getRoomId: (state) => state.roomId,
     getRoomData: (state) => state.data,
     getSocket: (state) => state.socket,
+    getLiveGames: (state) => state.liveGames,
   },
   actions: {
     setupSocket() {
@@ -33,6 +36,9 @@ export const useSocketStore = defineStore("socket", {
       socket.on("disconnect", this.onDisconnect);
       socket.on("connect_error", this.onConnectError);
       this.socket = socket;
+    },
+    setLiveGames(games: any) {
+      this.liveGames = games;
     },
     onConnect() {
       console.log("Vous êtes connecté.");
