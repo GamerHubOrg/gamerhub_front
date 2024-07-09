@@ -1,4 +1,4 @@
-import { IGameListItemTranslations } from "@/translations/types/homepage.translations.types";
+import { IGameListItemTranslations } from "@/translations/types/home.translations.types";
 
 const frGameListItemTranslations: IGameListItemTranslations = {
   players: "joueur | joueurs",

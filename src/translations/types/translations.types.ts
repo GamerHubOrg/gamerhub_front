@@ -1,9 +1,17 @@
-import IHomepageTranslations from "./homepage.translations.types";
+import ICommunityTranslations from "./community.translations.types";
+import IHomePageTranslations from "./home.translations.types";
 import INavbarTranslations from "./navbar.translations.types";
+import IPremiumTranslations from "./premium.translations.types";
+import IProfileTranslations from "./profile.translations.types";
+import ISharedTranslations from "./shared.translations.types";
 
 interface ITranslations extends Record<string, any> {
-  homepage: IHomepageTranslations;
+  home: IHomePageTranslations;
   navbar: INavbarTranslations;
+  community: ICommunityTranslations;
+  premium: IPremiumTranslations;
+  shared: ISharedTranslations;
+  profile: IProfileTranslations;
 }
 
 export default ITranslations;
