@@ -4,8 +4,8 @@ export interface IGameListItemTranslations {
   createRoom : string;
 }
 
-interface IHomepageTranslations {
+interface IHomePageTranslations {
   "game-list-item": IGameListItemTranslations;
 }
 
-export default IHomepageTranslations;
+export default IHomePageTranslations;

@@ -1,10 +1,18 @@
 import ITranslations from "../types/translations.types";
-import frHomepageTranslations from "./homepage";
+import frCommunityTranslations from "./community.translations";
+import frHomeTranslations from "./home/home.translations";
 import frNavbarTranslations from "./navbar.translations";
+import frPremiumTranslations from "./premium.translations";
+import frProfileTranslations from "./profile/profile.translations";
+import frSharedTranslations from "./shared.translations";
 
 const frTranslations: ITranslations = {
-  homepage: frHomepageTranslations,
+  home: frHomeTranslations,
   navbar: frNavbarTranslations,
+  community: frCommunityTranslations,
+  premium: frPremiumTranslations,
+  shared: frSharedTranslations,
+  profile: frProfileTranslations,
 };
 
 export default frTranslations;
