@@ -42,17 +42,17 @@
       </div>
     </form>
 
-    <div class="flex justify-center mt-4"> 
+    <div class="flex justify-center mt-4">
       <Button @click="showModalUpdatePassword = true" color="primary">Change password</Button>
     </div>
 
-    <div class="flex justify-center mt-4"> 
+    <div class="flex justify-center mt-4">
       <Button @click="showModalDeleteUser = true" color="danger">Delete account</Button>
     </div>
 
 
     <Modal :open="showModalUpdatePassword" @close="showModalUpdatePassword = false">
-      <form  @submit="handleChangePassword">
+      <form @submit="handleChangePassword">
         <div class="min-w-64">
           <label for="oldPassword" class="block text-sm font-medium leading-6 text-white">Old password</label>
           <div class="mt-2">
@@ -86,12 +86,14 @@
     </Modal>
 
     <Modal :open="showModalDeleteUser" @close="showModalDeleteUser = false">
-      <form  @submit="handleDeleteUser">
+      <form @submit="handleDeleteUser">
         <h3 class="mb-3">Are you sure you want to delete your account ?</h3>
         <div class="min-w-64">
           <label for="oldPassword" class="block text-sm font-medium leading-6 text-white">password</label>
           <div class="mt-2">
-            <input v-model="deletePasswordData" id="oldPassword" name="oldPassword" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 bg-white/5 p-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" />
+            <input v-model="deletePasswordData" id="oldPassword" name="oldPassword" type="password"
+              autocomplete="current-password" required
+              class="block w-full rounded-md border-0 bg-white/5 p-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" />
           </div>
         </div>
 
@@ -114,8 +116,9 @@ import { useRouter } from 'vue-router';
 import Button from '@/components/Button.vue';
 import Tabs from '@/components/Tabs.vue';
 import ProfileHistory from '@/components/profile/history/ProfileHistory.vue';
+import { useI18n } from 'vue-i18n';
 
-
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 
@@ -189,39 +192,24 @@ const handleChangePassword = async (e: Event) => {
 }
 
 const handleDeleteUser = async (e: Event) => {
-  try{
+  try {
     e.preventDefault();
-    await authStore.deleteUser({"password":deletePasswordData.value});
+    await authStore.deleteUser({ "password": deletePasswordData.value });
     showModalDeleteUser.value = false;
     toast('L\'utilisateur à bien été supprimé', {
       autoClose: 3000,
-      type:'success',
+      type: 'success',
       theme: 'dark'
     });
     router.replace('login');
-  }catch(err) {
+  } catch (err) {
     console.error(err);
     toast('Erreur lors de la supression', {
-      type:'error',
+      type: 'error',
       theme: 'dark'
-  });
+    });
   }
 }
-
-const asChange = computed(() => {
-  let isDifferent = false
-  if (user.value.picture !== currentUser.value?.picture) {
-    isDifferent = true;
-  }
-  if (user.value.username !== currentUser.value?.username) {
-    isDifferent = true;
-  }
-  if (user.value.email !== currentUser.value?.email) {
-    isDifferent = true;
-  }
-  return isDifferent
-})
-
 </script>
 
 <style>
