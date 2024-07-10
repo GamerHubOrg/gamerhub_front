@@ -12,7 +12,7 @@
     <form class="space-y-6" @submit="handleChangeUser">
       <div class="flex justify-center items-center flex-col profile-container">
         <div class="min-w-64">
-          <label for="username" class="block text-sm font-medium leading-6 text-white">Username</label>
+          <label for="username" class="block text-sm font-medium leading-6 text-white">{{$t("profile.profileTab.username")}}</label>
           <div class="mt-2">
             <input v-model="user.username" id="username" name="username" type="text" autocomplete="username" required
               class="block w-full rounded-md border-0 bg-white/5 p-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" />
@@ -20,7 +20,7 @@
         </div>
 
         <div class="min-w-64">
-          <label for="email" class="block text-sm font-medium leading-6 text-white">Email address</label>
+          <label for="email" class="block text-sm font-medium leading-6 text-white">{{$t("profile.profileTab.email")}}</label>
           <div class="mt-2">
             <input v-model="user.email" id="email" name="email" type="email" autocomplete="email" required
               class="block w-full rounded-md border-0 bg-white/5 p-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" />
@@ -30,7 +30,7 @@
 
       <div class="flex justify-center gap-4">
         <div class="min-w-64">
-          <label for="imageUrl" class="block text-sm font-medium leading-6 text-white">Url de l'image</label>
+          <label for="imageUrl" class="block text-sm font-medium leading-6 text-white">{{$t("profile.profileTab.imageUrl")}}</label>
           <div class="mt-2">
             <input v-model="user.picture" id="imageUrl" name="imageUrl" type="url"
               class="block w-full rounded-md border-0 bg-white/5 p-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" />
@@ -38,16 +38,16 @@
         </div>
       </div>
       <div class="flex justify-center">
-        <Button type="submit" color="primary">Save</button>
+        <Button type="submit" color="primary">{{$t("profile.profileTab.button.save")}}</button>
       </div>
     </form>
 
     <div class="flex justify-center mt-4">
-      <Button @click="showModalUpdatePassword = true" color="primary">Change password</Button>
+      <Button @click="showModalUpdatePassword = true" color="primary">{{$t("profile.profileTab.button.changePass")}}</Button>
     </div>
 
     <div class="flex justify-center mt-4">
-      <Button @click="showModalDeleteUser = true" color="danger">Delete account</Button>
+      <Button @click="showModalDeleteUser = true" color="danger">{{$t("profile.profileTab.button.deleteAccount")}}</Button>
     </div>
 
 
@@ -143,8 +143,8 @@ const passwords = computed<any>(() => ({
 }));
 
 const tabs = ref([
-  { name: "Profil", value: "profile" },
-  { name: "Historique", value: "history" }
+  { name: t("profile.tabs.profile"), value: "profile" },
+  { name: t("profile.tabs.history"), value: "history" }
 ])
 const selectedTab = ref<string>("profile");
 
@@ -153,14 +153,14 @@ const handleChangeUser = async (e: Event) => {
   try {
     e.preventDefault();
     await authStore.updateUser(user.value);
-    toast('Modifications enregistrées', {
+    toast(t("profile.toasts.changeUser.success"), {
       autoClose: 3000,
       type: 'success',
       theme: 'dark'
     });
   } catch (err) {
     console.error(err);
-    toast('Erreur lors de l\'enregistrement', {
+    toast(t("profile.toasts.changeUser.error"), {
       autoClose: 3000,
       type: 'error',
       theme: 'dark'
@@ -176,14 +176,14 @@ const handleChangePassword = async (e: Event) => {
     passwords.value.newPassword = '';
     passwords.value.newPasswordConfirm = '';
     showModalUpdatePassword.value = false;
-    toast('Le mot de passe a bien été changé', {
+    toast(t("profile.toasts.changePass.success"), {
       autoClose: 3000,
       type: 'success',
       theme: 'dark'
     });
   } catch (err) {
     console.error(err);
-    toast('Erreur lors de la modification', {
+    toast(t("profile.toasts.changePass.error"), {
       autoClose: 3000,
       type: 'error',
       theme: 'dark'
@@ -196,7 +196,7 @@ const handleDeleteUser = async (e: Event) => {
     e.preventDefault();
     await authStore.deleteUser({ "password": deletePasswordData.value });
     showModalDeleteUser.value = false;
-    toast('L\'utilisateur à bien été supprimé', {
+    toast(t("profile.toasts.deleteAccount.success"), {
       autoClose: 3000,
       type: 'success',
       theme: 'dark'
@@ -204,7 +204,7 @@ const handleDeleteUser = async (e: Event) => {
     router.replace('login');
   } catch (err) {
     console.error(err);
-    toast('Erreur lors de la supression', {
+    toast(t("profile.toasts.deleteAccount.error"), {
       type: 'error',
       theme: 'dark'
     });
