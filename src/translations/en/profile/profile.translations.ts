@@ -38,6 +38,10 @@ const enProfileTranslations: IProfileTranslations = {
       success: "Your changes have been saved",
       error: "An error has occured while saving",
     },
+    changeUser: {
+      success: "",
+      error: ""
+    }
   },
   historyTab: {
     refresh: "Refresh",
