@@ -1,5 +1,6 @@
 import ITranslations from "../types/translations.types";
 import frCommunityTranslations from "./community.translations";
+import frGamesTranslations from "./games/games.translations";
 import frHomeTranslations from "./home/home.translations";
 import frNavbarTranslations from "./navbar.translations";
 import frPremiumTranslations from "./premium.translations";
@@ -13,6 +14,7 @@ const frTranslations: ITranslations = {
   premium: frPremiumTranslations,
   shared: frSharedTranslations,
   profile: frProfileTranslations,
+  games: frGamesTranslations
 };
 
 export default frTranslations;
