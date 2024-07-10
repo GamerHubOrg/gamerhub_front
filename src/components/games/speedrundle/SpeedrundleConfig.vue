@@ -119,8 +119,8 @@ const internalConfig = ref<ISpeedrundleConfig>({
   nbRounds: 1,
   mode: "classic",
   theme: "league_of_legends",
-  selectedGenerations: [],
-  selectedColumns: [],
+  selectedGenerations: [1, 2],
+  selectedColumns: speedrundleColumns.league_of_legends.map(({ key }) => key),
 });
 
 const columns = computed(() => {
@@ -169,6 +169,15 @@ watch(
   },
   { deep: true }
 );
+
+watch(
+  () => internalConfig.value.theme,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      internalConfig.value.selectedColumns = columns.value.map(({ key }) => key);
+    }
+  }
+)
 
 watch(
   () => ({ ...props.config }),
