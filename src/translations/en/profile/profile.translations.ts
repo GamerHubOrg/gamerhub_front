@@ -33,15 +33,18 @@ const enProfileTranslations: IProfileTranslations = {
     deleteAccount: {
       success: "Your account has been deleted",
       error: "An error has occured while deleting",
+<<<<<<< HEAD
+    },
+    changeUser: {
+      success: "Your changes have been saved",
+      error: "An error has occured while saving",
+=======
+>>>>>>> 027b49d (feat: game history translations)
     },
     changeUser: {
       success: "Your changes have been saved",
       error: "An error has occured while saving",
     },
-    changeUser: {
-      success: "",
-      error: ""
-    }
   },
   historyTab: {
     refresh: "Refresh",

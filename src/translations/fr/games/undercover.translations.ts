@@ -1,10 +1,15 @@
 import { IUndercoverTranslations } from "@/translations/types/games.translations.types";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 027b49d (feat: game history translations)
 const frUndercoverTranslations: IUndercoverTranslations = {
   record: {
     civilian: "Civil",
     undercover: "Espion",
     civilianWord: "Mot civil",
+<<<<<<< HEAD
     spyWord: "Mot espion",
   },
   configs: {
@@ -25,6 +30,10 @@ const frUndercoverTranslations: IUndercoverTranslations = {
     nbWords: "Nombre de mots par tour",
     hiddenMode: "Mode caché",
   },
+=======
+    spyWord: "Mot espion"
+  }
+>>>>>>> 027b49d (feat: game history translations)
 };
 
 export default frUndercoverTranslations;
