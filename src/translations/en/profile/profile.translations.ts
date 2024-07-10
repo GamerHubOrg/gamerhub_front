@@ -39,9 +39,9 @@ const enProfileTranslations: IProfileTranslations = {
       error: "An error has occured while saving",
     },
     changeUser: {
-      success: "",
-      error: ""
-    }
+      success: "Your changes have been saved",
+      error: "An error has occured while saving",
+    },
   },
   historyTab: {
     refresh: "Refresh",
