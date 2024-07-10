@@ -23,6 +23,12 @@ interface IProfileTranslations {
       button: string;
     };
   };
+  historyTab: {
+    refresh: string;
+    loadMore: string;
+    viewConfig: string;
+    ago: string;
+  };
   toasts: {
     changeUser: {
       success: string;

@@ -2,43 +2,49 @@ import IProfileTranslations from "@/translations/types/profile.translations.type
 
 const enProfileTranslations: IProfileTranslations = {
   tabs: {
-    profile: "",
-    history: "",
+    profile: "Profile",
+    history: "Game history",
   },
   profileTab: {
-    username: "",
-    email: "",
-    imageUrl: "",
+    username: "Username",
+    email: "Email address",
+    imageUrl: "Image URL",
     button: {
-      save: "",
-      changePass: "",
-      deleteAccount: "",
+      save: "Save",
+      changePass: "Change password",
+      deleteAccount: "Delete account",
     },
     changeModal: {
-      oldPass: "",
-      newPass: "",
-      confirmPass: "",
+      oldPass: "Old password",
+      newPass: "New password",
+      confirmPass: "Confirm password",
     },
     deleteModal: {
-      confirm: "",
-      pass: "",
-      button: "",
+      confirm: "Are you sure you want to delete your account ?",
+      pass: "Type your password to confirm",
+      button: "Delete my account",
     },
   },
   toasts: {
     changePass: {
-      success: "",
-      error: "",
+      success: "The password has been changed",
+      error: "An error has occured while updating",
     },
     deleteAccount: {
-      success: "",
-      error: "",
+      success: "Your account has been deleted",
+      error: "An error has occured while deleting",
     },
     changeUser: {
-      success: "",
-      error: ""
-    }
+      success: "Your changes have been saved",
+      error: "An error has occured while saving",
+    },
   },
+  historyTab: {
+    refresh: "Refresh",
+    loadMore: "Load more",
+    viewConfig : "View config",
+    ago: `{time} ago`,
+  }
 };
 
 export default enProfileTranslations;

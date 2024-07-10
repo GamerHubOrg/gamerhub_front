@@ -1,60 +1,42 @@
 <template>
   <div
     class="flex max-[800px]:flex-col w-full h-full min-[801px]:gap-5 relative after:absolute after:left-0 after:top-0 after:h-full after:w-2 after:bg-primary"
-    :class="{ 'after:bg-red-500': !hasWon }"
-  >
+    :class="{ 'after:bg-red-500': !hasWon }">
     <div class="flex relative main">
       <div
-        class="text-xs min-[801px]:text-base flex h-full justify-between py-2 px-6 max-[800px]:items-center max-[800px]:w-full max-[800px]:justify-between min-[801px]:flex-col min-[801px]:w-[200px]"
-      >
+        class="text-xs min-[801px]:text-base flex h-full justify-between py-2 px-6 max-[800px]:items-center max-[800px]:w-full max-[800px]:justify-between min-[801px]:flex-col min-[801px]:w-[200px]">
         <div class="flex max-[800px]:gap-5 min-[801px]:flex-col">
           <p class="font-bold">Werewolves</p>
-          <i>Il y a {{ timeAgo }}</i>
+          <i>{{ $t('profile.historyTab.ago', { time: timeAgo }) }}</i>
         </div>
         <hr class="max-[800px]:hidden opacity-30" />
         <p class="font-bold text-primary" v-if="hasWon">
-          Victory : {{ capitalizeFirstLetter(currentCamp || "") }}
+          {{ $t("games.shared.victory") }} : {{ capitalizeFirstLetter($t(`games.werewolves.camps.${currentCamp}`)) }}
         </p>
-        <p class="font-bold text-red-500" v-else>Defeat</p>
+        <p class="font-bold text-red-500" v-else>{{ $t("games.shared.defeat") }}</p>
       </div>
-      <span
-        class="max-[800px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"
-      ></span>
+      <span class="max-[800px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
     </div>
-    <div
-      class="max-[800px]:text-xs h-full min-[801px]:text-base flex gap-5 max-[800px]:pl-5"
-    >
+    <div class="max-[800px]:text-xs h-full min-[801px]:text-base flex gap-5 max-[800px]:pl-5">
       <div class="flex flex-col justify-center items-center min-w-[100px]">
-        <img
-          :src="`/images/werewolves/icons/${originalRole?.picture}.png`"
-          class="h-16 w-16"
-        />
+        <img :src="`/images/werewolves/icons/${originalRole?.picture}.png`" class="h-16 w-16" />
         <p class="font-bold">
-          {{ capitalizeFirstLetter(originalRole?.name || "") }}
+          {{ capitalizeFirstLetter($t(`games.werewolves.roles.${originalRole?.picture}`)) }}
         </p>
       </div>
-      <span
-        class="max-[550px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"
-      ></span>
-      <div
-        class="max-[550px]:hidden text-xs flex flex-col justify-center min-w-[140px]"
-      >
-        <p>Nombre de morts : {{ deadCount }}</p>
+      <span class="max-[550px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
+      <div class="max-[550px]:hidden text-xs flex flex-col justify-center min-w-[140px]">
+        <p>{{ $t("games.werewolves.record.deadCount") }} : {{ deadCount }}</p>
       </div>
       <span class="h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
       <div class="py-2 text-xs">
-        <p class="mb-1 whitespace-nowrap truncate">Composition :</p>
+        <p class="mb-1 whitespace-nowrap truncate">{{ $t("games.werewolves.record.composition") }} :</p>
         <div class="flex flex-wrap gap-1 max-h-[34px] min-[801px]:max-h-[68px]">
           <div v-for="role in composition.slice(0, maxVisibleCharacters)">
-            <img
-              :src="`/images/werewolves/icons/${role}.png`"
-              class="w-8 h-8 rounded-full"
-            />
+            <img :src="`/images/werewolves/icons/${role}.png`" class="w-8 h-8 rounded-full" />
           </div>
-          <div
-            v-if="composition.length > maxVisibleCharacters"
-            class="bg-white text-black font-bold w-8 h-8 rounded-full flex items-center justify-center"
-          >
+          <div v-if="composition.length > maxVisibleCharacters"
+            class="bg-white text-black font-bold w-8 h-8 rounded-full flex items-center justify-center">
             +{{ composition.length - maxVisibleCharacters }}
           </div>
         </div>
@@ -68,12 +50,13 @@ import { IWerewolvesRecord } from "@/modules/auth/gameRecords";
 import { useAuthStore } from "@/modules/auth/auth.store";
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { capitalizeFirstLetter } from "@/utils/functions";
+import { getTimeAgo } from "./records.functions";
 
 const authStore = useAuthStore();
 const props = defineProps<{ record: IWerewolvesRecord }>();
 const record = computed<IWerewolvesRecord>(() => props.record);
 const currentUser = computed(() => authStore.getCurrentUser);
-const timeAgo = computed(() => getTimeAgo());
+const timeAgo = computed(() => getTimeAgo(props.record.createdAt))
 const aliveUsers = computed(() =>
   Object.entries(record.value.roles)
     .filter(([, { isAlive }]) => isAlive)
@@ -160,27 +143,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
 });
-
-const getTimeAgo = () => {
-  const { createdAt } = record.value;
-  const now = new Date();
-
-  const diffMs = now.getTime() - new Date(createdAt).getTime();
-  const seconds = Math.floor(diffMs / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 0) {
-    return `${days} jour${days > 1 ? "s" : ""}`;
-  } else if (hours > 0) {
-    return `${hours} heure${hours > 1 ? "s" : ""}`;
-  } else if (minutes > 0) {
-    return `${minutes} minute${minutes > 1 ? "s" : ""}`;
-  } else {
-    return `${seconds} seconde${seconds > 1 ? "s" : ""}`;
-  }
-};
 </script>
 
 <style scoped lang="scss">

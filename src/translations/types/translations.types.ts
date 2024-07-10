@@ -1,4 +1,5 @@
 import ICommunityTranslations from "./community.translations.types";
+import IGamesTranslations from "./games.translations.types";
 import IHomePageTranslations from "./home.translations.types";
 import INavbarTranslations from "./navbar.translations.types";
 import IPremiumTranslations from "./premium.translations.types";
@@ -12,6 +13,7 @@ interface ITranslations extends Record<string, any> {
   premium: IPremiumTranslations;
   shared: ISharedTranslations;
   profile: IProfileTranslations;
+  games: IGamesTranslations;
 }
 
 export default ITranslations;
