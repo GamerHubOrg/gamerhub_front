@@ -55,6 +55,9 @@ export const useAdminStore = defineStore("admin", {
     async fetchDashboardStats() {
         const { data } = await api.get('/admin/stats/dashboard');
         this.dashboardStats = data;
+    },
+    async putBanUser(userId: string, message: string) {
+      await api.put(`/admin/users/${userId}/ban`, { message });
     }
   },
 });

@@ -15,6 +15,7 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   subscribedAt: Date;
+  bannedAt?: Date;
 }
 
 export interface IMinifiedUser {

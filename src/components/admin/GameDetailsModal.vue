@@ -25,7 +25,11 @@
 
 <script lang="ts" setup>
 import Modal from "@/components/Modal.vue";
+import { useAdminStore } from "@/modules/admin/admin.store";
+import { useAuthStore } from "@/modules/auth/auth.store";
 import { useSocketStore } from "@/modules/socket/socket.store";
+import { computed } from "vue";
+import { toast } from "vue3-toastify";
 
 const emit = defineEmits(["close"]);
 const props = defineProps<{
@@ -33,13 +37,21 @@ const props = defineProps<{
   game: any;
 }>();
 
+const store = useAuthStore();
 const socketStore = useSocketStore();
+const adminStore = useAdminStore();
+
+const currentUser = computed(() => store.getCurrentUser);
 
 const handleKickUser = (id: string) => {
   socketStore.handleKickUser(id, props.game.roomId);
+  emit('close');
 };
 
-const handleBanUser = (id: string) => {
+const handleBanUser = async (id: string) => {
   socketStore.handleKickUser(id, props.game.roomId);
+  await adminStore.putBanUser(id, `Banned by ${currentUser.value?.username}`);
+  emit('close')
+  toast('Utilisateur bannis avec succes', { type: 'success', autoClose: 3000 });
 };
 </script>
