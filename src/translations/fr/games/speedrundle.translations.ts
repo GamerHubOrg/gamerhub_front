@@ -1,14 +1,23 @@
 import { ISpeedrundleTranslations } from "@/translations/types/games.translations.types";
 
+<<<<<<< HEAD
 const frSpeedrundleTranslations: ISpeedrundleTranslations = {
   record: {
     rank: "Rang",
+=======
+
+const frSpeedrundleTranslations: ISpeedrundleTranslations = {
+  record : {
+    rank: "Rang",
+    me: "Moi",
+>>>>>>> 027b49d (feat: game history translations)
     unknown: "Utilisateur inconnu",
     totalScore: "Score total",
     averageScore: "Score moyen",
     maxScore: "Score maximal",
     minScore: "Score minimal",
     charactersToGuess: "Personnages à deviner",
+<<<<<<< HEAD
   },
   configs: {
     mode: {
@@ -115,6 +124,9 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
       },
     },
   },
+=======
+  }
+>>>>>>> 027b49d (feat: game history translations)
 };
 
 export default frSpeedrundleTranslations;
