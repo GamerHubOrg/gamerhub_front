@@ -66,6 +66,9 @@
                     Premium
                   </Button>
                 </router-link>
+                <router-link v-if="isCurrentUserAdmin" to="/admin" class="bg-primary w-7 flex justify-center items-center rounded-lg">
+                  <RocketLaunchIcon class="w-4" />
+                </router-link>
               </div>
             </div>
           </div>
@@ -203,7 +206,7 @@ import Button from "../components/Button.vue";
 import { useGamesStore } from "@/modules/games/games.store";
 import router from "@/router";
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { Bars3Icon, XMarkIcon, RocketLaunchIcon } from '@heroicons/vue/24/outline'
 
 const store = useAuthStore();
 const roomStore = useSocketStore();
@@ -213,6 +216,7 @@ const data = computed(() => roomStore.getRoomData);
 const currentPath = computed(() => router.currentRoute.value.fullPath);
 
 const currentUser = computed(() => store.getCurrentUser);
+const isCurrentUserAdmin = computed(() => currentUser.value?.roles?.includes('admin'));
 const showUserMenu = ref(false);
 
 function handleOpenLobby() {

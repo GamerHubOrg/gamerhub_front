@@ -69,11 +69,11 @@ const isSavePotionUsed = computed(() => currentUserRole.value?.power.savePotionU
 const isKillPotionUsed = computed(() => currentUserRole.value?.power.killPotionUsed);
 
 function handleSavePlayer(userId: string) {
-    socket.value?.emit('game:werewolves:witch:save', { roomId: roomId.value, userId: currentUser.value?._id, save: userId });
+    socket.value?.emit('game:werewolves:witch:save', { roomId: roomId.value, userId: currentUser.value?._id, target: userId });
 }
 
 function handleKillPlayer(userId: string) {
-    socket.value?.emit('game:werewolves:witch:kill', { roomId: roomId.value, userId: currentUser.value?._id, kill: userId });
+    socket.value?.emit('game:werewolves:witch:kill', { roomId: roomId.value, userId: currentUser.value?._id, target: userId });
 }
 
 function handleSkip() {

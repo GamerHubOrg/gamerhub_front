@@ -36,9 +36,9 @@ const villageVotes = computed(() => gameData.value?.villageVotes || []);
 
 const votesNumber = computed(() => {
     if (props.type === 'village') {
-        return [...tmpVotes.value, ...villageVotes.value].filter((vote) => (!vote.turn || vote.turn === gameData.value?.turn) && vote.vote === props.user._id).length;
+        return [...tmpVotes.value, ...villageVotes.value].filter((vote) => (!vote.turn || vote.turn === gameData.value?.turn) && vote.target === props.user._id).length;
     }
     
-    return [...tmpVotes.value, ...wolfVotes.value].filter((vote) => (!vote.turn || vote.turn === gameData.value?.turn) && vote.vote === props.user._id).length;
+    return [...tmpVotes.value, ...wolfVotes.value].filter((vote) => (!vote.turn || vote.turn === gameData.value?.turn) && vote.target === props.user._id).length;
 });
 </script>

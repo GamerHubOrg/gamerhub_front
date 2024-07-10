@@ -50,7 +50,7 @@ const gameRoles = computed(() => roomData.value.gameData?.roles || {});
 const users = computed(() => roomData.value.users.filter((u) => gameRoles.value[u._id].isAlive));
 
 function handleWatchrole(userId: string) {
-    socket.value?.emit('game:werewolves:psychic:watch', { roomId: roomId.value, userId: currentUser.value?._id, watch: userId });
+    socket.value?.emit('game:werewolves:psychic:watch', { roomId: roomId.value, userId: currentUser.value?._id, target: userId });
 }
 </script>
 

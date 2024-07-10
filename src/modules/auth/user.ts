@@ -12,6 +12,9 @@ export interface User {
   picture?: string;
   roles: string[];
   stripe: IStripeConfig;
+  createdAt: Date;
+  updatedAt: Date;
+  subscribedAt: Date;
 }
 
 export interface IMinifiedUser {

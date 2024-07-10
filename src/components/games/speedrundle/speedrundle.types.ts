@@ -122,8 +122,8 @@ export interface ISpeedrundleGuess {
 export interface ISpeedrundleConfig extends IRoomConfig {
   nbRounds: number;
   theme: SpeedrundleTheme;
-  selectedGenerations : number[]
-  selectedColumns : string[]
+  selectedGenerations: number[]
+  selectedColumns: string[]
 }
 
 const LEAGUE_OF_LEGENDS_COLUMNS: IColumn[] = [
