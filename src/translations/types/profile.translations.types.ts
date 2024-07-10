@@ -24,6 +24,10 @@ interface IProfileTranslations {
     };
   };
   toasts: {
+    changeUser: {
+      success: string;
+      error: string;
+    };
     changePass: {
       success: string;
       error: string;
