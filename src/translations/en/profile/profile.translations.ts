@@ -34,6 +34,10 @@ const enProfileTranslations: IProfileTranslations = {
       success: "",
       error: "",
     },
+    changeUser: {
+      success: "",
+      error: ""
+    }
   },
 };
 
