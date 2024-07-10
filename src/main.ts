@@ -11,7 +11,7 @@ import frTranslations from "./translations/fr";
 
 const i18n = createI18n({
   legacy : false,
-  locale: navigator.language.split("-")[0],
+  locale: "en" || navigator.language.split("-")[0],
   fallbackLocale: "fr",
   availableLocales : ["fr", "en"],
   messages: {

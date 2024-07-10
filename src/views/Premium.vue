@@ -83,7 +83,7 @@
         <button
           class="bg-emerald-500 text-white hover:bg-emerald-600 mt-8 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium disabled:opacity-60 disabled:cursor-not-allowed"
           :disabled="isAlreadySubscribed" @click="handleStartSubscription">
-          {{ $tc("premium.plans.premium.button", isAlreadySubscribed ? 2 : 1) }}
+          {{ $t("premium.plans.premium.button", isAlreadySubscribed ? 2 : 1) }}
         </button>
       </div>
     </div>

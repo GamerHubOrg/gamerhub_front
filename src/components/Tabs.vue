@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6">
         <div class="sm:hidden">
-            <label for="tabs" class="sr-only">Select a tab</label>
+            <label for="tabs" class="sr-only">{{$t("shared.tabSelect")}}</label>
             <select :value="selected" @change="(e : any) => handleChange(e.target.value)" id="tabs" name="tabs"
                 class="bg-transparent block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary focus:outline-none focus:ring-primary sm:text-sm">
                 <option class="bg-dark1" v-for="tab in tabs" :key="tab.name" :value="tab.value">{{ tab.name }}</option>

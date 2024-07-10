@@ -17,8 +17,8 @@ export interface IGameRecord {
   gameName: "speedrundle" | "werewolves" | "undercover";
   users: string[];
   usersData: IMinifiedUser[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   config: Record<string, any>;
 }
 
