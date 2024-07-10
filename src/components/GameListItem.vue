@@ -16,7 +16,7 @@
 
         <div class="flex gap-3 justify-between flex-row items-end text-white">
             <div class="flex gap-6">
-                <p class="gameInfosShadow">{{ nbPlayers }} {{ $tc("homepage.game-list-item.players", 2) }}</p>
+                <p class="gameInfosShadow">{{ nbPlayers }} {{$tc("shared.players", 2)}}</p>
                 <p class="gameInfosShadow">{{ time }}</p>
             </div>
 
