@@ -8,15 +8,15 @@
 
       <div class="flex gap-3 justify-between flex-row items-end text-white">
         <div class="flex gap-6">
-          <p class="gameInfosShadow">{{ nbPlayers }} {{$tc("homepage.game-list-item.players", 2)}}</p>
+          <p class="gameInfosShadow">{{ nbPlayers }} {{$tc("shared.players", 2)}}</p>
           <p class="gameInfosShadow">{{ time }}</p>
         </div>
 
         <span v-if="disabled" class='gameInfosShadow absolute top-1/2 left-1/2 -translate-x-1/2 p-3 text-center'>
-          {{$t("homepage.game-list-item.notAvailable")}}
+          {{$t("home.game-list-item.notAvailable")}}
         </span>
         <Button v-else-if="!roomId" color="primary" shape="squared" @click="handleCreateRoom">
-          {{ $t("homepage.game-list-item.createRoom") }}
+          {{ $t("home.game-list-item.createRoom") }}
         </Button>
       </div>
     </div>
