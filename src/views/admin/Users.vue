@@ -78,7 +78,25 @@
                 {{ user.stripe?.subscriptionId }}
               </td>
               <td class="whitespace-nowrap px-4 py-2 text-gray-500 font-normal">
-                Actions
+                <div class="flex flex-row items-center gap-2">
+                  <button 
+                    v-if="!user.bannedAt"
+                    class="bg-orange-400 text-white px-2 py-1 text-sm rounded hover:bg-orange-500"
+                    :disabled="loading"
+                    @click="() => handleBanUser(user._id, 'email')"
+                    >
+                    Bannir le compte
+                  </button>
+
+                  <button 
+                    v-if="!user.bannedAt"
+                    class="bg-red-400 text-white px-2 py-1 text-sm rounded hover:bg-red-500"
+                    :disabled="loading"
+                    @click="() => handleBanUser(user._id, 'ip')"
+                    >
+                    Bannir IP
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -97,9 +115,9 @@
     </div>
 
     <EditUserModal 
-        :open="editUserModalOpen" 
-        :user="selectedUser" 
-        @close="editUserModalOpen = false" 
+      :open="editUserModalOpen" 
+      :user="selectedUser" 
+      @close="editUserModalOpen = false" 
     />
   </div>
 </template>
@@ -109,26 +127,38 @@ import { useAdminStore } from '@/modules/admin/admin.store';
 import { User } from '@/modules/auth/user';
 import EditUserModal from '@/components/admin/EditUserModal.vue';
 import { computed, onMounted, ref } from 'vue';
+import { useAuthStore } from '@/modules/auth/auth.store';
+import { toast } from 'vue3-toastify';
 
+const store = useAuthStore();
 const adminStore = useAdminStore();
 const users = computed(() => adminStore.getUsers);
+const currentUser = computed(() => store.getCurrentUser);
 
 const editUserModalOpen = ref(false);
 const selectedUser = ref();
+const loading = ref(false);
 
 async function handleFetchUsers() {
     try {
+        loading.value = true;
         const offset = users.value.list.length || 0;
         await adminStore.fetchUsers({ offset, limit: 20 });
     } catch(err) {
-        console.log(err);
+      toast('Impossible de récuperer les utilisateurs', { type: 'error', autoClose: 3000 });
     }
+    loading.value = false;
 }
 
 function handleOpenEditModal(user: User) {
     selectedUser.value = user;
     editUserModalOpen.value = true;
 }
+
+const handleBanUser = async (userId: string, type: string) => {
+  await adminStore.putBanUser({ userId, type, message: `Banned by ${currentUser.value?.username}` });
+  toast('Utilisateur bannis avec succes', { type: 'success', autoClose: 3000 });
+};
 
 onMounted(async () => {
     await handleFetchUsers();

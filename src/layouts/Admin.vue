@@ -44,6 +44,7 @@ const tabs = [
     { name: 'Tableau de bord', link: '/admin' },
     { name: 'Utilisateurs', link: '/admin/users' },
     { name: 'Parties', link: '/admin/games' },
+    { name: 'Banissements', link: '/admin/banishments' },
 ]
 
 async function handleSyncUserInfo() {

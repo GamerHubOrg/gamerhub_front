@@ -1,6 +1,6 @@
 <template>
   <Modal :open="open" @close="$emit('close')">
-    <h6 class="font-medium mb-4">Edit {{ user._id }}</h6>
+    <h6 class="font-medium mb-4">Edit {{ user?._id }}</h6>
     <form @submit="handleEditUser" class="flex flex-col gap-4">
       <div>
         <label for="username" class="block text-xs font-medium text-gray-200">
@@ -77,7 +77,7 @@ import { toast } from "vue3-toastify";
 const emit = defineEmits(["close"]);
 const props = defineProps<{
   open: boolean;
-  user: User;
+  user?: User;
 }>();
 
 

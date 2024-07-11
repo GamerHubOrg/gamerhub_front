@@ -5,17 +5,21 @@
       <div 
         v-for="user in game.users" 
         :key="user._id"
-        class="border-dark5 bg-dark2 rounded-md p-3 flex flex-row items-center justify-between gap-1"
+        class="border-dark5 bg-dark2 rounded-md p-3 flex flex-col sm:flex-row items-center justify-between gap-1"
       >
         <span>{{ user.username }}</span>
-        <div class="flex flex-row items-center gap-2">
-          <button class="bg-[#E8B9141A] text-[#E8B914] rounded-md px-3 py-1.5 text-sm"
+        <div class="flex flex-col items-center gap-2 sm:flex-row w-full sm:w-auto">
+          <button class="bg-[#E8B9141A] text-[#E8B914] rounded-md px-3 py-1.5 text-sm w-full sm:w-auto"
             @click="handleKickUser(user._id)">
-            Kick
+            Expulser
           </button>
-          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm"
-            @click="handleBanUser(user._id)">
-            Ban
+          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm w-full sm:w-auto"
+            @click="handleBanUser(user._id, 'email')">
+            Bannir le compte
+          </button>
+          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm w-full sm:w-auto"
+            @click="handleBanUser(user._id, 'ip')">
+            Bannir IP
           </button>
         </div>
       </div>
@@ -25,7 +29,11 @@
 
 <script lang="ts" setup>
 import Modal from "@/components/Modal.vue";
+import { useAdminStore } from "@/modules/admin/admin.store";
+import { useAuthStore } from "@/modules/auth/auth.store";
 import { useSocketStore } from "@/modules/socket/socket.store";
+import { computed } from "vue";
+import { toast } from "vue3-toastify";
 
 const emit = defineEmits(["close"]);
 const props = defineProps<{
@@ -33,13 +41,21 @@ const props = defineProps<{
   game: any;
 }>();
 
+const store = useAuthStore();
 const socketStore = useSocketStore();
+const adminStore = useAdminStore();
+
+const currentUser = computed(() => store.getCurrentUser);
 
 const handleKickUser = (id: string) => {
   socketStore.handleKickUser(id, props.game.roomId);
+  emit('close');
 };
 
-const handleBanUser = (id: string) => {
-  socketStore.handleKickUser(id, props.game.roomId);
+const handleBanUser = async (userId: string, type: string) => {
+  socketStore.handleKickUser(userId, props.game.roomId);
+  await adminStore.putBanUser({ userId, type, message: `Banned by ${currentUser.value?.username}` });
+  emit('close')
+  toast('Utilisateur bannis avec succes', { type: 'success', autoClose: 3000 });
 };
 </script>
