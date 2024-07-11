@@ -59,6 +59,11 @@ const routes = [
             path: 'games',
             name: 'admin_games',
             component: () => import('../views/admin/Games.vue'),
+          },
+          {
+            path: 'banishments',
+            name: 'admin_banishments',
+            component: () => import('../views/admin/Banishments.vue'),
           }
         ]
       },

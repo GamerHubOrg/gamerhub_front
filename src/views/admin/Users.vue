@@ -106,9 +106,9 @@
     </div>
 
     <EditUserModal 
-        :open="editUserModalOpen" 
-        :user="selectedUser" 
-        @close="editUserModalOpen = false" 
+      :open="editUserModalOpen" 
+      :user="selectedUser" 
+      @close="editUserModalOpen = false" 
     />
   </div>
 </template>
@@ -136,7 +136,7 @@ async function handleFetchUsers() {
         const offset = users.value.list.length || 0;
         await adminStore.fetchUsers({ offset, limit: 20 });
     } catch(err) {
-        console.log(err);
+      toast('Impossible de récuperer les utilisateurs', { type: 'error', autoClose: 3000 });
     }
     loading.value = false;
 }
