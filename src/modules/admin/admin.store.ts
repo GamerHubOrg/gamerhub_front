@@ -86,8 +86,8 @@ export const useAdminStore = defineStore("admin", {
         const { data } = await api.get('/admin/stats/dashboard');
         this.dashboardStats = data;
     },
-    async putBanUser(userId: string, message: string) {
-      await api.put(`/admin/users/${userId}/ban`, { message });
+    async putBanUser({userId, type, message} : { userId: string, type: string, message: string }) {
+      await api.put(`/admin/users/${userId}/ban`, { message, type });
       this.users.list = this.users.list.filter((user) => user._id !== userId);
     },
     async deleteUnbanUser(banishmentId: string) {

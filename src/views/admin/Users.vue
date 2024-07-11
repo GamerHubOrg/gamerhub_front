@@ -81,11 +81,20 @@
                 <div class="flex flex-row items-center gap-2">
                   <button 
                     v-if="!user.bannedAt"
+                    class="bg-orange-400 text-white px-2 py-1 text-sm rounded hover:bg-orange-500"
+                    :disabled="loading"
+                    @click="() => handleBanUser(user._id, 'email')"
+                    >
+                    Bannir le compte
+                  </button>
+
+                  <button 
+                    v-if="!user.bannedAt"
                     class="bg-red-400 text-white px-2 py-1 text-sm rounded hover:bg-red-500"
                     :disabled="loading"
-                    @click="() => handleBanUser(user._id)"
+                    @click="() => handleBanUser(user._id, 'ip')"
                     >
-                    Bannir
+                    Bannir IP
                   </button>
                 </div>
               </td>
@@ -146,8 +155,8 @@ function handleOpenEditModal(user: User) {
     editUserModalOpen.value = true;
 }
 
-const handleBanUser = async (id: string) => {
-  await adminStore.putBanUser(id, `Banned by ${currentUser.value?.username}`);
+const handleBanUser = async (userId: string, type: string) => {
+  await adminStore.putBanUser({ userId, type, message: `Banned by ${currentUser.value?.username}` });
   toast('Utilisateur bannis avec succes', { type: 'success', autoClose: 3000 });
 };
 

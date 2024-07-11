@@ -11,11 +11,15 @@
         <div class="flex flex-row items-center gap-2">
           <button class="bg-[#E8B9141A] text-[#E8B914] rounded-md px-3 py-1.5 text-sm"
             @click="handleKickUser(user._id)">
-            Kick
+            Expulser
           </button>
           <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm"
-            @click="handleBanUser(user._id)">
-            Ban
+            @click="handleBanUser(user._id, 'email')">
+            Bannir le compte
+          </button>
+          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm"
+            @click="handleBanUser(user._id, 'ip')">
+            Bannir IP
           </button>
         </div>
       </div>
@@ -48,9 +52,9 @@ const handleKickUser = (id: string) => {
   emit('close');
 };
 
-const handleBanUser = async (id: string) => {
-  socketStore.handleKickUser(id, props.game.roomId);
-  await adminStore.putBanUser(id, `Banned by ${currentUser.value?.username}`);
+const handleBanUser = async (userId: string, type: string) => {
+  socketStore.handleKickUser(userId, props.game.roomId);
+  await adminStore.putBanUser({ userId, type, message: `Banned by ${currentUser.value?.username}` });
   emit('close')
   toast('Utilisateur bannis avec succes', { type: 'success', autoClose: 3000 });
 };

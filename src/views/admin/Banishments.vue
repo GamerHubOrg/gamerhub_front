@@ -11,6 +11,9 @@
                 Created
               </th>
               <th class="whitespace-nowrap px-4 py-2 font-medium text-white">
+                Type
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-white">
                 Email
               </th>
               <th class="whitespace-nowrap px-4 py-2 font-medium text-white">
@@ -29,6 +32,9 @@
             <tr v-for="banishment in banishments.list" :key="banishment._id">
               <td class="whitespace-nowrap px-4 py-2 text-gray-500 font-normal">
                 {{ new Date(banishment.createdAt).toLocaleDateString() }}
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 font-normal">
+                <span class="bg-primary bg-opacity-30 border border-primary rounded px-1 text-primary">{{ banishment.type }}</span>
               </td>
               <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-300">
                 {{ banishment.email }}
