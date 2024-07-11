@@ -16,7 +16,6 @@
     "@vueuse/core": "^10.11.0",
     "apexcharts": "^3.50.0",
     "axios": "^1.6.5",
-    "cssnano": "^7.0.4",
     "pinia": "^2.1.7",
     "socket-io": "^1.0.0",
     "socket.io-client": "^4.7.4",
