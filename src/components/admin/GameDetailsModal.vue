@@ -5,19 +5,19 @@
       <div 
         v-for="user in game.users" 
         :key="user._id"
-        class="border-dark5 bg-dark2 rounded-md p-3 flex flex-row items-center justify-between gap-1"
+        class="border-dark5 bg-dark2 rounded-md p-3 flex flex-col sm:flex-row items-center justify-between gap-1"
       >
         <span>{{ user.username }}</span>
-        <div class="flex flex-row items-center gap-2">
-          <button class="bg-[#E8B9141A] text-[#E8B914] rounded-md px-3 py-1.5 text-sm"
+        <div class="flex flex-col items-center gap-2 sm:flex-row w-full sm:w-auto">
+          <button class="bg-[#E8B9141A] text-[#E8B914] rounded-md px-3 py-1.5 text-sm w-full sm:w-auto"
             @click="handleKickUser(user._id)">
             Expulser
           </button>
-          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm"
+          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm w-full sm:w-auto"
             @click="handleBanUser(user._id, 'email')">
             Bannir le compte
           </button>
-          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm"
+          <button class="bg-[#E847471A] text-[#E84747] rounded-md px-3 py-1.5 text-sm w-full sm:w-auto"
             @click="handleBanUser(user._id, 'ip')">
             Bannir IP
           </button>
