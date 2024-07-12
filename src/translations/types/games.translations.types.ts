@@ -1,17 +1,41 @@
 export interface IGameTranslations {
   record: Record<string, any>;
+  configs: Record<string, any>;
 }
 
 export interface ISpeedrundleTranslations extends IGameTranslations {
   record: {
     rank: string;
-    me: string;
     unknown: string;
     totalScore: string;
     averageScore: string;
     maxScore: string;
     minScore: string;
     charactersToGuess: string;
+  };
+  configs: {
+    mode: {
+      label: string;
+      values: {
+        classic: string;
+      };
+    };
+    theme: string;
+    clues: string;
+    nbRounds: string;
+    pokemonGens : string;
+  };
+  columns : {
+    league_of_legends: {
+      gender: string;
+      species: string;
+      tags: string;
+      ressource: string;
+      range: string;
+      position: string;
+      region: string;
+      releaseYear: string;
+    };
   };
 }
 

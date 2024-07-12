@@ -2,7 +2,7 @@ import { IGameListItemTranslations } from "@/translations/types/home.translation
 
 const enGameListItemTranslations: IGameListItemTranslations = {
   notAvailable: "This game is not available for the moment.",
-  createRoom : "Create room"
+  createRoom : "@.capitalize:shared.create room"
 };
 
 export default enGameListItemTranslations;

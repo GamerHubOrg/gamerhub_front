@@ -30,6 +30,9 @@ const toggleLogs = () => areLogsExpanded.value = !areLogsExpanded.value
 function onRoomJoined(roomId: string, data: IRoomData) {
   socketStore.handleRoomUpdate({ roomId, data })
   localStorage.setItem("roomId", roomId)
+  if (!route.path.includes('room')) {
+    router.push('/room/' + roomId);
+  }
 }
 
 function onRoomUpdated(data: IRoomData) {
@@ -40,14 +43,10 @@ function onRoomStarted(data: IRoomData) {
   socketStore.handleRoomUpdate({ data })
   router.push(`/room/${roomId.value}`)
   gameStore.setIsLobbyCollapsed(true);
-
 }
 
 function onRoomBackToLobby(data: IRoomData) {
   socketStore.handleRoomUpdate({ data })
-  if (route.path.includes('room')) {
-    router.push('/')
-  }
 }
 
 function onRoomDeleted(roomId: string) {
@@ -67,7 +66,7 @@ function onRoomKicked() {
 }
 
 function onRoomNotFound(roomId: string) {
-  localStorage.removeItem("roomId")  
+  localStorage.removeItem("roomId")
   onRoomNotification(`La room ${roomId} n'existe pas`, "error");
   router.push("/")
 }
@@ -132,8 +131,8 @@ watch(
     <div v-if="areLogsExpanded" class="p-2">
       <div v-for="log in data.logs" class="flex">
         <p><span class="font-bold">{{ new Date(log.date).toLocaleString() }}</span> : <span>{{
-    log.message
-  }}</span>
+          log.message
+            }}</span>
         </p>
       </div>
     </div>
