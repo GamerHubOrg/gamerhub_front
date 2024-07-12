@@ -1,6 +1,8 @@
 <template>
     <WerewolvesGame v-if="data.gameState === 'started'" />
     <WerewolvesResults v-else-if="data.gameState === 'results'" />
+    <GameLobby v-else />
+
 </template>
 
 <script setup lang="ts">
@@ -8,6 +10,7 @@ import { useSocketStore } from '@/modules/socket/socket.store';
 import WerewolvesGame from './WerewolvesGame.vue';
 import WerewolvesResults from './WerewolvesResults.vue';
 import { computed, onMounted } from 'vue';
+import GameLobby from '../GameLobby.vue';
 
 const socketStore = useSocketStore();
 const data = computed(() => socketStore.getRoomData)

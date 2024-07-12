@@ -2,6 +2,7 @@ import ITranslations from "../types/translations.types";
 import enCommunityTranslations from "./community.translations";
 import enGamesTranslations from "./games/games.translations";
 import enHomeTranslations from "./home/home.translations";
+import enLobbyTranslations from "./lobby.translations";
 import enNavbarTranslations from "./navbar.translations";
 import enPremiumTranslations from "./premium.translations";
 import enProfileTranslations from "./profile/profile.translations";
@@ -14,7 +15,8 @@ const enTranslations: ITranslations = {
   premium: enPremiumTranslations,
   shared: enSharedTranslations,
   profile: enProfileTranslations,
-  games: enGamesTranslations
+  games: enGamesTranslations,
+  lobby: enLobbyTranslations,
 };
 
 export default enTranslations;
