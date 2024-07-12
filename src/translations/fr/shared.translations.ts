@@ -4,6 +4,9 @@ const frSharedTranslations: ISharedTranslations = {
   players: "joueur | joueurs",
   games: "jeu | jeux",
   tabSelect: "Choisissez un onglet",
+  create : "créer",
+  me: "Moi",
+  maxPlayers : "Nombre de @:shared.players maximum",
   time: {
     seconds: "seconde | secondes",
     minutes: "minute | minutes",

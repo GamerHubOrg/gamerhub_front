@@ -4,6 +4,9 @@ const enSharedTranslations: ISharedTranslations = {
   players: "player | players",
   games: "game | games",
   tabSelect: "Select a tab",
+  create: "create",
+  me: "Me",
+  maxPlayers: "Maximum number of @:shared.players",
   time: {
     seconds: "second | seconds",
     minutes: "minute | minutes",
