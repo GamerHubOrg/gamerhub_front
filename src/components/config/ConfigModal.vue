@@ -1,13 +1,22 @@
 <template>
   <Modal :open="open && !shareModalOpen" @close="$emit('close')">
-    <div v-for="{ value, label } in configValues">
-      <p v-if="![undefined, null].includes(value)">
-        <span>{{ label }} : </span>{{ format(value) }}
-      </p>
+    <span class="font-bold">Configuration de la partie</span>
+    <div class="divide-y divide-dark5 my-2 text-sm">
+      <div 
+        v-for="{ value, label } in configValues" 
+        :key="label"
+        class="py-3"
+      >
+        <p>
+          <span>{{ label }} : </span> 
+          <span v-if="![undefined, null].includes(value)">{{ format(value) }}</span>
+        </p>
+      </div>
     </div>
     <div class="flex gap-2">
       <Button
-        type="secondary"
+        v-if="shareable"
+        color="secondary"
         shape="squared"
         class="mt-2"
         @click="shareModalOpen = true"
@@ -30,7 +39,8 @@
         Share
       </Button>
       <Button
-        type="primary"
+        v-if="playable"
+        color="primary"
         shape="squared"
         class="mt-2"
         @click="playWithConfig"
@@ -65,6 +75,8 @@ const emit = defineEmits(["close"]);
 const props = defineProps<{
   open: boolean;
   config?: IRoomConfig & { gameName: string };
+  shareable?: boolean;
+  playable?: boolean;
 }>();
 
 const gameStore = useGamesStore();
