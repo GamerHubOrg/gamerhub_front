@@ -1,16 +1,22 @@
 import { ISpeedrundleTranslations } from "@/translations/types/games.translations.types";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const frSpeedrundleTranslations: ISpeedrundleTranslations = {
   record: {
     rank: "Rang",
 =======
 
+=======
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
 const frSpeedrundleTranslations: ISpeedrundleTranslations = {
-  record : {
+  record: {
     rank: "Rang",
+<<<<<<< HEAD
     me: "Moi",
 >>>>>>> 027b49d (feat: game history translations)
+=======
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
     unknown: "Utilisateur inconnu",
     totalScore: "Score total",
     averageScore: "Score moyen",
@@ -18,6 +24,9 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
     minScore: "Score minimal",
     charactersToGuess: "Personnages à deviner",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
   },
   configs: {
     mode: {
@@ -29,21 +38,33 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
     clues: "Indices",
     theme: "Thème",
     nbRounds: "Nombre de rounds",
+<<<<<<< HEAD
     pokemonGens: "Générations de Pokémon",
   },
   columns: {
     league_of_legends: {
       sprite: "Champion",
+=======
+    pokemonGens: "Générations de Pokémon"
+  },
+  columns: {
+    league_of_legends: {
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
       gender: "Genre",
       species: "Espèce",
       tags: "Combat",
       ressource: "Ressource",
+<<<<<<< HEAD
       range: "Range",
+=======
+      range : "Range",
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
       position: "Position",
       region: "Région",
       releaseYear: "Date de sortie",
     },
   },
+<<<<<<< HEAD
   game: {
     giveUp: "Abandonner ce personnage",
     abandoned: "Abandonné",
@@ -127,6 +148,8 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
 =======
   }
 >>>>>>> 027b49d (feat: game history translations)
+=======
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
 };
 
 export default frSpeedrundleTranslations;

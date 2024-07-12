@@ -19,8 +19,11 @@ const enTranslations: ITranslations = {
   profile: enProfileTranslations,
   games: enGamesTranslations,
   lobby: enLobbyTranslations,
+<<<<<<< HEAD
   config: enConfigTranslations,
   room: enRoomTranslations,
+=======
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
 };
 
 export default enTranslations;
