@@ -22,7 +22,7 @@
                         <span>{{ user.rank }}</span>
                         -
                         <img :src="user.picture" class="w-5 h-5 rounded-full" />
-                        <span class="truncate">{{ currentUser?._id === user.playerId ? $t('games.speedrundle.record.me')
+                        <span class="truncate">{{ currentUser?._id === user.playerId ? $t('shared.me')
                             : user.username || $t('games.speedrundle.record.unknown') }}</span>
                     </div>
                 </div>
