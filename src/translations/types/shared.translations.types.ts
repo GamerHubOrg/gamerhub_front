@@ -22,6 +22,9 @@ interface ISharedTranslations {
 =======
   games : string;
   tabSelect : string;
+  create : string;
+  me : string;
+  maxPlayers : string;
   time : {
     seconds : string;
     minutes : string;

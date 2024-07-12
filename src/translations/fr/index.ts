@@ -21,6 +21,7 @@ const frTranslations: ITranslations = {
   shared: frSharedTranslations,
   profile: frProfileTranslations,
 <<<<<<< HEAD
+<<<<<<< HEAD
   games: frGamesTranslations,
   lobby: frLobbyTranslations,
   config: frConfigTranslations,
@@ -28,6 +29,10 @@ const frTranslations: ITranslations = {
 =======
   games: frGamesTranslations
 >>>>>>> 027b49d (feat: game history translations)
+=======
+  games: frGamesTranslations,
+  lobby : frLobbyTranslations
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
 };
 
 export default frTranslations;

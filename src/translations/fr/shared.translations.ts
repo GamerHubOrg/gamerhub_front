@@ -5,6 +5,7 @@ const frSharedTranslations: ISharedTranslations = {
   games: "jeu | jeux",
   tabSelect: "Choisissez un onglet",
 <<<<<<< HEAD
+<<<<<<< HEAD
   create: "créer",
   me: "Moi",
   share: "Partager",
@@ -16,6 +17,11 @@ const frSharedTranslations: ISharedTranslations = {
   no: "Non",
 =======
 >>>>>>> 027b49d (feat: game history translations)
+=======
+  create : "créer",
+  me: "Moi",
+  maxPlayers : "Nombre de @:shared.players maximum",
+>>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
   time: {
     seconds: "seconde | secondes",
     minutes: "minute | minutes",
