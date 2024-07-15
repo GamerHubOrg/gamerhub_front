@@ -128,13 +128,14 @@ function handlePlayWithConfig(config: Config) {
         ? config.game
         : undefined
     );
-  } else {
-    socketStore.handleCreateRoom(
-      currentUser.value,
-      config.game,
-      config.options
-    );
+    return;
   }
+
+  socketStore.handleCreateRoom(
+    currentUser.value,
+    config.game,
+    config.options
+  );
 }
 
 function handleDisplayConfigDetails(config: Config) {
