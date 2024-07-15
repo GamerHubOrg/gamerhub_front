@@ -11,6 +11,7 @@
                     <div class="bg-dark3 h-full w-full text-center p-2 rounded">{{ user.username }}</div>
 
                     <button 
+                        v-if="!hasAlreadyChoosed"
                         class="bg-primary rounded text-sm w-full px-2 py-1"
                         @click="() => handleWatchrole(user._id)"
                     >
@@ -18,6 +19,7 @@
                     </button>
                 </div>
             </div>
+            <span v-if="hasAlreadyChoosed" class="w-full text-center">En attente des autres voyantes...</span>
         </div>
     </Modal>
 </template>
@@ -48,6 +50,10 @@ const stateData = computed(() => socketStore.getRoomData)
 const roomData = computed(() => (stateData.value as IWerewolvesRoomData));
 const gameRoles = computed(() => roomData.value.gameData?.roles || {});
 const users = computed(() => roomData.value.users.filter((u) => gameRoles.value[u._id].isAlive));
+const psychicWatch = computed(() => roomData.value.gameData?.psychicWatch || []);
+const currentTurnVotedPlayers = computed(() => psychicWatch.value.filter((vote) => vote.turn === roomData.value.gameData?.turn));
+const selectedPlayer = computed(() => currentTurnVotedPlayers.value.find((vote) => vote.playerId === currentUser.value?._id));
+const hasAlreadyChoosed = computed(() => !!selectedPlayer.value);
 
 function handleWatchrole(userId: string) {
     socket.value?.emit('game:werewolves:psychic:watch', { roomId: roomId.value, userId: currentUser.value?._id, target: userId });

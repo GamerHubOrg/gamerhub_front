@@ -60,7 +60,7 @@
 <script lang="ts" setup>
 import { useSocketStore } from "@/modules/socket/socket.store";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { IWerewolvesRoomData } from "./werewolves.types";
+import { EWerewolvesRoleName, IWerewolvesRoomData } from "./werewolves.types";
 import { useAuthStore } from "@/modules/auth/auth.store";
 import WolfPowerModal from './power/WolfPowerModal.vue';
 import WitchPowerModal from './power/WitchPowerModal.vue';
@@ -84,6 +84,7 @@ const gameRoles = computed(() => gameData.value?.roles || {});
 const currentUser = computed(() => store.getCurrentUser);
 const currentUserRole = computed(() => gameRoles.value[currentUser.value!._id]);
 const currentRoleTurn = computed(() => gameData.value?.roleTurn);
+const huntersBeingKilled = computed(() => Object.keys(gameRoles.value).filter((userId) => gameRoles.value[userId].isBeingKilled && gameRoles.value[userId].name === EWerewolvesRoleName.hunter));
 
 const showWolfPowerModal = ref(false);
 const showWitchPowerModal = ref(false);
@@ -125,7 +126,7 @@ function handleDayPhase() {
     showVillageVoteModal.value =  true;
   }
 
-  if (currentRoleTurn.value === 'Chasseur' && currentUserRole.value?.name === currentRoleTurn.value) {
+  if (currentRoleTurn.value === 'Chasseur' && currentUserRole.value?.name === currentRoleTurn.value && huntersBeingKilled.value.includes(currentUser.value!._id)) {
     showHunterPowerModal.value = true;
   }
 }
@@ -138,7 +139,11 @@ socket.value?.on('game:werewolves:state', ({ data }) => {
 })
 
 watch(
-  [() => currentRoleTurn.value, () => gameState.value],
+  [
+    () => currentRoleTurn.value, 
+    () => gameState.value,
+    () => huntersBeingKilled.value,
+  ],
   () => {
     showWolfPowerModal.value = false;
     showWitchPowerModal.value = false;

@@ -64,14 +64,6 @@ const currentUser = computed(() => store.getCurrentUser);
 const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => email === currentUser.value?.email && !!isOwner))
 const isConfigDisabled = computed(() => !isOwner.value || data.value.gameState !== 'lobby');
 
-const maxRolesCount: Record<string, number> = {
-  'thief': 1,
-  'hunter': 1,
-  'witch': 1,
-  'psychic': 1,
-  'cupidon': 1,
-}
-
 function getRoleCount(role: string) {
   if (!internalConfig.value?.composition) return 0;
   return internalConfig.value.composition[role] || 0;
@@ -81,7 +73,6 @@ function handleChangeComposition(role: string, direction: number) {
   const roleCount = internalConfig.value.composition[role] || 0;
 
   if (roleCount + direction < 0) return;
-  if (maxRolesCount[role] && roleCount + direction > maxRolesCount[role]) return;
 
   internalConfig.value.composition[role] = roleCount + direction;
   internalConfig.value.maxPlayers = Object.values(internalConfig.value.composition).reduce((acc, count) => acc + count, 0);

@@ -18,14 +18,14 @@
           <div class="w-20 h-20 bg-black rounded-full border border-primary flex justify-center items-center text-white font-bold text-3xl">?</div>
           <div class="flex flex-row items-center gap-1">
             <span>{{ user.username }}</span> 
-            <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
+            <span v-if="getIsInCurrentUserCouple(user._id)" class="text-lg">❤️</span>
           </div>
         </div>
         <div v-else class="flex flex-col items-center">
           <img :src="`/images/werewolves/icons/${gameRoles[user._id]?.picture}.png`" class="w-24 h-24 rounded-full" />
           <div class="flex flex-row items-center gap-1">
             <span>{{ user.username }}</span> 
-            <span v-if="currentUserInCouple && gameData?.couple?.includes(user._id)" class="text-lg">❤️</span>
+            <span v-if="getIsInCurrentUserCouple(user._id)" class="text-lg">❤️</span>
           </div>
           <span>({{ gameRoles[user._id]?.name }})</span>
         </div>
@@ -48,9 +48,10 @@ import noCampfireImage from '@/assets/games/werewolves/images/no_campfire.gif';
 import campfireImage from '@/assets/games/werewolves/images/campfire.gif';
 import { useSocketStore } from "@/modules/socket/socket.store";
 import Modal from '@/components/Modal.vue'
-import { IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
+import { IWerewolvesCouple, IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
 import WerewolvesGameState from './WerewolvesGameState.vue';
+import { getCoupleFromUser } from "./werewolves.functions";
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -63,9 +64,10 @@ const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'night');
 const gameRoles = computed(() => gameData.value?.roles || {});
 const users = computed(() => roomData.value?.users || []);
+const couples = computed(() => (gameData.value?.couple || {}) as IWerewolvesCouple);
 
 const currentUser = computed(() => store.getCurrentUser);
-const currentUserInCouple = computed(() => gameData.value?.couple?.includes(currentUser.value?._id as string))
+const currentUserInCouple = computed(() => Object.values(couples.value).some((couple: string[]) => couple.includes(currentUser.value._id)));
 const currentUserRole = computed(() => gameRoles.value[currentUser.value!._id]);
 
 const playersContainer = ref();
@@ -74,7 +76,7 @@ const showDisplayRoleDialog = ref(false);
 
 function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const psychicWatch = gameData.value?.psychicWatch || [];
-  const isRoleDiscovered = psychicWatch.find((pw) => pw.target === user._id);
+  const isRoleDiscovered = psychicWatch.find((pw) => pw.target === user._id && pw.playerId === currentUser.value?._id);
   const isPlayerDead = !gameRoles.value[user!._id]?.isAlive;
   const gameTurn = gameData.value?.turn || 0;
   const arePlayersWolves = gameTurn > 0 && currentUserRole.value?.name === 'Loup' && gameRoles.value[user!._id]?.name === 'Loup';
@@ -101,6 +103,11 @@ function handleSetPlayersPosition() {
       child.style.top = `${y}px`;
     });
   }
+}
+
+function getIsInCurrentUserCouple(userId: string) {
+  if (!currentUserInCouple.value) return false;
+  return getCoupleFromUser(couples.value, currentUser.value!._id).includes(userId);
 }
 
 socket.value?.on('game:werewolves:start', () => {
