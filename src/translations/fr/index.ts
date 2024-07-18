@@ -1,9 +1,13 @@
 import ITranslations from "../types/translations.types";
 import frCommunityTranslations from "./community.translations";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import frConfigTranslations from "./config.translation";
 =======
 >>>>>>> 027b49d (feat: game history translations)
+=======
+import frConfigTranslations from "./config.translation";
+>>>>>>> e5d80a3 (WIP: room notifications translations)
 import frGamesTranslations from "./games/games.translations";
 import frHomeTranslations from "./home/home.translations";
 import frLobbyTranslations from "./lobby.translations";
@@ -31,8 +35,13 @@ const frTranslations: ITranslations = {
 >>>>>>> 027b49d (feat: game history translations)
 =======
   games: frGamesTranslations,
+<<<<<<< HEAD
   lobby : frLobbyTranslations
 >>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
+=======
+  lobby : frLobbyTranslations,
+  config : frConfigTranslations
+>>>>>>> e5d80a3 (WIP: room notifications translations)
 };
 
 export default frTranslations;
