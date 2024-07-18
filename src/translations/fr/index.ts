@@ -1,5 +1,6 @@
 import ITranslations from "../types/translations.types";
 import frCommunityTranslations from "./community.translations";
+import frConfigTranslations from "./config.translation";
 import frGamesTranslations from "./games/games.translations";
 import frHomeTranslations from "./home/home.translations";
 import frLobbyTranslations from "./lobby.translations";
@@ -16,7 +17,8 @@ const frTranslations: ITranslations = {
   shared: frSharedTranslations,
   profile: frProfileTranslations,
   games: frGamesTranslations,
-  lobby : frLobbyTranslations
+  lobby : frLobbyTranslations,
+  config : frConfigTranslations
 };
 
 export default frTranslations;

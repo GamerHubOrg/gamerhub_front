@@ -23,9 +23,9 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
     theme: string;
     clues: string;
     nbRounds: string;
-    pokemonGens : string;
+    pokemonGens: string;
   };
-  columns : {
+  columns: {
     league_of_legends: {
       gender: string;
       species: string;
@@ -45,6 +45,24 @@ export interface IUndercoverTranslations extends IGameTranslations {
     undercover: string;
     civilianWord: string;
     spyWord: string;
+  };
+  configs: {
+    mode: {
+      label: string;
+      values: {
+        words: string;
+        images: string;
+      };
+    };
+    theme: {
+      label: string;
+      values: {
+        classic: string;
+      };
+    };
+    nbSpies: string;
+    nbWords: string;
+    hiddenMode: string;
   };
 }
 
