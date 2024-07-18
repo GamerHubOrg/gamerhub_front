@@ -1,22 +1,22 @@
 <template>
   <div class="flex flex-col gap-3 text-white">
     <div class="option-container">
-      <label for="mode">Mode de jeu :</label>
+      <label for="mode">{{ $t("games.undercover.configs.mode.label") }} :</label>
       <select id="mode" :disabled="isConfigDisabled" v-model="internalConfig.mode">
-        <option class="text-black" value="words">Mots</option>
-        <option class="text-black" value="images">Images</option>
+        <option class="text-black" value="words">{{ $t("games.undercover.configs.mode.values.words") }}</option>
+        <option class="text-black" value="images">{{ $t("games.undercover.configs.mode.values.images") }}</option>
       </select>
     </div>
 
     <div class="option-container">
-      <label for="thme">Thème :</label>
+      <label for="thme">{{ $t("games.undercover.configs.theme.label") }} :</label>
       <select id="theme" :disabled="isConfigDisabled" v-model="internalConfig.theme">
-        <option class="text-black" value="classic">Classic</option>
+        <option class="text-black" value="classic">{{ $t("games.undercover.configs.theme.values.classic") }}</option>
       </select>
     </div>
 
     <div class="option-container">
-      <label for="maxPlayers">Nombre de joueurs maximum :</label>
+      <label for="maxPlayers">{{ $t("shared.maxPlayers", 2) }} :</label>
       <input
         id="maxPlayers"
         type="number"
@@ -28,7 +28,7 @@
     </div>
 
     <div class="option-container">
-      <label for="spyCount">Nombre d'espions :</label>
+      <label for="spyCount">{{ $t("games.undercover.configs.nbSpies") }} :</label>
       <input
         id="spyCount"
         type="number"
@@ -40,7 +40,7 @@
     </div>
 
     <div class="option-container">
-      <label for="wordsPerTurn">Nombre de mots par tour :</label>
+      <label for="wordsPerTurn">{{ $t("games.undercover.configs.nbWords") }} :</label>
       <input
         id="wordsPerTurn"
         type="number"
@@ -52,7 +52,7 @@
     </div>
 
     <div class="option-container">
-      <label for="anonymousMode">Mode caché :</label>
+      <label for="anonymousMode">{{ $t("games.undercover.configs.hiddenMode") }} :</label>
       <input
         id="anonymousMode"
         type="checkbox"
