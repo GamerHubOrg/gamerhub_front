@@ -125,9 +125,13 @@ watch([() => currentUser.value, () => socketStore.getConnected], () => {
 
 <template>
   <slot></slot>
-  <div v-if="roomId"
-    class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg">
-    <div class="sticky top-0 left-0 flex p-2 justify-between items-center bg-white">
+  <div
+    v-if="roomId"
+    class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg"
+  >
+    <div
+      class="sticky top-0 left-0 flex p-2 justify-between items-center bg-white"
+    >
       <button @click="toggleLogs" class="font-bold">Journal de la room</button>
       <button v-if="areLogsExpanded" @click="toggleLogs" class="font-bold text-3xl">
         &times;
