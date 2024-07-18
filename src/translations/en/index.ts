@@ -1,5 +1,6 @@
 import ITranslations from "../types/translations.types";
 import enCommunityTranslations from "./community.translations";
+import enConfigTranslations from "./config.translation";
 import enGamesTranslations from "./games/games.translations";
 import enHomeTranslations from "./home/home.translations";
 import enLobbyTranslations from "./lobby.translations";
@@ -17,6 +18,7 @@ const enTranslations: ITranslations = {
   profile: enProfileTranslations,
   games: enGamesTranslations,
   lobby: enLobbyTranslations,
+  config : enConfigTranslations
 };
 
 export default enTranslations;

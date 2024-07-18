@@ -6,6 +6,8 @@ const frSharedTranslations: ISharedTranslations = {
   tabSelect: "Choisissez un onglet",
   create : "créer",
   me: "Moi",
+  share : "Partager",
+  cancel : "Annuler",
   maxPlayers : "Nombre de @:shared.players maximum",
   time: {
     seconds: "seconde | secondes",
