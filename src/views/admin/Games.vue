@@ -47,7 +47,7 @@ const showDetailsModal = ref(false);
 const selectedGame = ref();
 
 function handleDeleteRoom(roomId: string) {
-  socket.value?.emit('games:delete', roomId);
+  socket.value?.emit('room:delete', roomId);
 }
 
 function handleOpenDetailsModal(game: any) {
