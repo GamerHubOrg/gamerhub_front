@@ -1,32 +1,14 @@
 import { ISpeedrundleTranslations } from "@/translations/types/games.translations.types";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 const enSpeedrundleTranslations: ISpeedrundleTranslations = {
   record: {
     rank: "Rank",
-=======
-
-=======
->>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
-const enSpeedrundleTranslations: ISpeedrundleTranslations = {
-  record: {
-    rank: "Rank",
-<<<<<<< HEAD
-    me: "Me",
->>>>>>> 027b49d (feat: game history translations)
-=======
->>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
     unknown: "Unknown user",
     totalScore: "Total score",
     averageScore: "Average score",
     maxScore: "Max score",
     minScore: "Min score",
     charactersToGuess: "Characters to guess",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
   },
   configs: {
     mode: {
@@ -42,10 +24,7 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
   },
   columns: {
     league_of_legends: {
-<<<<<<< HEAD
       sprite: "Champion",
-=======
->>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
       gender: "Gender",
       species: "Species",
       tags: "Combat",
@@ -56,7 +35,7 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
       releaseYear: "Release year",
     },
   },
-<<<<<<< HEAD
+
   game: {
     giveUp: "Abandon this character",
     abandoned: "Abandoned",
@@ -137,11 +116,7 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
       },
     },
   },
-=======
-  }
->>>>>>> 027b49d (feat: game history translations)
-=======
->>>>>>> 3b32e5c (feat: GameLobby component on all games + langues in Lobby + Speedrundle config)
+
 };
 
 export default enSpeedrundleTranslations;

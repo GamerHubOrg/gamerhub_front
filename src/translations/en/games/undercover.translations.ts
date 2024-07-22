@@ -1,21 +1,11 @@
 import { IUndercoverTranslations } from "@/translations/types/games.translations.types";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> 027b49d (feat: game history translations)
-=======
->>>>>>> e5d80a3 (WIP: room notifications translations)
 const enUndercoverTranslations: IUndercoverTranslations = {
   record: {
     civilian: "Civilian",
     undercover: "Undercover",
     civilianWord: "Civilian word",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e5d80a3 (WIP: room notifications translations)
+
     spyWord: "Undercover word",
   },
   configs: {
@@ -35,13 +25,8 @@ const enUndercoverTranslations: IUndercoverTranslations = {
     nbSpies: "Number of spies",
     nbWords: "Number of words per turn",
     hiddenMode: "Hidden mode",
-<<<<<<< HEAD
-=======
-    spyWord: "Undercover word"
->>>>>>> 027b49d (feat: game history translations)
-=======
->>>>>>> e5d80a3 (WIP: room notifications translations)
   },
+  game: {}
 };
 
 export default enUndercoverTranslations;
