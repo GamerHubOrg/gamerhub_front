@@ -43,6 +43,10 @@ body {
 
 select {
   padding : 0;
-  padding-right : 25px;
+  padding-right : 30px;
+  border : 0;
+}
+
+input {
   border : 0;
 }

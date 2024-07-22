@@ -6,7 +6,8 @@
                 <img v-if="selectedOption.imageUrl" :src="selectedOption.imageUrl" alt="" class="rounded-full mr-2"
                     :style="{ width: `${imageSize}px`, height: `${imageSize}px` }">
                 <input v-if="!hideSearch" v-model="searchQuery" @click="handleInputClick" type="text"
-                    class="w-full p-2 border-b border-gray-300 focus:outline-none text-black" placeholder="Search...">
+                    class="w-full p-2 border-b border-gray-300 focus:outline-none text-black"
+                    :placeholder="$t('shared.search') + '...'">
             </div>
             <span class="pointer-events-none">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
