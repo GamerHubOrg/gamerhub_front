@@ -53,7 +53,7 @@ function onRoomBackToLobby(data: IRoomData) {
 
 function onRoomDeleted(roomId: string) {
   socketStore.handleRoomUpdate({ roomId: "", data: {} });
-  onRoomNotification(`La room ${roomId} a été supprimée.`, "error");
+  onRoomNotification(t("room.notifications.roomDeleted", { roomId }), "error");
   if (route.path.includes('room')) {
     router.push('/')
   }
@@ -61,7 +61,7 @@ function onRoomDeleted(roomId: string) {
 
 function onRoomKicked() {
   socketStore.handleRoomUpdate({ roomId: "", data: {} });
-  onRoomNotification("Tu as été kick de la room", "error");
+  onRoomNotification(t("room.notifications.roomKicked"), "error");
   if (route.path.includes('room')) {
     router.push('/')
   }

@@ -2,24 +2,27 @@
   <div class="flex flex-col items-center gap-7 mt-4 pb-10">
     <SpeedrundleHeader :config="roomConfig" />
     <SpeedrundleGameProgress v-if="!!userAnswers" :user-answers="userAnswers" />
-    <SpeedrundleScoreDetails v-if="!!userAnswers && playerState === 'finished'" :user-answers="userAnswers" :is-waiting="true" />
+    <SpeedrundleScoreDetails v-if="!!userAnswers && playerState === 'finished'" :user-answers="userAnswers"
+      :is-waiting="true" />
 
     <div v-else class="flex flex-col items-center gap-7 max-w-[1500px] w-full mr-16 ml-16">
       <Select :value="characterGuessId" @update="handleCharacterSelect" :hide-options="true" :query-starts-with="true"
         :options="filteredCharacters" class="z-20" />
-      <Button color="danger" @click="handleGiveUpCharacter">Abandonner ce personnage</Button>
+      <Button color="danger" @click="handleGiveUpCharacter" shape="squared">{{ $t("games.speedrundle.game.giveUp")
+        }}</Button>
       <div class="w-full max-xl:h-[370px] max-xl:overflow-y-auto overflow-x-auto">
         <table class=" bg-dark2 w-full border-spacing-0 border-collapse">
           <thead class="sticky bg-dark2 top-[-1px] gap-0 z-10 p-0">
             <tr class="p-0">
-              <th v-for="column in gameData?.columns" :key="column.name" class="p-0">
+              <th v-for="column in columns" :key="column.name" class="p-0">
                 {{ column.name }}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="guess in reversedGuessedCharacters" :key="guess?.id">
-              <th v-for="column in gameData?.columns" :class="getColumnClass(guess.id, column.key)" :key="column.key" class="p-2 border-black border">
+              <th v-for="column in columns" :class="getColumnClass(guess.id, column.key)" :key="column.key"
+                class="p-2 border-black border">
                 <img v-if="column.type === 'image'" :src="guess[column.key as keyof object]" class="mx-auto" />
                 <p v-else>{{ guess[column.key as keyof object] }}</p>
               </th>
@@ -61,8 +64,10 @@ import SpeedrundleHeader from "./components/SpeedrundleHeader.vue";
 import SpeedrundleUserScore from "./components/SpeedrundleUserScore.vue";
 import SpeedrundleGameProgress from "./components/SpeedrundleGameProgress.vue";
 import SpeedrundleScoreDetails from "./components/SpeedrundleScoreDetails.vue";
+import { useI18n } from "vue-i18n";
 
-
+const { t } = useI18n({ useScope: "global" })
+const translate = (str: string) => t(`games.speedrundle.game.clueValues.${str}`)
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
@@ -73,6 +78,8 @@ const currentUser = computed(() => store.getCurrentUser as User);
 const roomData = computed(() => stateData.value as ISpeedrundleRoomData);
 const roomConfig = computed(() => roomData.value.config as ISpeedrundleConfig);
 const gameData = computed(() => roomData.value.gameData as ISpeedrundleGameData);
+const theme = computed(() => roomConfig.value.theme);
+const columns = computed(() => gameData.value.columns?.map((col) => ({ ...col, name: t(`games.speedrundle.columns.${theme.value}.${col.key}`) || col.name })));
 
 const characterGuessId = ref<string>("");
 const userAnswers = ref<ISpeedrundleAnswer>();
@@ -92,7 +99,7 @@ const guessedCharacters = computed(() => {
   const { roundsData, currentRound } = userAnswers.value;
   return (
     roundsData[currentRound - 1].guesses
-      .map((characterId) => formatCharacter(allCharacters.value, roomData.value.config?.theme!, characterId))
+      .map((characterId) => formatCharacter(allCharacters.value, roomData.value.config?.theme!, characterId, translate))
       .filter((e) => !!e) ?? []
   );
 });
@@ -131,6 +138,7 @@ function compareGuessToAnswer(id: string, column: string): SpeedrundleAnswerClue
 
 function getColumnClass(id: string, column: string) {
   const comparisonResult = compareGuessToAnswer(id, column);
+
   return {
     "bg-red-500": ["false", "more", "less"].includes(comparisonResult),
     "bg-orange-500": comparisonResult === "partial",

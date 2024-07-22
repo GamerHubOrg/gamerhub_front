@@ -22,7 +22,6 @@ export interface ICharacter {
   data: ICharacterData;
 }
 
-
 export interface ILolCharacterData extends ICharacterData {
   dataType: "league_of_legends";
   splash: string;
@@ -35,6 +34,7 @@ export interface ILolCharacterData extends ICharacterData {
   position: string[];
   region: string;
   releaseYear: number;
+  species: string[];
 }
 
 export interface IPokemonCharacterData extends ICharacterData {
@@ -49,7 +49,7 @@ export interface IPokemonCharacterData extends ICharacterData {
   color: string;
   habitat: string;
   generation: number;
-  status : string;
+  status: string;
 }
 
 export interface IPokemonCharacter extends ICharacter {
@@ -78,21 +78,21 @@ export interface ISpeedrundleAnswer {
   playerId: string;
   currentRound: number;
   roundsData: ISpeedrundleRoundData[];
-  state : "playing" | "finished"
+  state: "playing" | "finished";
 }
 
 export interface ISpeedrundleRoundData {
-  guesses : string[];
-  score : number;
-  hasFound : boolean;
-  startDate : Date;
+  guesses: string[];
+  score: number;
+  hasFound: boolean;
+  startDate: Date;
 }
 
 export interface IColumn {
   name: string;
   key: string;
-  type? : string
-  isIcon? : boolean
+  type?: string;
+  isIcon?: boolean;
 }
 
 export interface ISpeedrundleScore {
@@ -122,12 +122,12 @@ export interface ISpeedrundleGuess {
 export interface ISpeedrundleConfig extends IRoomConfig {
   nbRounds: number;
   theme: SpeedrundleTheme;
-  selectedGenerations: number[]
-  selectedColumns: string[]
+  selectedGenerations: number[];
+  selectedColumns: string[];
 }
 
 const LEAGUE_OF_LEGENDS_COLUMNS: IColumn[] = [
-  { name: "Champion", key: "sprite", type: "image", isIcon : true },
+  { name: "Champion", key: "sprite", type: "image", isIcon: true },
   { name: "Gender", key: "gender" },
   { name: "Species", key: "species" },
   { name: "Combat", key: "tags" },
@@ -144,12 +144,12 @@ const POKEMON_COLUMNS: IColumn[] = [
   { name: "Type 2", key: "type2" },
   { name: "Generation", key: "generation" },
   { name: "Color", key: "color" },
-  { name: "Evolution Stage", key: "evolutionStage", type : "comparison" },
+  { name: "Evolution Stage", key: "evolutionStage", type: "comparison" },
   { name: "Fully Evolved ?", key: "fullyEvolved" },
   { name: "Status", key: "status" },
   // { name: "Habitat", key: "habitat" },
-  { name: "Height", key: "height", type : "comparison" },
-  { name: "Weight", key: "weight", type : "comparison" },
+  { name: "Height", key: "height", type: "comparison" },
+  { name: "Weight", key: "weight", type: "comparison" },
 ];
 
 export const speedrundleColumns: Record<SpeedrundleTheme, IColumn[]> = {
@@ -157,5 +157,9 @@ export const speedrundleColumns: Record<SpeedrundleTheme, IColumn[]> = {
   pokemon: POKEMON_COLUMNS,
 };
 
-
-export type SpeedrundleAnswerClues = "true" | "false" | "partial" | "more" | "less"
+export type SpeedrundleAnswerClues =
+  | "true"
+  | "false"
+  | "partial"
+  | "more"
+  | "less";

@@ -7,6 +7,7 @@ import frLobbyTranslations from "./lobby.translations";
 import frNavbarTranslations from "./navbar.translations";
 import frPremiumTranslations from "./premium.translations";
 import frProfileTranslations from "./profile/profile.translations";
+import frRoomTranslations from "./room.translations";
 import frSharedTranslations from "./shared.translations";
 
 const frTranslations: ITranslations = {
@@ -17,8 +18,9 @@ const frTranslations: ITranslations = {
   shared: frSharedTranslations,
   profile: frProfileTranslations,
   games: frGamesTranslations,
-  lobby : frLobbyTranslations,
-  config : frConfigTranslations
+  lobby: frLobbyTranslations,
+  config: frConfigTranslations,
+  room: frRoomTranslations,
 };
 
 export default frTranslations;

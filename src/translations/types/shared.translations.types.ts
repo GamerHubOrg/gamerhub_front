@@ -7,6 +7,11 @@ interface ISharedTranslations {
   maxPlayers: string;
   share: string;
   cancel: string;
+  search: string;
+  results: string;
+  tries: string;
+  yes: string;
+  no: string;
   time: {
     seconds: string;
     minutes: string;

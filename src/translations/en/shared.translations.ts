@@ -7,14 +7,19 @@ const enSharedTranslations: ISharedTranslations = {
   create: "create",
   me: "Me",
   share: "Share",
-  cancel : "Cancel",
+  cancel: "Cancel",
+  search: "Search",
+  results: "Results",
   maxPlayers: "Maximum number of @:shared.players",
+  yes: "Yes",
+  no: "No",
   time: {
     seconds: "second | seconds",
     minutes: "minute | minutes",
     hours: "hour | hours",
     days: "day | days",
   },
+  tries: "try | tries"
 };
 
 export default enSharedTranslations;

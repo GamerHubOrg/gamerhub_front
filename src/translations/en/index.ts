@@ -7,6 +7,7 @@ import enLobbyTranslations from "./lobby.translations";
 import enNavbarTranslations from "./navbar.translations";
 import enPremiumTranslations from "./premium.translations";
 import enProfileTranslations from "./profile/profile.translations";
+import enRoomTranslations from "./room.translations";
 import enSharedTranslations from "./shared.translations";
 
 const enTranslations: ITranslations = {
@@ -18,7 +19,8 @@ const enTranslations: ITranslations = {
   profile: enProfileTranslations,
   games: enGamesTranslations,
   lobby: enLobbyTranslations,
-  config : enConfigTranslations
+  config: enConfigTranslations,
+  room: enRoomTranslations,
 };
 
 export default enTranslations;
