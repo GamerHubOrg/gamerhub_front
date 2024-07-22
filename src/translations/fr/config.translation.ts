@@ -6,6 +6,9 @@ const frConfigTranslations: IConfigTranslations = {
         placeholder: "Entrez le nom de la config ici...",
         toastSuccess: "La config a été publié !",
         toastError: "Une erreur est survenue"
+    },
+    playModal: {
+        playWith: "Jouer avec cette config"
     }
 };
 

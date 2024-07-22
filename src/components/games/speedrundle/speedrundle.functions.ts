@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from "@/utils/functions";
-import { ICharacter, SpeedrundleTheme } from './speedrundle.types';
+import { ICharacter, SpeedrundleTheme } from "./speedrundle.types";
 import {
   ILolCharacter,
   IPokemonCharacter,
@@ -50,7 +50,7 @@ export function comparePokemonGuessToAnswer(
   characterToGuess: IPokemonCharacter,
   currentGuess: IPokemonCharacter,
   column: string
-): SpeedrundleAnswerClues { 
+): SpeedrundleAnswerClues {
   const stringColumns = [
     "generation",
     "color",
@@ -72,12 +72,12 @@ export function comparePokemonGuessToAnswer(
     return guess === toGuess ? "true" : guess > toGuess ? "less" : "more";
   }
 
-  if(["type1", "type2"].includes(column)) {
-    const n = parseInt(column.split("type")[1])
-    const guess = currentGuess.data.types[n-1];
-    const toGuess = characterToGuess.data.types[n-1];
-    
-    return guess === toGuess ? "true" : "false"
+  if (["type1", "type2"].includes(column)) {
+    const n = parseInt(column.split("type")[1]);
+    const guess = currentGuess.data.types[n - 1];
+    const toGuess = characterToGuess.data.types[n - 1];
+
+    return guess === toGuess ? "true" : "false";
   }
 
   return currentGuess._id === characterToGuess._id ? "true" : "false";
@@ -100,7 +100,7 @@ export function formatPokemonCharacter(characterData: IPokemonCharacter) {
     generation,
     color,
     evolutionStage,
-    fullyEvolved : fullyEvolved ? "Yes" : "No",
+    fullyEvolved: fullyEvolved ? "Yes" : "No",
     habitat,
     height,
     weight,
@@ -108,25 +108,37 @@ export function formatPokemonCharacter(characterData: IPokemonCharacter) {
   };
 }
 
-export function formatLolCharacter(characterData: ILolCharacter) {
-  const sprite = characterData.data.sprite;
-  const { ressource, region, releaseYear } = characterData.data;
-  const gender =
-    characterData.data.gender === "male"
-      ? "Masculin"
-      : characterData.data.gender === "female"
-      ? "Féminin"
-      : "Autre";
-  const tags = characterData.data.tags.join(", ");
-  const species = characterData.data.species.join(", ");
-  const ranges = characterData.data.range.map((e) => capitalizeFirstLetter(e));
+export function formatLolCharacter(
+  { _id, data }: ILolCharacter,
+  t: (val: string) => string
+) {
+  const lolT = (val: string) => t("league_of_legends." + val.toLowerCase());
+  const sprite = data.sprite;
+  const { releaseYear } = data;
+
+  const gender = ["male", "female"].includes(data.gender)
+    ? t("shared.gender." + data.gender)
+    : t("shared.gender.other");
+  const ressource = lolT("ressource." + data.ressource);
+  const tags = data.tags.map((e) => lolT("tags." + e)).join(", ");
+  const species = data.species.map((e) => lolT("species." + e)).join(", ");
+  const ranges = data.range.map((e) =>
+    capitalizeFirstLetter(lolT("range." + e))
+  );
   const range = ranges.length > 1 ? ranges.join(", ") : ranges[0];
-  const position = characterData.data.position
+  const position = data.position
     .map((e) => capitalizeFirstLetter(e))
     .join(", ");
 
+  const region = (() => {
+    const lowerRegion = data.region.toLowerCase();
+    if (["shadow isles", "bandle city", "the void"].includes(lowerRegion))
+      return lolT("region." + lowerRegion);
+    return data.region;
+  })();
+
   return {
-    id: characterData._id,
+    id: _id,
     sprite,
     gender,
     tags,
@@ -139,13 +151,18 @@ export function formatLolCharacter(characterData: ILolCharacter) {
   };
 }
 
-export function formatCharacter(allCharacters : ICharacter[], theme : SpeedrundleTheme,id: string) {
+export function formatCharacter(
+  allCharacters: ICharacter[],
+  theme: SpeedrundleTheme,
+  id: string,
+  t: (val: string) => string
+) {
   const characterData = allCharacters.find(({ _id }) => _id === id);
   if (!characterData) return undefined;
 
   switch (theme) {
     case "league_of_legends":
-      return formatLolCharacter(characterData as ILolCharacter);
+      return formatLolCharacter(characterData as ILolCharacter, t);
     case "pokemon":
       return formatPokemonCharacter(characterData as IPokemonCharacter);
 

@@ -3,8 +3,8 @@
     <table class="w-full rounded-md max-w-full">
       <thead class="bg-dark2">
         <tr>
-          <th class="py-3 px-3 rounded-tl-md">Rank</th>
-          <th class="px-3">Username</th>
+          <th class="py-3 px-3 rounded-tl-md">{{ $t("games.speedrundle.record.rank") }}</th>
+          <th class="px-3">{{ $t("profile.profileTab.username") }}</th>
           <th class="rounded-tr-md px-3">Total</th>
           <th v-for="character in charactersToGuess" :key="character._id" class="whitespace-pre px-3">
             {{ character.name }}
@@ -40,7 +40,7 @@
                 <span v-if="user._id !== currentUser._id">{{
                   user.username
                 }}</span>
-                <span v-else class="text-green-400">Moi</span>
+                <span v-else class="text-green-400">{{ $t("shared.me") }}</span>
               </div>
             </div>
           </td>

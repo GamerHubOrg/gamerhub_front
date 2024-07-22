@@ -1,26 +1,11 @@
 <template>
   <div class="text-white">
-    <h1 class="text-center font-bold text-4xl">Résultats</h1>
+    <h1 class="text-center font-bold text-4xl mb-3">{{ $t("shared.results") }}</h1>
 
-    <SpeedrundleResultsTable
-      :users-answers="gameData.usersAnswers"
-      :users="roomData.users"
-      :characters-to-guess="charactersToGuess"
-    />
+    <SpeedrundleResultsTable :users-answers="gameData.usersAnswers" :users="roomData.users"
+      :characters-to-guess="charactersToGuess" />
 
-    <div class="mt-6">
-      <h3 class="text-xl text-center mb-2">Détails des scores</h3>
-      <div class="flex gap-5 justify-center flex-wrap mb-2">
-        <div
-          v-for="character in finishedCharactersData"
-          class="flex flex-col items-center"
-        >
-          <img v-if="!!character.image" :src="character.image" />
-          <p v-if="character.abandon">Abandonné</p>
-          <p v-else>{{ character.attempts }} essais</p>
-        </div>
-      </div>
-    </div>
+    <SpeedrundleScoreDetails v-if="!!userAnswers" :user-answers="userAnswers" />
   </div>
 </template>
 
@@ -33,8 +18,8 @@ import {
   ISpeedrundleGameData,
   ISpeedrundleRoomData,
 } from "./speedrundle.types";
-import { formatCharacter } from "./speedrundle.functions";
 import SpeedrundleResultsTable from "./components/SpeedrundleResultsTable.vue";
+import SpeedrundleScoreDetails from "./components/SpeedrundleScoreDetails.vue";
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -50,21 +35,8 @@ const gameData = computed(
 const charactersToGuess = computed(
   () => gameData.value.charactersToGuess ?? []
 );
+const userAnswers = computed(() => gameData.value.usersAnswers.find(
+  ({ playerId }) => playerId === currentUser.value._id
+))
 
-const finishedCharactersData = computed(() => {
-  const userAnswers = gameData.value.usersAnswers.find(
-    ({ playerId }) => playerId === currentUser.value._id
-  );
-  const { roundsData } = userAnswers || {};
-  return charactersToGuess.value.map((character, index) => ({
-    image: formatCharacter(
-      gameData.value.allCharacters,
-      roomData.value.config?.theme!,
-      character._id
-    )?.sprite,
-    attempts: roundsData?.[index].guesses.length || 0,
-    score: roundsData?.[index].score || 0,
-    abandon: !roundsData?.[index].hasFound,
-  }));
-});
 </script>

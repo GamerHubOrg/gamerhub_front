@@ -1,6 +1,7 @@
 export interface IGameTranslations {
   record: Record<string, any>;
   configs: Record<string, any>;
+  game: Record<string, any>;
 }
 
 export interface ISpeedrundleTranslations extends IGameTranslations {
@@ -25,8 +26,89 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
     nbRounds: string;
     pokemonGens: string;
   };
+  game: {
+    giveUp: string;
+    abandoned: string;
+    details: string;
+    waitingPlayers: string;
+    clueValues: {
+      shared: {
+        gender: {
+          male: string;
+          female: string;
+          other: string;
+        };
+      };
+      league_of_legends: {
+        species: {
+          aspect: string;
+          brackern: string;
+          cat: string;
+          celestial: string;
+          "chemically altered": string;
+          cyborg: string;
+          darkin: string;
+          demon: string;
+          dragon: string;
+          god: string;
+          "god-warrior": string;
+          golem: string;
+          human: string;
+          iceborn: string;
+          "magically altered": string;
+          magicborn: string;
+          minotaur: string;
+          revenant: string;
+          spirit: string;
+          spiritualist: string;
+          troll: string;
+          undead: string;
+          unknown: string;
+          vastayan: string;
+          "void-being": string;
+          yordle: string;
+          rat: string;
+          dog: string;
+          yeti: string;
+        };
+        tags: {
+          marksman: string;
+          fighter: string;
+          mage: string;
+          support: string;
+          tank: string;
+          assassin: string;
+        };
+        ressource: {
+          "blood well": string;
+          courage: string;
+          "crimson rush": string;
+          energy: string;
+          ferocity: string;
+          flow: string;
+          fury: string;
+          grit: string;
+          heat: string;
+          mana: string;
+          none: string;
+          rage: string;
+          shield: string;
+        };
+        range: {
+          melee: string;
+          range: string;
+        };
+        region : {
+          "shadow isles" : string;
+          "the void" : string;
+          "bandle city" : string;
+        }
+      };
+    };
+  };
   columns: {
     league_of_legends: {
+      sprite: string;
       gender: string;
       species: string;
       tags: string;
