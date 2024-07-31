@@ -1,89 +1,91 @@
 <template>
   <div class="text-white">
-    <h1 class="text-center font-bold text-4xl">{{ gameData.campWin === 'undercover' ? 'Undercover win' : 'Civilian win'
-      }} !</h1>
+    <h1 class="text-center font-bold text-4xl">{{ gameData.campWin === 'undercover' ? 'Les espions' : 'Les civils'}} ont gagné !</h1>
+    <div class="w-full max-xl:h-[370px] max-xl:overflow-y-auto overflow-x-auto">
+      <table class="w-full mt-12 rounded-md overflow-hidden overflow-x-auto">
+        <thead class="bg-dark2 w-full">
+          <tr class="">
+            <th class="min-w-48">Username</th>
+            <template v-for="turn in turnsNumber" :key="turn">
+              <th v-for="word in config.wordsPerTurn" :key="word" class="min-w-48 text-center w-60">
+                Mot {{ word }}
+              </th>
+              <th class="min-w-48 text-center">
+                Vote {{ turn }}
+              </th>
+            </template>
+          </tr>
+        </thead>
 
-    <div class="flex flex-col mt-12 rounded-md overflow-hidden overflow-x-auto">
-      <div class="flex flex-row items-center justify-between gap-2 bg-dark2 p-3">
-        <span class="w-56">Username</span>
-        <div v-for="turn in turnsNumber" :key="turn" class="flex flex-row items-center justify-between gap-2 w-full">
-          <span v-for="word in config.wordsPerTurn" :key="word" class="text-center w-60">
-            Mot {{ word }}
-          </span>
-          <span class="text-center w-60">
-            Vote {{ turn }}
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <div class="bg-green-500 bg-opacity-20 p-3 flex flex-row items-center gap-2">
-          <TrophyIcon v-if="gameData.campWin === 'civilian'" class="w-5 text-yellow-400" />
-          <span class="text-green-400 font-bold text-lg">Civilians</span>
-          <span>-</span>
-          <span v-if="config.mode === 'words'">{{ gameData.civilianWord }}</span>
-          <button v-else-if="config.mode === 'images'"
-            class="bg-green-500 bg-opacity-50 text-green-950 p-2 rounded-md text-sm"
-            @click="() => handleShowImage(gameData.civilianWord)">
-            Voir l'image
-          </button>
-        </div>
-        <div v-for="user in civilianUsers" :key="user._id">
-          <div class="flex flex-row items-center justify-between p-3 bg-green-500 bg-opacity-10">
-            <div class="flex items-center gap-x-4 text-xs w-56">
-              <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
-              <div class="font-medium leading-6 text-white">
-                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
-                <span v-else class="text-green-400">Moi</span>
+        <tbody>
+          <tr>
+            <td colspan="100" class="bg-green-500 bg-opacity-20">
+              <div class="p-3 flex flex-row items-center gap-2">
+                <TrophyIcon v-if="gameData.campWin === 'civilian'" class="w-5 text-yellow-400" />
+                <span class="text-green-400 font-bold text-lg">Civilians</span>
+                <span>-</span>
+                <span v-if="config.mode === 'words'">{{ gameData.civilianWord }}</span>
+                <button v-else-if="config.mode === 'images'"
+                  class="bg-green-500 bg-opacity-50 text-green-950 p-2 rounded-md text-sm"
+                  @click="() => handleShowImage(gameData.civilianWord)">
+                  Voir l'image
+                </button>
               </div>
-            </div>
-            <div v-for="turn in turnsNumber" :key="turn"
-              class="flex flex-row items-center justify-between gap-2 w-full">
-              <span v-for="word in config.wordsPerTurn" :key="word" class="text-center w-60">
-                {{ getUserWord(user, turn - 1, word - 1) }}
-              </span>
-              <span class="text-center w-60">
-                {{ getUserVote(user, turn - 1) }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="bg-red-500 bg-opacity-20 p-3 flex flex-row items-center gap-3">
-          <TrophyIcon v-if="gameData.campWin === 'undercover'" class="w-5 text-yellow-400" />
-          <span class="text-red-400 font-bold text-lg">Spies</span>
-          <span>-</span>
-          <span v-if="config.mode === 'words'">{{ gameData.spyWord }}</span>
-          <button v-else-if="config.mode === 'images'"
-            class="bg-red-500 bg-opacity-50 text-red-950 p-2 rounded-md text-sm"
-            @click="() => handleShowImage(gameData.spyWord)">
-            Voir l'image
-          </button>
-        </div>
-        <div v-for="user in spyUsers" :key="user._id">
-          <div class="flex flex-row items-center justify-between p-3 bg-red-500 bg-opacity-10">
-            <div class="flex items-center gap-x-4 text-xs w-56">
-              <img :src="user.picture" alt="" class="h-6 w-6 rounded-full bg-gray-800" />
+            </td>
+          </tr>
+          <tr v-for="user in civilianUsers" class="bg-green-500 bg-opacity-10">
+            <td class="p-2 flex justify-start items-center gap-4 border-none">
+              <img :src="user.picture" alt="" class="aspect-square rounded-full max-h-14 bg-gray-800" />
               <div class="font-medium leading-6 text-white">
                 <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
                 <span v-else class="text-red-400">Moi</span>
               </div>
-            </div>
-            <div v-for="turn in turnsNumber" :key="turn"
-              class="flex flex-row items-center justify-between gap-2 w-full">
-              <span v-for="word in config.wordsPerTurn" :key="word" class="w-60 text-center">
+            </td>
+            <template class="" v-for="turn in turnsNumber" :key="turn">
+              <td class="text-center px-8"
+                v-for="word in config.wordsPerTurn" :key="word">
                 {{ getUserWord(user, turn - 1, word - 1) }}
-              </span>
-              <span class="w-60 text-center">
-                {{ getUserVote(user, turn - 1) }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+              </td>
+              <td class="text-center font-bold"> 
+                {{ getUserVote(user, turn - 1) }}</td>
+            </template>
+          </tr>
+          <tr>
+            <td colspan="100" class=" bg-red-500 bg-opacity-20">
+              <div class="p-3 flex flex-row items-center gap-3">
+                <TrophyIcon v-if="gameData.campWin === 'undercover'" class="w-5 text-yellow-400" />
+                <span class="text-red-400 font-bold text-lg">Spies</span>
+                <span>-</span>
+                <span v-if="config.mode === 'words'">{{ gameData.spyWord }}</span>
+                <button v-else-if="config.mode === 'images'"
+                  class="bg-red-500 bg-opacity-50 text-red-950 p-2 rounded-md text-sm"
+                  @click="() => handleShowImage(gameData.spyWord)">
+                  Voir l'image
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr v-for="user in spyUsers" :key="user._id" class="bg-red-500 bg-opacity-10">
+            <td class="p-2 flex justify-start items-center gap-4 border-none">
+              <img :src="user.picture" alt="" class="aspect-square rounded-full max-h-14" />
+              <div class="font-medium leading-6 text-white">
+                <span v-if="user._id !== currentUser._id">{{ user.username }}</span>
+                <span v-else class="text-red-400">Moi</span>
+              </div>
+            </td>
+            <template v-for="turn in turnsNumber" :key="turn">
+              <td class="text-center"
+                v-for="word in config.wordsPerTurn" :key="word">
+                {{ getUserWord(user, turn - 1, word - 1) }}
+              </td>
+              <td class="text-center font-bold"> 
+                {{ getUserVote(user, turn - 1) }}</td>
+            </template>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
     <Modal v-if="config.mode === 'images'" :open="showImageModalOpen" @close="showImageModalOpen = false">
       <img :src="selectedWord" />
     </Modal>

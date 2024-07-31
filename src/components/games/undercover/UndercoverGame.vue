@@ -11,10 +11,10 @@
         <div v-else-if="config.mode === 'images'" class="flex flex-row items-center gap-2">
             Ton image : 
             <div class="overflow-hidden relative group flex justify-center items-center cursor-pointer" @click="handleShowImage">
-                <EyeSlashIcon class="group-hover:hidden absolute w-6 text-primary z-10" />
+                <EyeSlashIcon class="absolute w-6 text-primary z-10" />
                 <img
                     :src="gameWord"
-                    class="max-w-24 max-h-16 filter blur-lg grayscale group-hover:grayscale-0 group-hover:blur-none"
+                    class="max-w-24 max-h-16 filter blur-lg grayscale"
                 />
             </div>
         </div>
@@ -30,32 +30,32 @@
         </div>
         <div v-else>Tu es éliminé</div>
 
-        <div class="grid grid-cols-4 gap-12">
+        <div class="grid max-md:grid-cols-2 grid-cols-4 gap-12 mb-48">
             <div 
                 v-for="user in roomData.users" 
                 :key="user.socket_id"
-                class="flex justify-center items-center text-black"
+                class="flex justify-center items-start"
             >
                 <div 
-                    class="flex flex-col gap-2 max-w-48 bg-dark5 text-white p-3 rounded-md"
+                    class="flex flex-col gap-2 w-48 bg-dark5 text-white p-3 rounded-md h-full justify-between"
                     :class="{
                         'outline outline-green-400': user._id === gameData?.playerTurn && gameData?.state !== 'vote'
                     }"
                 >
                     <span v-if="user._id === currentUser._id && gameData?.undercoverPlayerIds?.includes(user._id) && !isAnonymouseMode">Tu es l'undercover</span>
-                    <img :src="user.picture" class="w-full">
+                    <img :src="user.picture" class="w-full object-cover aspect-square">
                     <span class="text-xs truncate">{{ user.username }} ({{ user.isEliminated ? 'dead' : 'alive' }})</span>
                     <div class="flex flex-col gap-3 items-center mt-2">
                         <span class="font-semibold">Mots</span>
-                        <div class="flex flex-col gap-2">
-                            <span v-for="(word, index) in getUserWords(user)" :key="`${user._id}-${index}`">
+                        <div class="flex flex-col gap-2 items-center max-w-full overflow-x-auto">
+                            <span class="max-w-full" v-for="(word, index) in getUserWords(user)" :key="`${user._id}-${index}`">
                                 {{ word.word }}
                             </span>
                         </div>
                     </div>
                     <button 
                         v-if="gameState === 'vote' && !hasCurrentPlayerVoted && !user.isEliminated && !isCurrentUserEliminated" 
-                        class="bg-green-400 rounded" 
+                        class="bg-green-400 rounded bottom-0 p-2" 
                         @click="() => handleVote(user)"
                     >
                         vote
@@ -66,7 +66,7 @@
 
         <form 
             v-if="!isCurrentUserEliminated && currentUser._id === gameData?.playerTurn && gameState === 'words'" 
-            class="border fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row gap-3 bg-white border-gray-200 p-3 rounded-md"
+            class="border fixed max-md:bottom-20 bottom-10 left-1/2 transform -translate-x-1/2 flex flex-row gap-3 bg-white border-gray-200 p-3 rounded-md"
             @submit="handleSendWord"
         >
             <input v-model="wordForm" type="text" class="border border-primary border-opacity-20 rounded-md p-3 text-black">
