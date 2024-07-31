@@ -37,7 +37,7 @@
                 class="flex justify-center items-start"
             >
                 <div 
-                    class="flex flex-col gap-2 w-48 bg-dark5 text-white p-3 rounded-md"
+                    class="flex flex-col gap-2 w-48 bg-dark5 text-white p-3 rounded-md h-full justify-between"
                     :class="{
                         'outline outline-green-400': user._id === gameData?.playerTurn && gameData?.state !== 'vote'
                     }"
@@ -47,15 +47,15 @@
                     <span class="text-xs truncate">{{ user.username }} ({{ user.isEliminated ? 'dead' : 'alive' }})</span>
                     <div class="flex flex-col gap-3 items-center mt-2">
                         <span class="font-semibold">Mots</span>
-                        <div class="flex flex-col gap-2">
-                            <span v-for="(word, index) in getUserWords(user)" :key="`${user._id}-${index}`">
+                        <div class="flex flex-col gap-2 items-center max-w-full overflow-x-auto">
+                            <span class="max-w-full" v-for="(word, index) in getUserWords(user)" :key="`${user._id}-${index}`">
                                 {{ word.word }}
                             </span>
                         </div>
                     </div>
                     <button 
                         v-if="gameState === 'vote' && !hasCurrentPlayerVoted && !user.isEliminated && !isCurrentUserEliminated" 
-                        class="bg-green-400 rounded" 
+                        class="bg-green-400 rounded bottom-0 p-2" 
                         @click="() => handleVote(user)"
                     >
                         vote
