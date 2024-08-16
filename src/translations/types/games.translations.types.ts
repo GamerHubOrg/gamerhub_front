@@ -118,6 +118,18 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
       region: string;
       releaseYear: string;
     };
+    pokemon: {
+      sprite : string;
+      type1 : string;
+      type2 : string;
+      generation : string;
+      color : string;
+      evolutionStage : string;
+      fullyEvolved : string;
+      status : string;
+      height : string;
+      weight : string;
+    };
   };
 }
 

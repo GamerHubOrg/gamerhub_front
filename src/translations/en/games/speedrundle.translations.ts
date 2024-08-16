@@ -34,6 +34,18 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
       region: "Region",
       releaseYear: "Release year",
     },
+    pokemon: {
+      sprite: "Pokemon",
+      type1: "Type 1",
+      type2: "Type 2",
+      generation: "Generations",
+      color: "Color",
+      evolutionStage: "Evolution stage",
+      fullyEvolved: "Fully evolved ?",
+      status: "Status",
+      height: "Height",
+      weight: "Weight"
+    }
   },
 
   game: {

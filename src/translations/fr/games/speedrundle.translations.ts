@@ -34,6 +34,18 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
       region: "Région",
       releaseYear: "Date de sortie",
     },
+    pokemon: {
+      sprite: "Pokémon",
+      type1: "Type 1",
+      type2: "Type 2",
+      generation: "Génération",
+      color: "Couleur",
+      evolutionStage: "Stade d'évolution",
+      fullyEvolved: "Évolution finale ?",
+      status: "Statut",
+      height: "Taille",
+      weight: "Poids"
+    },
   },
   game: {
     giveUp: "Abandonner ce personnage",
