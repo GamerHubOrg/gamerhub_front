@@ -44,8 +44,8 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
       fullyEvolved: "Fully evolved ?",
       status: "Status",
       height: "Height",
-      weight: "Weight"
-    }
+      weight: "Weight",
+    },
   },
 
   game: {
@@ -60,6 +60,7 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
           female: "Female",
           other: "Other",
         },
+        none: "None",
       },
       league_of_legends: {
         species: {
@@ -112,7 +113,6 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
           grit: "Grit",
           heat: "Heat",
           mana: "Mana",
-          none: "None",
           rage: "Rage",
           shield: "Shield",
         },
@@ -126,9 +126,36 @@ const enSpeedrundleTranslations: ISpeedrundleTranslations = {
           "bandle city": "Bandle",
         },
       },
+      pokemon: {
+        status: {
+          baby: "Baby",
+          legendary: "Legendary",
+          mythical: "Mythical",
+          common: "Common",
+        },
+        types: {
+          normal: "Normal",
+          fire: "Fire",
+          water: "Water",
+          electric: "Electric",
+          grass: "Grass",
+          ice: "Ice",
+          fighting: "Fighting",
+          poison: "Poison",
+          ground: "Ground",
+          flying: "Flying",
+          psychic: "Psychic",
+          bug: "Bug",
+          rock: "Rock",
+          ghost: "Ghost",
+          dragon: "Dragon",
+          dark: "Dark",
+          steel: "Steel",
+          fairy: "Fairy",
+        },
+      },
     },
   },
-
 };
 
 export default enSpeedrundleTranslations;

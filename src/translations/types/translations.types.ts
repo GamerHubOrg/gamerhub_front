@@ -1,3 +1,4 @@
+import IColorsTranslations from "./colors.translations.types";
 import ICommunityTranslations from "./community.translations.types";
 import IConfigTranslations from "./config.translations.types";
 import IGamesTranslations from "./games.translations.types";
@@ -19,7 +20,8 @@ interface ITranslations extends Record<string, any> {
   games: IGamesTranslations;
   lobby: ILobbyTranslations;
   config: IConfigTranslations;
-  room : IRoomTranslations;
+  room: IRoomTranslations;
+  colors: IColorsTranslations;
 }
 
 export default ITranslations;

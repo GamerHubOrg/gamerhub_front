@@ -5,7 +5,7 @@
       <div v-for="character in finishedCharactersData" :key="character.id" class="flex flex-col items-center">
         <img v-if="!!character.image" :src="character.image" />
         <p v-if="character.abandon">{{ $t("games.speedrundle.game.abandoned") }}</p>
-        <p v-else>{{ character.attempts }} {{ $t("games.speedrundle.game.tries", character.attempts) }}</p>
+        <p v-else>{{ character.attempts }} {{ $t("shared.tries", character.attempts) }}</p>
       </div>
     </div>
     <p class="text-center" v-if="isWaiting">{{ $t("games.speedrundle.game.waitingPlayers") }}</p>

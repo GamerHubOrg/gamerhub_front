@@ -38,6 +38,7 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
           female: string;
           other: string;
         };
+        none: string;
       };
       league_of_legends: {
         species: {
@@ -90,7 +91,6 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
           grit: string;
           heat: string;
           mana: string;
-          none: string;
           rage: string;
           shield: string;
         };
@@ -98,11 +98,39 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
           melee: string;
           range: string;
         };
-        region : {
-          "shadow isles" : string;
-          "the void" : string;
-          "bandle city" : string;
-        }
+        region: {
+          "shadow isles": string;
+          "the void": string;
+          "bandle city": string;
+        };
+      };
+      pokemon: {
+        status: {
+          baby: string;
+          legendary: string;
+          mythical: string;
+          common: string;
+        };
+        types: {
+          normal: string;
+          fire: string;
+          water: string;
+          electric: string;
+          grass: string;
+          ice: string;
+          fighting: string;
+          poison: string;
+          ground: string;
+          flying: string;
+          psychic: string;
+          bug: string;
+          rock: string;
+          ghost: string;
+          dragon: string;
+          dark: string;
+          steel: string;
+          fairy: string;
+        };
       };
     };
   };
@@ -119,16 +147,16 @@ export interface ISpeedrundleTranslations extends IGameTranslations {
       releaseYear: string;
     };
     pokemon: {
-      sprite : string;
-      type1 : string;
-      type2 : string;
-      generation : string;
-      color : string;
-      evolutionStage : string;
-      fullyEvolved : string;
-      status : string;
-      height : string;
-      weight : string;
+      sprite: string;
+      type1: string;
+      type2: string;
+      generation: string;
+      color: string;
+      evolutionStage: string;
+      fullyEvolved: string;
+      status: string;
+      height: string;
+      weight: string;
     };
   };
 }

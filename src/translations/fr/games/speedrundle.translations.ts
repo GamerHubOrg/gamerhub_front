@@ -44,7 +44,7 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
       fullyEvolved: "Évolution finale ?",
       status: "Statut",
       height: "Taille",
-      weight: "Poids"
+      weight: "Poids",
     },
   },
   game: {
@@ -59,6 +59,7 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
           female: "Féminin",
           other: "Autre",
         },
+        none: "Aucun | Aucune",
       },
       league_of_legends: {
         species: {
@@ -111,7 +112,6 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
           grit: "Agressivité",
           heat: "Vapeur",
           mana: "Mana",
-          none: "Aucune",
           rage: "Rage",
           shield: "Bouclier",
         },
@@ -119,10 +119,38 @@ const frSpeedrundleTranslations: ISpeedrundleTranslations = {
           melee: "Mêlée",
           range: "À distance",
         },
-        region : {
+        region: {
           "shadow isles": "Îles obscures",
           "the void": "Le Néant",
-          "bandle city": "Bandle"
+          "bandle city": "Bandle",
+        },
+      },
+      pokemon: {
+        status: {
+          baby: "Bébé",
+          legendary: "Légendaire",
+          mythical: "Mythique",
+          common: "Commun",
+        },
+        types: {
+          normal: "Normal",
+          fire: "Feu",
+          water: "Eau",
+          electric: "Électrik",
+          grass: "Plante",
+          ice: "Glace",
+          fighting: "Combat",
+          poison: "Poison",
+          ground: "Sol",
+          flying: "Vol",
+          psychic: "Psy",
+          bug: "Insecte",
+          rock: "Roche",
+          ghost: "Spectre",
+          dragon: "Dragon",
+          dark: "Ténèbres",
+          steel: "Acier",
+          fairy: "Fée"
         }
       },
     },

@@ -1,7 +1,8 @@
 <template>
   <h2 class="text-3xl">Speedrun DLE</h2>
   <p>
-    <span class="font-semibold">{{ getThemeLabel() }} - {{ getModeLabel() }}</span>
+    <span class="font-semibold">{{ getThemeLabel() }} - {{ $t(`games.speedrundle.configs.mode.values.${config.mode}`)
+      }}</span>
   </p>
 </template>
 
@@ -24,13 +25,6 @@ const getThemeLabel = () => {
       return "Pokémon";
     default:
       return capitalizeFirstLetter(config.value.theme);
-  }
-};
-
-const getModeLabel = () => {
-  switch (config.value.mode) {
-    default:
-      return capitalizeFirstLetter(config.value.mode);
   }
 };
 </script>
