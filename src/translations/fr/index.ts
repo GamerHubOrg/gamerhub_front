@@ -1,4 +1,5 @@
 import ITranslations from "../types/translations.types";
+import frColorsTranslations from "./colors.translations";
 import frCommunityTranslations from "./community.translations";
 import frConfigTranslations from "./config.translation";
 import frGamesTranslations from "./games/games.translations";
@@ -21,6 +22,7 @@ const frTranslations: ITranslations = {
   lobby: frLobbyTranslations,
   config: frConfigTranslations,
   room: frRoomTranslations,
+  colors: frColorsTranslations,
 };
 
 export default frTranslations;

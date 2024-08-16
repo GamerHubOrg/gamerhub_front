@@ -1,4 +1,5 @@
 import ITranslations from "../types/translations.types";
+import enColorsTranslations from "./colors.translations";
 import enCommunityTranslations from "./community.translations";
 import enConfigTranslations from "./config.translation";
 import enGamesTranslations from "./games/games.translations";
@@ -21,6 +22,7 @@ const enTranslations: ITranslations = {
   lobby: enLobbyTranslations,
   config: enConfigTranslations,
   room: enRoomTranslations,
+  colors: enColorsTranslations,
 };
 
 export default enTranslations;

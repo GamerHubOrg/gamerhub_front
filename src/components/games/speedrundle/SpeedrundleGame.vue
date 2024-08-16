@@ -66,8 +66,7 @@ import SpeedrundleGameProgress from "./components/SpeedrundleGameProgress.vue";
 import SpeedrundleScoreDetails from "./components/SpeedrundleScoreDetails.vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n({ useScope: "global" })
-const translate = (str: string) => t(`games.speedrundle.game.clueValues.${str}`)
+const { t, locale } = useI18n({ useScope: "global" })
 const store = useAuthStore();
 const socketStore = useSocketStore();
 
@@ -99,7 +98,7 @@ const guessedCharacters = computed(() => {
   const { roundsData, currentRound } = userAnswers.value;
   return (
     roundsData[currentRound - 1].guesses
-      .map((characterId) => formatCharacter(allCharacters.value, roomData.value.config?.theme!, characterId, translate))
+      .map((characterId) => formatCharacter(allCharacters.value, roomData.value.config?.theme!, characterId, t))
       .filter((e) => !!e) ?? []
   );
 });
@@ -109,7 +108,10 @@ const filteredCharacters = computed(() => {
   if (!chars) return [];
   return chars
     .filter(({ _id }) => !guessedCharacters.value.some((e) => e.id === _id))
-    .map(({ _id, name, data }) => ({ value: _id, label: name, imageUrl: data.sprite }));
+    .map(({ _id, data, names, ...c }) => {
+      const name = names?.[locale.value as keyof object] || c.name;
+      return ({ value: _id, label: name, imageUrl: data.sprite })
+    });
 });
 
 
