@@ -67,6 +67,6 @@ const selectedPlayer = computed(() => Object.keys(couples.value).find((cupidonId
 const hasAlreadyChoosed = computed(() => !!selectedPlayer.value);
 
 function handleDefineCouple() {
-    socket.value?.emit('game:werewolves:cupidon:couple', { roomId: roomId.value, playerId: currentUser.value!._id, couple: [firstPlayer.value, secondPlayer.value] });
+    socket.value?.emit('game:werewolves:cupidon:couple', { roomId: roomId.value, couple: [firstPlayer.value, secondPlayer.value] });
 }
 </script>
