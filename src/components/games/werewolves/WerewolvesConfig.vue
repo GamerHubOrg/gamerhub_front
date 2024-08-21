@@ -65,10 +65,6 @@ const isOwner = computed(() => data.value.users?.some(({ email, isOwner }) => em
 const isConfigDisabled = computed(() => !isOwner.value || data.value.gameState !== 'lobby');
 
 const maxRolesCount: Record<string, number> = {
-  'thief': 1,
-  'hunter': 1,
-  'witch': 1,
-  'psychic': 1,
   'cupidon': 1,
 }
 

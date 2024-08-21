@@ -56,7 +56,7 @@
       </div>
     </div>
   </div>
-  <ConfigModal :open="!!expandedConfig" @close="expandedConfig = undefined" :config="expandedConfig" />
+  <ConfigModal :open="!!expandedConfig" @close="expandedConfig = undefined" :config="expandedConfig" shareable playable/>
 </template>
 
 <script setup lang="ts">
@@ -121,7 +121,6 @@ watch(
   () => hasBeenFetched.value,
   (val) => {
     if (val || !currentUser.value) return;
-    console.log("first fetch");
     fetchMoreLoading.value = true;
     authStore.fetchGameRecords(0, gamePerLoad).finally(() => fetchMoreLoading.value = false);
     hasBeenFetched.value = true;
