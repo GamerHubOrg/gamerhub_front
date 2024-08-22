@@ -1,21 +1,23 @@
 <template>
-  <div class="min-h-screen h-full">
-    <Navbar />
-    <Lobby v-show="!isLobbyCollapsed" />
+    <div class="min-h-screen h-full">
+        <Navbar />
+        <Lobby v-show="!isLobbyCollapsed" />
+        <GameRules v-show="!isGameRulesCollapsed" />
 
-    <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
-      <router-view />
-    </main>
-  </div>
+        <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
+            <router-view />
+        </main>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, watch } from "vue";
+import {computed, onMounted, watch} from "vue";
 import Lobby from "../components/Lobby.vue";
 import Navbar from "../components/Navbar.vue";
-import { useAuthStore } from "../modules/auth/auth.store";
-import { useGamesStore } from "@/modules/games/games.store";
-import { useRoute, useRouter } from "vue-router";
+import {useAuthStore} from "../modules/auth/auth.store";
+import {useGamesStore} from "@/modules/games/games.store";
+import {useRoute, useRouter} from "vue-router";
+import GameRules from "@/components/GameRules.vue";
 
 const store = useAuthStore();
 const gamesStore = useGamesStore();
@@ -25,30 +27,31 @@ const routeNeedAuth = computed(() => route.meta?.requireAuth || false);
 const currentUser = computed(() => store.currentUser);
 
 const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
+const isGameRulesCollapsed = computed(() => gamesStore.isGameRulesCollapsed);
+
 
 async function handleSyncUserInfo() {
-  try {
-    await store.getMe();
-  } catch (err) {
-    store.setCurrentUser(undefined);
+    try {
+        await store.getMe();
+    } catch (err) {
+        store.setCurrentUser(undefined);
 
-    if (routeNeedAuth.value) {
-      router.replace("login");
+        if (routeNeedAuth.value) {
+            router.replace("login");
+        }
     }
-  }
 }
 
 onMounted(async () => {
-  await handleSyncUserInfo();
+    await handleSyncUserInfo();
 });
 
 watch(
-  () => route.fullPath,
-  () => {
-    if (routeNeedAuth.value && !currentUser.value) {
-      router.replace("login");
+    () => route.fullPath,
+    () => {
+        if (routeNeedAuth.value && !currentUser.value) {
+            router.replace("login");
+        }
     }
-  }
 );
 </script>
-  

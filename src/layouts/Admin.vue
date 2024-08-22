@@ -2,6 +2,7 @@
   <div class="min-h-screen h-full">
     <Navbar />
     <Lobby v-show="!isLobbyCollapsed" />
+    <GameRules v-show="!isGameRulesCollapsed" />
 
     <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
       <div class="mt-10 bg-dark3 rounded-md p-3">
@@ -30,6 +31,7 @@ import { useAuthStore } from "../modules/auth/auth.store";
 import { useRoute, useRouter } from "vue-router";
 import { useGamesStore } from "@/modules/games/games.store";
 import { useSocketStore } from "@/modules/socket/socket.store";
+import GameRules from "@/components/GameRules.vue";
 
 const gamesStore = useGamesStore();
 const socketStore = useSocketStore();
@@ -38,6 +40,7 @@ const router = useRouter();
 const route = useRoute();
 
 const isLobbyCollapsed = computed(() => gamesStore.isLobbyCollapsed);
+const isGameRulesCollapsed = computed(() => gamesStore.isGameRulesCollapsed);
 const socket = computed(() => socketStore.getSocket);
 
 const tabs = [
@@ -87,4 +90,3 @@ watch(
   }
 )
 </script>
-  
