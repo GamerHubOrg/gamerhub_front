@@ -11,14 +11,13 @@ const handleOpenLobby = () => {
     gamesStore.setIsGameRulesCollapsed(true);
 };
 
-// Mapping entre les noms de jeux et les composants
 const gameComponents: { [key: string]: Function } = {
     'undercover': Undercover,
     'werewolves': Werewolves,
     'speedrundle': Speedrundle,
 };
+
 const gameName = computed(() => gamesStore.gameName);
-// Détermine dynamiquement le composant à afficher
 const currentComponent = computed(() => {
     const gameName = gamesStore.gameName;
     return gameComponents[gameName] || null;
@@ -40,8 +39,6 @@ const currentComponent = computed(() => {
         </div>
 
         <div>
-            <h4 class="text-white text-lg font-bold mb-2">{{ gameName }}</h4>
-            <!-- Composant dynamique -->
             <component :is="currentComponent"></component>
         </div>
     </div>
