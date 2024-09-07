@@ -5,7 +5,6 @@ const enUndercoverTranslations: IUndercoverTranslations = {
     civilian: "Civilian",
     undercover: "Undercover",
     civilianWord: "Civilian word",
-
     spyWord: "Undercover word",
   },
   configs: {

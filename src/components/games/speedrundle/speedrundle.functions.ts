@@ -138,6 +138,13 @@ export function formatLolCharacter(
       ? t("shared.none", 2)
       : lolT("ressource." + data.ressource);
 
+  const region = (() => {
+    const lowerRegion = data.region.toLowerCase();
+    if (["shadow isles", "bandle city", "the void"].includes(lowerRegion))
+      return lolT("region." + lowerRegion);
+    return data.region;
+  })();
+
   return {
     id: _id,
     sprite,
