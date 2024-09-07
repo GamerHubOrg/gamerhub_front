@@ -4,11 +4,24 @@
     <!-- Desktop vue -->
     <div class="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between">
-        <button class="flex items-center gap-4 duration-200 hover:brightness-[85%]" @click="handleOpenLobby">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <button
+          class="flex items-center gap-4 duration-200 hover:brightness-[85%]"
+          @click="handleOpenLobby"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <path
               d="M7 1V19M3 1H17C18.1046 1 19 1.89543 19 3V17C19 18.1046 18.1046 19 17 19H3C1.89543 19 1 18.1046 1 17V3C1 1.89543 1.89543 1 3 1Z"
-              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
 
           <div v-if="roomId" class="flex items-center gap-2 rounded-full px-3 py-2" :class="{
@@ -37,7 +50,13 @@
                 <!-- Apps -->
                 <router-link to="/">
                   <Button :selected="currentPath === '/'">
-                    <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                      width="22"
+                      height="17"
+                      viewBox="0 0 22 17"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
                         d="M5 7.5H9M7 5.5V9.5M14 8.5H14.01M17 6.5H17.01M16.32 1.5H5.68C4.69028 1.50023 3.73579 1.86738 3.00103 2.53046C2.26628 3.19355 1.80345 4.10549 1.702 5.09C1.696 5.142 1.692 5.191 1.685 5.242C1.604 5.916 1 10.956 1 12.5C1 13.2956 1.31607 14.0587 1.87868 14.6213C2.44129 15.1839 3.20435 15.5 4 15.5C5 15.5 5.5 15 6 14.5L7.414 13.086C7.78899 12.7109 8.29761 12.5001 8.828 12.5H13.172C13.7024 12.5001 14.211 12.7109 14.586 13.086L16 14.5C16.5 15 17 15.5 18 15.5C18.7956 15.5 19.5587 15.1839 20.1213 14.6213C20.6839 14.0587 21 13.2956 21 12.5C21 10.955 20.396 5.916 20.315 5.242C20.308 5.192 20.304 5.142 20.298 5.091C20.1968 4.10631 19.7341 3.19413 18.9993 2.53083C18.2645 1.86754 17.3099 1.50026 16.32 1.5Z"
                         stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -47,7 +66,13 @@
                 </router-link>
                 <router-link to="/community">
                   <Button :selected="currentPath === '/community'">
-                    <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                      width="22"
+                      height="17"
+                      viewBox="0 0 22 17"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
                         d="M5 7.5H9M7 5.5V9.5M14 8.5H14.01M17 6.5H17.01M16.32 1.5H5.68C4.69028 1.50023 3.73579 1.86738 3.00103 2.53046C2.26628 3.19355 1.80345 4.10549 1.702 5.09C1.696 5.142 1.692 5.191 1.685 5.242C1.604 5.916 1 10.956 1 12.5C1 13.2956 1.31607 14.0587 1.87868 14.6213C2.44129 15.1839 3.20435 15.5 4 15.5C5 15.5 5.5 15 6 14.5L7.414 13.086C7.78899 12.7109 8.29761 12.5001 8.828 12.5H13.172C13.7024 12.5001 14.211 12.7109 14.586 13.086L16 14.5C16.5 15 17 15.5 18 15.5C18.7956 15.5 19.5587 15.1839 20.1213 14.6213C20.6839 14.0587 21 13.2956 21 12.5C21 10.955 20.396 5.916 20.315 5.242C20.308 5.192 20.304 5.142 20.298 5.091C20.1968 4.10631 19.7341 3.19413 18.9993 2.53083C18.2645 1.86754 17.3099 1.50026 16.32 1.5Z"
                         stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -112,6 +137,9 @@
                       </svg>
                       {{ $t("navbar.myProfile") }}</router-link>
                     </MenuItem>
+                    <div class="py-2 px-4 text-sm">
+                      <LocaleSwitcher />
+                    </div>
                     <MenuItem>
                     <span class="block py-2 px-4 text-sm hover:ring-gray-400 cursor-pointer" @click="handleLogout">{{
                       $t("navbar.signOut") }}</span>
@@ -145,10 +173,20 @@
         <DisclosureButton as="a" href="/"
           class="flex items-center py-2 hover:ring-gray-400 text-base font-medium text-white">
           <Button :selected="currentPath === '/'">
-            <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="22"
+              height="17"
+              viewBox="0 0 22 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 d="M5 7.5H9M7 5.5V9.5M14 8.5H14.01M17 6.5H17.01M16.32 1.5H5.68C4.69028 1.50023 3.73579 1.86738 3.00103 2.53046C2.26628 3.19355 1.80345 4.10549 1.702 5.09C1.696 5.142 1.692 5.191 1.685 5.242C1.604 5.916 1 10.956 1 12.5C1 13.2956 1.31607 14.0587 1.87868 14.6213C2.44129 15.1839 3.20435 15.5 4 15.5C5 15.5 5.5 15 6 14.5L7.414 13.086C7.78899 12.7109 8.29761 12.5001 8.828 12.5H13.172C13.7024 12.5001 14.211 12.7109 14.586 13.086L16 14.5C16.5 15 17 15.5 18 15.5C18.7956 15.5 19.5587 15.1839 20.1213 14.6213C20.6839 14.0587 21 13.2956 21 12.5C21 10.955 20.396 5.916 20.315 5.242C20.308 5.192 20.304 5.142 20.298 5.091C20.1968 4.10631 19.7341 3.19413 18.9993 2.53083C18.2645 1.86754 17.3099 1.50026 16.32 1.5Z"
-                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
             Hub
           </Button>
@@ -156,10 +194,20 @@
         <DisclosureButton as="a" href="/community"
           class="block rounded-md py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
           <Button :selected="currentPath === '/community'">
-            <svg width="22" height="17" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="22"
+              height="17"
+              viewBox="0 0 22 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 d="M5 7.5H9M7 5.5V9.5M14 8.5H14.01M17 6.5H17.01M16.32 1.5H5.68C4.69028 1.50023 3.73579 1.86738 3.00103 2.53046C2.26628 3.19355 1.80345 4.10549 1.702 5.09C1.696 5.142 1.692 5.191 1.685 5.242C1.604 5.916 1 10.956 1 12.5C1 13.2956 1.31607 14.0587 1.87868 14.6213C2.44129 15.1839 3.20435 15.5 4 15.5C5 15.5 5.5 15 6 14.5L7.414 13.086C7.78899 12.7109 8.29761 12.5001 8.828 12.5H13.172C13.7024 12.5001 14.211 12.7109 14.586 13.086L16 14.5C16.5 15 17 15.5 18 15.5C18.7956 15.5 19.5587 15.1839 20.1213 14.6213C20.6839 14.0587 21 13.2956 21 12.5C21 10.955 20.396 5.916 20.315 5.242C20.308 5.192 20.304 5.142 20.298 5.091C20.1968 4.10631 19.7341 3.19413 18.9993 2.53083C18.2645 1.86754 17.3099 1.50026 16.32 1.5Z"
-                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
             {{ $t("navbar.navLinks.community") }}
           </Button>
@@ -167,9 +215,20 @@
         <DisclosureButton as="a" href="/premium"
           class="block rounded-md py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
           <Button :selected="currentPath === '/premium'">
-            <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 17.5H18M1 1.5L4 13.5H18L21 1.5L15 8.5L11 1.5L7 8.5L1 1.5Z" stroke="white" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" />
+            <svg
+              width="22"
+              height="19"
+              viewBox="0 0 22 19"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 17.5H18M1 1.5L4 13.5H18L21 1.5L15 8.5L11 1.5L7 8.5L1 1.5Z"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
             Premium
           </Button>
