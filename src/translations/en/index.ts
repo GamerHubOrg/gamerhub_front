@@ -6,6 +6,7 @@ import enGamesTranslations from "./games/games.translations";
 import enHomeTranslations from "./home/home.translations";
 import enLobbyTranslations from "./lobby.translations";
 import enNavbarTranslations from "./navbar.translations";
+import enNotificationsTranslations from "./notifications.translations";
 import enPremiumTranslations from "./premium.translations";
 import enProfileTranslations from "./profile/profile.translations";
 import enRoomTranslations from "./room.translations";
@@ -23,6 +24,7 @@ const enTranslations: ITranslations = {
   config: enConfigTranslations,
   room: enRoomTranslations,
   colors: enColorsTranslations,
+  notifications: enNotificationsTranslations,
 };
 
 export default enTranslations;
