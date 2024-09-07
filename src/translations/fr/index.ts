@@ -6,6 +6,7 @@ import frGamesTranslations from "./games/games.translations";
 import frHomeTranslations from "./home/home.translations";
 import frLobbyTranslations from "./lobby.translations";
 import frNavbarTranslations from "./navbar.translations";
+import frNotificationsTranslations from "./notifications.translations";
 import frPremiumTranslations from "./premium.translations";
 import frProfileTranslations from "./profile/profile.translations";
 import frRoomTranslations from "./room.translations";
@@ -23,6 +24,7 @@ const frTranslations: ITranslations = {
   config: frConfigTranslations,
   room: frRoomTranslations,
   colors: frColorsTranslations,
+  notifications: frNotificationsTranslations,
 };
 
 export default frTranslations;

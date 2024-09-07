@@ -5,6 +5,7 @@ import IGamesTranslations from "./games.translations.types";
 import IHomePageTranslations from "./home.translations.types";
 import ILobbyTranslations from "./lobby.translations.types";
 import INavbarTranslations from "./navbar.translations.types";
+import INotificationsTranslations from "./notifications.translations.types";
 import IPremiumTranslations from "./premium.translations.types";
 import IProfileTranslations from "./profile.translations.types";
 import IRoomTranslations from "./room.translations.types";
@@ -22,6 +23,7 @@ interface ITranslations extends Record<string, any> {
   config: IConfigTranslations;
   room: IRoomTranslations;
   colors: IColorsTranslations;
+  notifications: INotificationsTranslations;
 }
 
 export default ITranslations;

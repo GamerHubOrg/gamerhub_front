@@ -53,7 +53,7 @@ function onRoomBackToLobby(data: IRoomData) {
 
 function onRoomDeleted(roomId: string) {
   socketStore.handleRoomUpdate({ roomId: "", data: {} });
-  onRoomNotification(t("room.notifications.roomDeleted", { roomId }), "error");
+  onRoomNotification(t("room.notifications.roomDeleted", { roomId }), "error", "roomDeleted");
   if (route.path.includes('room')) {
     router.push('/')
   }
@@ -61,7 +61,7 @@ function onRoomDeleted(roomId: string) {
 
 function onRoomKicked() {
   socketStore.handleRoomUpdate({ roomId: "", data: {} });
-  onRoomNotification(t("room.notifications.roomKicked"), "error");
+  onRoomNotification(t("room.notifications.roomKicked"), "error", "roomKicked");
   if (route.path.includes('room')) {
     router.push('/')
   }
@@ -69,19 +69,20 @@ function onRoomKicked() {
 
 function onRoomNotFound(roomId: string) {
   localStorage.removeItem("roomId");
-  onRoomNotification(t("room.notifications.roomNotExist", { roomId }), "error");
+  onRoomNotification(t("room.notifications.roomNotExist", { roomId }), "error", "roomNotExist");
   router.push("/");
 }
 
 function onUserNotAuth() {
-  onRoomNotification(t("room.notifications.userNotAuth"), "error");
+  onRoomNotification(t("room.notifications.userNotAuth"), "error", "userNotAuth");
 }
 
-function onRoomNotification(message: string, type: ToastType) {
+function onRoomNotification(message: string, type: ToastType, toastId?: string) {
   toast(message, {
     autoClose: 3000,
     type,
     theme: "dark",
+    toastId
   });
 }
 
@@ -97,18 +98,22 @@ if (socket) {
   socket.on("user:not-auth", onUserNotAuth);
   socket.on("room:kicked", onRoomKicked);
   socket.on("room:deleted", onRoomDeleted);
-  socket.on("room:notifications:success", (message: string) =>
-    onRoomNotification(message, "success")
-  );
-  socket.on("room:notifications:info", (message: string) =>
-    onRoomNotification(message, "info")
-  );
-  socket.on("room:notifications:error", (message: string) =>
-    onRoomNotification(message, "error")
-  );
-  socket.on("room:notifications:warning", (message: string) =>
-    onRoomNotification(message, "warning")
-  );
+  socket.on("room:notifications:success", (toastId: string, data?: Record<string, any>) => {
+    const message = t("notifications." + toastId, data || {});
+    onRoomNotification(message, "success", toastId)
+  });
+  socket.on("room:notifications:info", (toastId: string, data?: Record<string, any>) => {
+    const message = t("notifications." + toastId, data || {});
+    onRoomNotification(message, "info", toastId)
+  });
+  socket.on("room:notifications:error", (toastId: string, data?: Record<string, any>) => {
+    const message = t("notifications." + toastId, data || {});
+    onRoomNotification(message, "error", toastId)
+  });
+  socket.on("room:notifications:warning", (toastId: string, data?: Record<string, any>) => {
+    const message = t("notifications." + toastId, data || {});
+    onRoomNotification(message, "warning", toastId)
+  });
 }
 
 watch([() => currentUser.value, () => socketStore.getConnected], () => {
@@ -120,19 +125,11 @@ watch([() => currentUser.value, () => socketStore.getConnected], () => {
 
 <template>
   <slot></slot>
-  <div
-    v-if="roomId"
-    class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg"
-  >
-    <div
-      class="sticky top-0 left-0 flex p-2 justify-between items-center bg-white"
-    >
+  <div v-if="roomId"
+    class="bg-gray-200 text-black flex flex-col gap-2 fixed z-10 bottom-0 right-0 max-h-[75%] overflow-auto rounded-t-lg">
+    <div class="sticky top-0 left-0 flex p-2 justify-between items-center bg-white">
       <button @click="toggleLogs" class="font-bold">Journal de la room</button>
-      <button
-        v-if="areLogsExpanded"
-        @click="toggleLogs"
-        class="font-bold text-3xl"
-      >
+      <button v-if="areLogsExpanded" @click="toggleLogs" class="font-bold text-3xl">
         &times;
       </button>
     </div>
