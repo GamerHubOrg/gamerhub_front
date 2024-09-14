@@ -4,7 +4,7 @@
         <Lobby v-show="!isLobbyCollapsed" />
         <GameRules v-show="!isGameRulesCollapsed" />
 
-        <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
+        <main class="p-4 h-full pt-24 xl:max-w-screen-xl w-full mx-auto">
             <router-view />
         </main>
     </div>

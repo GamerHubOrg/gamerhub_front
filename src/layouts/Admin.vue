@@ -4,7 +4,7 @@
     <Lobby v-show="!isLobbyCollapsed" />
     <GameRules v-show="!isGameRulesCollapsed" />
 
-    <main class="p-4 h-full pt-20 xl:max-w-screen-xl w-full mx-auto">
+    <main class="p-4 h-full pt-24 xl:max-w-screen-xl w-full mx-auto">
       <div class="mt-10 bg-dark3 rounded-md p-3">
         <nav class="flex gap-6" aria-label="Tabs">
           <router-link

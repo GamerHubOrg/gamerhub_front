@@ -1,7 +1,7 @@
 export interface IGameTranslations {
   record: Record<string, any>;
   configs: Record<string, any>;
-  game: Record<string, any>;
+  game?: Record<string, any>;
 }
 
 export interface ISpeedrundleTranslations extends IGameTranslations {
@@ -193,15 +193,7 @@ export interface IWerewolvesTranslations extends IGameTranslations {
     deadCount: string;
     composition: string;
   };
-  roles: {
-    cupidon: string;
-    hunter: string;
-    psychic: string;
-    thief: string;
-    villager: string;
-    witch: string;
-    wolf: string;
-  };
+  roles: Record<string, any>;
   camps: {
     wolves: string;
     village: string;

@@ -1,33 +1,31 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
         <div class="flex flex-col gap-2">
-            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Cupidon</span>
-            <span class="w-full text-center bg-dark3 p-2 rounded">Choisissez le couple de la partie</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.cupidonPower.title') }}</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.cupidonPower.subtitle') }}</span>
         </div>
 
         <div class="flex flex-row justify-between items-center gap-2 text-black mx-auto w-full my-14">
             <select v-model="firstPlayer" class="bg-dark5 text-white p-2 rounded w-full cursor-pointer" :disabled="hasAlreadyChoosed">
-                <option :value="undefined" disabled>Choose player</option>
+                <option :value="undefined" disabled>{{ $t('games.werewolves.game.cupidonPower.choosePlayer') }}</option>
                 <option v-for="user in availableFirstUsers" :key="user._id" :value="user._id">{{ user.username }}</option>
             </select>
 
             <span class="text-4xl">❤️</span>
 
             <select v-model="secondPlayer" class="bg-dark5 text-white p-2 rounded w-full cursor-pointer" :disabled="hasAlreadyChoosed">
-                <option :value="undefined" disabled>Choose player</option>
+                <option :value="undefined" disabled>{{ $t('games.werewolves.game.cupidonPower.choosePlayer') }}</option>
                 <option v-for="user in availableSecondUsers" :key="user._id" :value="user._id">{{ user.username }}</option>
             </select>
         </div>
 
         <button 
-            v-if="!hasAlreadyChoosed"
             class="bg-primary text-white w-full p-1 rounded hover:bg-opacity-80 disabled:opacity-50 disabled:cursor-not-allowed"
             :disabled="!firstPlayer || !secondPlayer"
             @click="handleDefineCouple" 
         >
-            Confirmer
+            {{ $t('shared.confirm') }}
         </button>
-        <span v-else class="w-full text-center">En attente des autres sorcières...</span>
     </Modal>
 </template>
 

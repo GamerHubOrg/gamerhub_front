@@ -1,23 +1,24 @@
 <template>
   <div class="w-full">
+    {{ currentRoleTurn }}
     <div v-if="gameState === 'night'" class="bg-blue-950 rounded-lg p-4 w-full flex flex-col gap-3 mb-10">
       <div class="flex flex-row items-center gap-3">
-        <span class="font-bold text-2xl">Nuit 🌙</span>
-        <button v-if="currentUserRole?.name === currentRoleTurn && currentUserRole?.isAlive" class="bg-black bg-opacity-25 p-2 rounded-md text-sm" @click="handleNightPhase">Jouer mon tour</button>
+        <span class="font-bold text-2xl">{{ $t('games.werewolves.game.state.night') }}</span>
+        <button v-if="currentUserRole?.name === currentRoleTurn && currentUserRole?.isAlive" class="bg-black bg-opacity-25 p-2 rounded-md text-sm" @click="handleNightPhase">{{ $t('games.werewolves.game.state.playMyTurn') }}</button>
       </div>
-      <p v-if="currentRoleTurn === 'Voyante'">La voyante se réveille et regarde dans sa boule de cristal...</p>
-      <p v-if="currentRoleTurn === 'Sorcière'">La sorcière se réveille et prépare ses potions...</p>
-      <p v-if="currentRoleTurn === 'Voleur'">Le voleur se réveille, faites attention à vos affaires...</p>
-      <p v-if="currentRoleTurn === 'Cupidon'">Cupidon ouvre les yeux et décoche une fléche de son arc...</p>
-      <p v-if="currentRoleTurn === 'Loup'">Les loups se réveillent{{ gameData?.turn == 1 ? ', se découvrent ' : '' }} et choisissent leur proie...</p>
+      <p v-if="currentRoleTurn === 'games.werewolves.roles.psychic.name'">{{ $t('games.werewolves.game.state.psychic') }}</p>
+      <p v-if="currentRoleTurn === 'games.werewolves.roles.witch.name'">{{ $t('games.werewolves.game.state.witch') }}</p>
+      <p v-if="currentRoleTurn === 'games.werewolves.roles.thief.name'">{{ $t('games.werewolves.game.state.thief') }}</p>
+      <p v-if="currentRoleTurn === 'games.werewolves.roles.cupidon.name'">{{ $t('games.werewolves.game.state.cupidon') }}</p>
+      <p v-if="currentRoleTurn === 'games.werewolves.roles.wolf.name'">{{ $t('games.werewolves.game.state.wolf') }}</p>
     </div>
     <div v-else-if="gameState === 'day'" class="bg-blue-500 rounded-lg p-4 w-full flex flex-col gap-3 mb-10">
       <div class="flex flex-row items-center gap-3">
-        <span class="font-bold text-2xl">Jour ☀️</span>
-        <button v-if="(currentUserRole?.name === currentRoleTurn || currentRoleTurn === 'Village') && currentUserRole?.isAlive" class="bg-black bg-opacity-25 p-2 rounded-md text-sm" @click="handleDayPhase">Jouer mon tour</button>
+        <span class="font-bold text-2xl">{{ $t('games.werewolves.game.state.day') }}</span>
+        <button v-if="(currentUserRole?.name === currentRoleTurn || currentRoleTurn === 'Village') && currentUserRole?.isAlive" class="bg-black bg-opacity-25 p-2 rounded-md text-sm" @click="handleDayPhase">{{ $t('games.werewolves.game.state.playMyTurn') }}</button>
       </div>
-      <p v-if="currentRoleTurn === 'Village'">Les villageois se réveillent et se réunissent autour du feu pour élucider cette histoire de Loup-Garou infiltré au sein du village...</p>
-      <p v-if="currentRoleTurn === 'Chasseur'">Le chasseur est mort... Il va tirer sur quelqu'un pour l'entrainer dans chute</p>
+      <p v-if="currentRoleTurn === 'Village'">{{ $t('games.werewolves.game.state.village') }}</p>
+      <p v-if="currentRoleTurn === 'games.werewolves.roles.hunter.name'">{{ $t('games.werewolves.game.state.hunter') }}</p>
     </div>
 
     <WolfPowerModal 
@@ -98,23 +99,23 @@ const nightPhaseTimer = ref();
 function handleNightPhase() {
   if (gameState.value !== 'night' || !currentUserRole.value?.isAlive || currentUserRole.value?.name !== currentRoleTurn.value) return;
 
-  if (currentRoleTurn.value === 'Voyante') {
+  if (currentRoleTurn.value === 'games.werewolves.roles.psychic.name') {
     showPsychicPowerModal.value = true;
   }
 
-  if (currentRoleTurn.value === 'Loup') {
+  if (currentRoleTurn.value === 'games.werewolves.roles.wolf.name') {
     showWolfPowerModal.value = true;
   }
 
-  if (currentRoleTurn.value === 'Sorcière') {
+  if (currentRoleTurn.value === 'games.werewolves.roles.witch.name') {
     showWitchPowerModal.value = true;
   }
 
-  if (currentRoleTurn.value === 'Cupidon') {
+  if (currentRoleTurn.value === 'games.werewolves.roles.cupidon.name') {
     showCupidonPowerModal.value = true;
   }
 
-  if (currentRoleTurn.value === 'Voleur') {
+  if (currentRoleTurn.value === 'games.werewolves.roles.thief.name') {
     showThiefPowerModal.value = true;
   }
 }
@@ -126,7 +127,7 @@ function handleDayPhase() {
     showVillageVoteModal.value =  true;
   }
 
-  if (currentRoleTurn.value === 'Chasseur' && currentUserRole.value?.name === currentRoleTurn.value && huntersBeingKilled.value.includes(currentUser.value!._id)) {
+  if (currentRoleTurn.value === 'games.werewolves.roles.hunter.name' && currentUserRole.value?.name === currentRoleTurn.value && huntersBeingKilled.value.includes(currentUser.value!._id)) {
     showHunterPowerModal.value = true;
   }
 }

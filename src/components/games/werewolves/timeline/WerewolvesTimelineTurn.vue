@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col gap-2 border-4 border-dark2 rounded-lg overflow-hidden">
     <div class="p-3 bg-dark2 cursor-pointer flex flex-row items-center justify-between gap-1" @click="handleCollapseTurn">
-      <span>{{ turn }}{{ turn === 1 ? 'er' : 'e' }} tour</span>
+      <span>{{ turn }}{{ turn === 1 ? 'er' : 'e' }} {{ $t('games.werewolves.game.timeline.turn') }}</span>
       <div class="flex flex-row items-center gap-2">
         <span 
           class="text-white rounded px-2 py-1 bg-green-400 text-sm"
           :class="{'bg-yellow-600': currentRoundTotalDeath === 1, 'bg-red-400': currentRoundTotalDeath > 1}"
         >
-          {{ currentRoundTotalDeath }} morts
+          {{ currentRoundTotalDeath }} {{ $t('games.werewolves.game.timeline.deaths') }}
         </span>
       </div>
       <ChevronDownIcon v-if="!collapsed" class="w-5 text-white" />
@@ -15,91 +15,91 @@
     </div>
     <div v-if="!collapsed" class="flex flex-col gap-4">
       <div class="flex flex-col gap-3 p-3">
-        <span class="w-full bg-dark2 p-3 rounded-md">Nuit</span>
+        <span class="w-full bg-dark2 p-3 rounded-md"> {{ $t('games.werewolves.game.timeline.night') }}</span>
         <!-- Thief row -->
         <div v-if="hasThiefPlayed" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="thiefUser" :role="getPlayerSwapedRole(thiefUser?._id)" />
-          <span>a volé le role de</span>
+          <span>{{ $t('games.werewolves.game.timeline.stealRole') }}</span>
           <WerewolvesPlayerName :user="swapedUser" :role="getPlayerSwapedRole(swapedUser?._id)" />
-          <span>qui devient donc</span>
+          <span>{{ $t('games.werewolves.game.timeline.whoBecome') }}</span>
           <WerewolvesPlayerName :user="swapedUser" :role="getPlayerRole(swapedUser?._id)" />
         </div>
 
         <!-- Cupidon row -->
         <div v-if="hasCupidonPlayed" class="flex flex-row items-center gap-1 flex-wrap">
           <WerewolvesPlayerName :user="cupidonUser" :role="getPlayerRole(cupidonUser?._id)" /> 
-          <span>a uni</span>
+          <span>{{ $t('games.werewolves.game.timeline.united') }}</span>
           <WerewolvesPlayerName v-if="gameData?.couple" :user="getPlayer(gameData?.couple[0])" :role="getPlayerRole(gameData?.couple[0])" /> 
-          <span>et</span>
+          <span>{{ $t('games.werewolves.game.timeline.and') }}</span>
           <WerewolvesPlayerName v-if="gameData?.couple" :user="getPlayer(gameData?.couple[1])" :role="getPlayerRole(gameData?.couple[1])" /> 
-          <span>jusqu'à ce que la mort les sépare</span>
+          <span>{{ $t('games.werewolves.game.timeline.untilDeath') }}</span>
         </div>
 
         <!-- Psychic row -->
         <div v-if="hasPsychicPlayed" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="psychicUser" :role="getPlayerRole(psychicUser?._id)" /> 
-          <span>a regardé le role de</span>
+          <span>{{ $t('games.werewolves.game.timeline.watchedRole') }}</span>
           <WerewolvesPlayerName :user="getPlayer(currentTurnPsychicWatch?.target)" :role="getPlayerRole(currentTurnPsychicWatch?.target)" />
         </div>
 
         <!-- Wolves row -->
         <div v-if="hasWolvesVoted && wolvesMostVotedPlayer" class="flex flex-row items-center gap-1">
-          <span>Les loups ont décidés de tuer</span>
+          <span>{{ $t('games.werewolves.game.timeline.wolfKilled') }}</span>
           <WerewolvesPlayerName :user="getPlayer(wolvesMostVotedPlayer.target)" :role="getPlayerRole(wolvesMostVotedPlayer.target)" /> 
         </div>
 
         <!-- Witch kill row -->
         <div v-if="hasWitchKilled" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="witchUser" :role="getPlayerRole(witchUser?._id)" /> 
-          <span>utilisé une potion pour tuer</span>
+          <span>{{ $t('games.werewolves.game.timeline.killPotionUsed') }}</span>
           <WerewolvesPlayerName :user="getPlayer(currentTurnWitchKill?.target)" :role="getPlayerRole(currentTurnWitchKill?.target)" />
         </div>
 
         <!-- Witch save row -->
         <div v-if="hasWitchSaved" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="witchUser" :role="getPlayerRole(witchUser?._id)" /> 
-          <span>utilisé une potion pour sauver</span>
+          <span>{{ $t('games.werewolves.game.timeline.savePotionUsed') }}</span>
           <WerewolvesPlayerName :user="getPlayer(currentTurnWitchSave?.target)" :role="getPlayerRole(currentTurnWitchSave?.target)" />
         </div>
       </div>
 
       <div class="flex flex-col gap-3 p-3">
-        <span class="w-full bg-dark2 p-3 rounded-md">Jour</span>
+        <span class="w-full bg-dark2 p-3 rounded-md">{{ $t('games.werewolves.game.timeline.day') }}</span>
         <!-- Couple dead night row -->
         <div v-if="isCoupleDeadByNight" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="getPlayer(couplePlayerDead)" :role="getPlayerRole(couplePlayerDead)" /> 
-          <span>est mort cette nuit. Dans un élan de chagrin, </span>
+          <span>{{ $t('games.werewolves.game.timeline.coupleDeadWolf') }} </span>
           <WerewolvesPlayerName :user="getPlayer(otherCouplePlayer)" :role="getPlayerRole(otherCouplePlayer)" />
-          <span>se donne la mort</span>
+          <span>{{ $t('games.werewolves.game.timeline.suicide') }}</span>
         </div>
 
         <!-- Night Hunter row -->
         <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.target !== hunterUser?._id" class="flex flex-row items-center gap-1">
-          <span>Le chasseur est mort durant la nuit.</span>
+          <span>{{ $t('games.werewolves.game.timeline.hunterDeadNight') }}</span>
           <WerewolvesPlayerName :user="hunterUser" :role="getPlayerRole(hunterUser?._id)" /> 
-          <span>a tiré sur</span>
+          <span>{{ $t('games.werewolves.game.timeline.shootOn') }}</span>
           <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.target)" :role="getPlayerRole(currentTurnHunterKill?.target)" />
         </div>
 
         <!-- Villages row -->
         <div v-if="hasVillageVoted && villageMostVotedPlayer" class="flex flex-row items-center gap-1">
-          <span>Les villageois ont décidés de tuer</span>
+          <span>{{ $t('games.werewolves.game.timeline.villagersKilled') }}</span>
           <WerewolvesPlayerName :user="getPlayer(villageMostVotedPlayer.target)" :role="getPlayerRole(villageMostVotedPlayer.target)" /> 
         </div>
 
         <!-- Day Hunter row -->
         <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.target === hunterUser?._id" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="hunterUser" :role="getPlayerRole(hunterUser?._id)" /> 
-          <span>a tiré sur</span>
+          <span>{{ $t('games.werewolves.game.timeline.shootOn') }}</span>
           <WerewolvesPlayerName :user="getPlayer(currentTurnHunterKill?.target)" :role="getPlayerRole(currentTurnHunterKill?.target)" />
         </div>
 
         <!-- Couple dead day row -->
         <div v-if="isCoupleDeadByDay" class="flex flex-row items-center gap-1">
           <WerewolvesPlayerName :user="getPlayer(couplePlayerDead)" :role="getPlayerRole(couplePlayerDead)" /> 
-          <span>est mort par le village. Dans un élan de chagrin, </span>
+          <span>{{ $t('games.werewolves.game.timeline.coupleDeadVillage') }} </span>
           <WerewolvesPlayerName :user="getPlayer(otherCouplePlayer)" :role="getPlayerRole(otherCouplePlayer)" />
-          <span>se donne la mort</span>
+          <span>{{ $t('games.werewolves.game.timeline.suicide') }}</span>
         </div>
       </div>
     </div>

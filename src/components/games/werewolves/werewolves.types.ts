@@ -36,13 +36,13 @@ export interface WerewolfRole {
 }
 
 export enum EWerewolvesRoleName {
-  thief = 'Voleur',
-  wolf = 'Loup',
-  witch = 'Sorcière',
-  hunter = 'Chasseur',
-  psychic = 'Voyante',
-  villager = 'Villageois',
-  cupidon = 'Cupidon',
+  thief = 'games.werewolves.roles.thief.name',
+  wolf = 'games.werewolves.roles.wolf.name',
+  witch = 'games.werewolves.roles.witch.name',
+  hunter = 'games.werewolves.roles.hunter.name',
+  psychic = 'games.werewolves.roles.psychic.name',
+  villager = 'games.werewolves.roles.villager.name',
+  cupidon = 'games.werewolves.roles.cupidon.name',
 }
 
 export type ILinkedWerewolfRoles = Record<string, WerewolfRole>;

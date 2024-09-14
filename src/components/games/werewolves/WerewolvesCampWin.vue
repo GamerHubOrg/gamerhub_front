@@ -13,10 +13,10 @@
     <div>
       <span class="font-bold text-2xl">{{ gameCampWin }}</span>
 
-      <p v-if="campWin === 'wolves'">Tous les villageois sont morts, les loups remporte la partie !</p>
-      <p v-else-if="campWin === 'village'">Tous les loups sont morts, les villageois remporte la partie !</p>
-      <p v-else-if="campWin === 'solo'">Après avoir trahis son camp et tuer tous les autres joueurs, il remporte la partie !</p>
-      <p v-else>Tous les joueurs sont morts, la partie se solde par une égalité !</p>
+      <p v-if="campWin === 'wolves'">{{ $t('games.werewolves.game.campWin.wolvesWin') }}</p>
+      <p v-else-if="campWin === 'village'">{{ $t('games.werewolves.game.campWin.villageWin') }}</p>
+      <p v-else-if="campWin === 'solo'">{{ $t('games.werewolves.game.campWin.soloWin') }}</p>
+      <p v-else>{{ $t('games.werewolves.game.campWin.draw') }}</p>
     </div>
   </div>
 </template>
@@ -25,12 +25,14 @@
 import { computed } from "vue";
 import { IWerewolvesGameData } from "./werewolves.types";
 import { useAuthStore } from "@/modules/auth/auth.store";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
   gameData: IWerewolvesGameData,
 }>()
 
 const store = useAuthStore();
+const { t } = useI18n(); 
 
 const currentUser = computed(() => store.getCurrentUser);
 const campWin = computed(() => props.gameData.campWin ?? 'draw');
@@ -40,11 +42,11 @@ const currentUserRole = computed(() => gameRoles.value[currentUser.value?._id as
 const aliveUsers = computed(() => props.gameData.usersThatPlayed.filter((user) => gameRoles.value[user._id]?.isAlive));
 
 const gameCampWin = computed(() => {
-  if (campWin.value === 'wolves') return 'Victoire des loups';
-  if (campWin.value === 'village') return 'Victoire du village';
+  if (campWin.value === 'wolves') return t('games.werewolves.game.campWin.wolvesWinTitle');
+  if (campWin.value === 'village') return t('games.werewolves.game.campWin.villageWinTitle');
   const hasCoupleWon = aliveUsers.value.length === props.gameData.couple?.length;
-  if (campWin.value === 'solo' && hasCoupleWon) return 'Victoire du couple';
-  if (campWin.value === 'solo') return "Victoire d'un role solitaire"
-  return 'Égalité';
+  if (campWin.value === 'solo' && hasCoupleWon) return t('games.werewolves.game.campWin.coupleWinTitle');
+  if (campWin.value === 'solo') return t('games.werewolves.game.campWin.soloWinTitle');
+  return t('games.werewolves.game.campWin.drawTitle');
 })
 </script>

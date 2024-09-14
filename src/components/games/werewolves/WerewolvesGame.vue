@@ -27,16 +27,16 @@
             <span>{{ user.username }}</span> 
             <span v-if="getIsInCurrentUserCouple(user._id)" class="text-lg">❤️</span>
           </div>
-          <span>({{ gameRoles[user._id]?.name }})</span>
+          <span v-if="gameRoles[user._id]?.name">({{ $t(gameRoles[user._id]?.name) }})</span>
         </div>
       </div>
     </div>
 
     <Modal :open="showDisplayRoleDialog" :autoclose="4000" @close="showDisplayRoleDialog = false">
       <div class="flex flex-col">
-        <span>Voici votre role</span>
+        <span>{{ $t('games.werewolves.game.roleModal.title') }}</span>
         <img :src="`/images/werewolves/icons/${currentUserRole?.picture}.png`" />
-        {{ currentUserRole?.name }}
+        {{ $t(currentUserRole?.name) }}
       </div>
     </Modal>
   </div>
@@ -81,7 +81,7 @@ function isUserRoleDiscovered(user: IWerewolvesPlayer) {
   const gameTurn = gameData.value?.turn || 0;
   const arePlayersWolves = gameTurn > 0 && currentUserRole.value?.name === 'Loup' && gameRoles.value[user!._id]?.name === 'Loup';
 
-  return currentUser.value?._id === user._id || (currentUserRole.value?.name === 'Voyante' && isRoleDiscovered) || isPlayerDead || arePlayersWolves;
+  return currentUser.value?._id === user._id || (currentUserRole.value?.name === 'games.werewolves.roles.psychic.name' && isRoleDiscovered) || isPlayerDead || arePlayersWolves;
 }
 
 function setPlayerRef(el: any) {

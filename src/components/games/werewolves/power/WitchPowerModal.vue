@@ -1,8 +1,8 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
         <div class="flex flex-col gap-2">
-            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Sorcière</span>
-            <p class="w-full text-center bg-dark3 p-2 rounded">Voulez vous utiliser une de vos potions cette nuit ?</p>
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.witchPower.title') }}</span>
+            <p class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.witchPower.subtitle') }}</p>
             {{ witchSkips }}
             <div class="players-grid mt-4">
                 <div
@@ -16,14 +16,14 @@
                         class="bg-primary rounded text-sm w-full px-2 py-1 hover:bg-opacity-70"
                         @click="() => handleSavePlayer(user._id)"
                     >
-                        Sauver
+                        {{ $t('games.werewolves.game.witchPower.save') }}
                     </button>
                     <button 
                         v-else-if="gameRoles[user._id].isAlive && !isKillPotionUsed && !hasAlreadyChoosed" 
                         class="bg-red-500 rounded text-sm w-full px-2 py-1 hover:bg-red-400"
                         @click="() => handleKillPlayer(user._id)"
                     >
-                        Empoisonner
+                        {{ $t('games.werewolves.game.witchPower.kill') }}
                     </button>
                 </div>
             </div>
@@ -33,9 +33,9 @@
                 class="underline mt-4 border border-dark3 rounded p-2 hover:bg-dark3 transition-colors"
                 @click="handleSkip"
             >
-                Ne rien faire
+                {{ $t('games.werewolves.game.witchPower.doNothing') }}
             </button>
-            <span v-else class="w-full text-center">En attente des autres sorcières...</span>
+            <span v-else class="w-full text-center">{{ $t('games.werewolves.game.witchPower.waiting') }}</span>
         </div>
     </Modal>
 </template>

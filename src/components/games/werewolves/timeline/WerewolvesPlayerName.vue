@@ -12,7 +12,7 @@
           }"
           class="font-bold"
         >
-          {{ user?.username }} ({{ role?.name }})
+          {{ user?.username }} ({{ $t(role?.name) }})
         </span>
       </div>
     </PopoverButton>
@@ -31,8 +31,8 @@
             :src="`/images/werewolves/icons/${role?.picture}.png`"
             class="w-40"
           />
-          <span class="font-bold">{{ role?.name }}</span>
-          <span class="w-full text-center">{{ role?.power?.description }}</span>
+          <span class="font-bold">{{ $t(role?.name) }}</span>
+          <span class="w-full text-center">{{ $t(role?.power?.description) }}</span>
         </div>
       </PopoverPanel>
     </transition>

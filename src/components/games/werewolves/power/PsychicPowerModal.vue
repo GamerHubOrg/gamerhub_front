@@ -1,8 +1,8 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
         <div class="flex flex-col gap-2">
-            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Voyante</span>
-            <span class="w-full text-center bg-dark3 p-2 rounded">Selectionnez un joueur pour voir son role</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.psychicPower.title') }}</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.psychicPower.subtitle') }}</span>
             <div class="players-grid mt-4">
                 <div
                     v-for="user in users" :key="user._id" 
@@ -15,11 +15,11 @@
                         class="bg-primary rounded text-sm w-full px-2 py-1"
                         @click="() => handleWatchrole(user._id)"
                     >
-                        Voir le role
+                        {{ $t('games.werewolves.game.psychicPower.watch') }}
                     </button>
                 </div>
             </div>
-            <span v-if="hasAlreadyChoosed" class="w-full text-center">En attente des autres voyantes...</span>
+            <span v-if="hasAlreadyChoosed" class="w-full text-center">{{ $t('games.werewolves.game.psychicPower.waiting') }}</span>
         </div>
     </Modal>
 </template>

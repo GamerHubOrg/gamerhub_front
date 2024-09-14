@@ -19,7 +19,8 @@ const enSharedTranslations: ISharedTranslations = {
     hours: "hour | hours",
     days: "day | days",
   },
-  tries: "try | tries"
+  tries: "try | tries",
+  confirm: "Confirm"
 };
 
 export default enSharedTranslations;

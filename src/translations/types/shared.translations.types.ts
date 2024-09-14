@@ -18,6 +18,7 @@ interface ISharedTranslations {
     hours: string;
     days: string;
   };
+  confirm: string;
 }
 
 export default ISharedTranslations;

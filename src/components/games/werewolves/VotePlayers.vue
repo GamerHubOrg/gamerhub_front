@@ -11,13 +11,13 @@
 
         <div class="flex flex-col mt-3 gap-2">
             <span v-for="vote in tmpVotes" :key="vote.playerId">
-                {{ getPlayerName(vote.playerId) }} want to vote for {{ getPlayerName(vote.target) }}
+                {{ getPlayerName(vote.playerId) }} {{ $t('games.werewolves.game.villagePower.wantVoteFor') }} {{ getPlayerName(vote.target) }}
             </span>
         </div>
 
         <div class="flex flex-col mt-3 gap-2">
             <span v-for="vote in votes" :key="vote.playerId">
-                {{ getPlayerName(vote.playerId) }} voted for {{ getPlayerName(vote.target) }}
+                {{ getPlayerName(vote.playerId) }} {{ $t('games.werewolves.game.villagePower.votedFor') }} {{ getPlayerName(vote.target) }}
             </span>
         </div>
 
@@ -26,7 +26,7 @@
             @click="handleSendVote"
             :disabled="hasVoted"
         >
-            {{ hasVoted ? 'Waiting for everyone to vote' : 'Confirm vote' }}
+            {{ hasVoted ? $t('games.werewolves.game.villagePower.waiting') : $t('games.werewolves.game.villagePower.confirm') }}
         </button>
     </div>
 </template>

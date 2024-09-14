@@ -1,8 +1,8 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
         <div class="flex flex-col gap-2">
-            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Voleur</span>
-            <span class="w-full text-center bg-dark3 p-2 rounded">Choisissez un role pour jouer la partie</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.thiefPower.title') }}</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.thiefPower.subtitle') }}</span>
             <div class="flex flex-row gap-3 mt-6">
                 <div 
                     v-for="userId in usersIds" 
@@ -16,10 +16,10 @@
                     @click="!hasAlreadyChoosed && handleChooseRole(userId)"
                 >
                     <img :src="`/images/werewolves/icons/${gameRoles[userId]?.picture}.png`">
-                    <span>{{ gameRoles[userId]?.name }}</span>
+                    <span v-if="gameRoles[userId]?.name">{{ $t(gameRoles[userId]?.name) }}</span>
                 </div>
             </div>
-            <span v-if="hasAlreadyChoosed" class="w-full text-center">En attente des autres voleurs...</span>
+            <span v-if="hasAlreadyChoosed" class="w-full text-center">{{ $t('games.werewolves.game.thiefPower.waiting') }}</span>
         </div>
     </Modal>
 </template>

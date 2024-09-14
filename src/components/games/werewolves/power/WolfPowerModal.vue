@@ -1,8 +1,8 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
         <div class="flex flex-col gap-2 mb-6">
-            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Loups</span>
-            <span class="w-full text-center bg-dark3 p-2 rounded">Selectionnez votre victime pour cette nuit</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.wolfPower.title') }}</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.wolfPower.subtitle') }}</span>
         </div>
         <VotePlayers :users="aliveUsers" @vote="handleConfirmVote" />
     </Modal>

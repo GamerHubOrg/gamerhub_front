@@ -20,6 +20,7 @@ const frSharedTranslations: ISharedTranslations = {
     days: "jour | jours",
   },
   tries: "essai | essais",
+  confirm: "Confirmer"
 };
 
 export default frSharedTranslations;

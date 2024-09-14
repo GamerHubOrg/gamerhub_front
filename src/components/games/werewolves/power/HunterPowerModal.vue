@@ -1,8 +1,8 @@
 <template>
     <Modal :open="open" @close="$emit('close')">
         <div class="flex flex-col gap-2 mb-6">
-            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">Chasseur</span>
-            <span class="w-full text-center bg-dark3 p-2 rounded">Vous avez été tué. Emportez quelqu'un avec vous</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.hunterPower.title') }}</span>
+            <span class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.hunterPower.subtitle') }}</span>
 
             <div class="players-grid mt-4">
                 <div
@@ -15,7 +15,7 @@
                         class="bg-red-500 rounded text-sm w-full px-2 py-1 hover:bg-red-400"
                         @click="() => handleKillPlayer(user._id)"
                     >
-                        Tirer
+                    {{ $t('games.werewolves.game.hunterPower.shoot') }}
                     </button>
                 </div>
             </div>
