@@ -10,33 +10,43 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --toastify-color-success: #00A569;
+  --toastify-color-success: #00a569;
   --toastify-color-dark: #232323;
 }
 
-body{
-  color:white;
+body {
+  color: white;
   background: #121212;
 }
 
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #00a569 #232323;
-  }
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #00a569 #232323;
+}
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 4px;
-  }
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 4px;
+}
 
-  *::-webkit-scrollbar-track {
-    background: #232323;
-  }
+*::-webkit-scrollbar-track {
+  background: #232323;
+}
 
-  *::-webkit-scrollbar-thumb {
-    background-color: #00a569;
-    border-radius: 0px;
-    border: 1px solid #232323;
-  }
+*::-webkit-scrollbar-thumb {
+  background-color: #00a569;
+  border-radius: 0px;
+  border: 1px solid #232323;
+}
+
+select {
+  padding : 0;
+  padding-right : 30px;
+  border : 0;
+}
+
+input {
+  border : 0;
+}

@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/vue-i18n.d.ts"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
@@ -21,6 +26,7 @@
     "socket.io-client": "^4.7.4",
     "stripe": "^16.0.0",
     "vue": "^3.3.8",
+    "vue-i18n": "9",
     "vue-router": "^4.2.5",
     "vue3-toastify": "^0.2.1"
   },

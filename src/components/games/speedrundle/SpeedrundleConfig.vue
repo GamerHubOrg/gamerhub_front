@@ -1,26 +1,15 @@
 <template>
   <div class="flex flex-col gap-3 text-white">
     <div class="option-container">
-      <label for="mode">Mode de jeu :</label>
-      <select
-        id="mode"
-        :disabled="isConfigDisabled"
-        v-model="internalConfig.mode"
-      >
-        <option value="classic" class="text-black">Classic</option>
-        <option value="less_trials" class="text-black">
-          Few trials possible
-        </option>
+      <label for="mode">{{ $t("games.speedrundle.configs.mode.label") }} :</label>
+      <select id="mode" :disabled="isConfigDisabled" v-model="internalConfig.mode">
+        <option value="classic" class="text-black">{{ $t("games.speedrundle.configs.mode.values.classic") }}</option>
       </select>
     </div>
 
     <div class="option-container">
-      <label for="theme">Thème :</label>
-      <select
-        id="theme"
-        :disabled="isConfigDisabled"
-        v-model="internalConfig.theme"
-      >
+      <label for="theme">{{ $t("games.speedrundle.configs.theme") }} :</label>
+      <select id="theme" :disabled="isConfigDisabled" v-model="internalConfig.theme">
         <option class="text-black" value="league_of_legends">
           League Of Legends
         </option>
@@ -28,23 +17,13 @@
       </select>
     </div>
 
-    <div
-      v-if="internalConfig.theme === 'pokemon'"
-      class="option-container !flex-col !items-start"
-    >
-      <label>Générations de Pokémon :</label>
+    <div v-if="internalConfig.theme === 'pokemon'" class="option-container !flex-col !items-start">
+      <label>{{ $t("games.speedrundle.configs.pokemonGens") }} :</label>
       <div class="flex flex-wrap gap-2">
         <div v-for="generation in 9" :key="generation">
           <label>
-            <input
-              type="checkbox"
-              :disabled="isConfigDisabled"
-              :checked="
-                internalConfig.selectedGenerations?.includes(generation)
-              "
-              @change="toggleGeneration(generation)"
-              :value="generation"
-            />
+            <input type="checkbox" :disabled="isConfigDisabled" :checked="internalConfig.selectedGenerations?.includes(generation)
+              " @change="toggleGeneration(generation)" :value="generation" />
             {{ generation }}
           </label>
         </div>
@@ -52,17 +31,12 @@
     </div>
 
     <div class="option-container !flex-col !items-start">
-      <label>Indices :</label>
+      <label>{{ $t("games.speedrundle.configs.clues") }} :</label>
       <div class="flex flex-wrap gap-2">
         <div v-for="{ key, name } in columns" :key="key">
           <label>
-            <input
-              type="checkbox"
-              :disabled="isConfigDisabled"
-              :checked="internalConfig.selectedColumns?.includes(key)"
-              @change="toggleColumn(key)"
-              :value="key"
-            />
+            <input type="checkbox" :disabled="isConfigDisabled" :checked="internalConfig.selectedColumns?.includes(key)"
+              @change="toggleColumn(key)" :value="key" />
             {{ name }}
           </label>
         </div>
@@ -70,28 +44,15 @@
     </div>
 
     <div class="option-container">
-      <label for="maxPlayers">Nombre de joueurs maximum :</label>
-      <input
-        id="maxPlayers"
-        type="number"
-        :disabled="isConfigDisabled"
-        :min="1"
-        placeholder="Entrez le nombre maximum de joueurs"
-        v-model="internalConfig.maxPlayers"
-      />
+      <label for="maxPlayers">{{ $t("shared.maxPlayers", 2) }} :</label>
+      <input id="maxPlayers" type="number" :disabled="isConfigDisabled" :min="1"
+        placeholder="Entrez le nombre maximum de joueurs" v-model="internalConfig.maxPlayers" />
     </div>
 
     <div class="option-container">
-      <label for="nbRounds">Nombre de rounds :</label>
-      <input
-        id="nbRounds"
-        type="number"
-        :disabled="isConfigDisabled"
-        :min="1"
-        :max="10"
-        placeholder="Entrez le nombre de rounds"
-        v-model="internalConfig.nbRounds"
-      />
+      <label for="nbRounds">{{ $t("games.speedrundle.configs.nbRounds") }} :</label>
+      <input id="nbRounds" type="number" :disabled="isConfigDisabled" :min="1" :max="10"
+        placeholder="Entrez le nombre de rounds" v-model="internalConfig.nbRounds" />
     </div>
   </div>
 </template>
@@ -102,12 +63,14 @@ import { useSocketStore } from "@/modules/socket/socket.store";
 import { computed, onMounted, ref, watch } from "vue";
 import { ISpeedrundleConfig, speedrundleColumns } from "./speedrundle.types";
 import { areObjectsEquals } from "@/utils/functions";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n({ useScope: "global" });
 
 const emit = defineEmits(["update", "change"]);
 const props = defineProps({
   config: {
     type: Object,
-    default: () => {},
+    default: () => { },
   },
 });
 
@@ -127,7 +90,8 @@ const columns = computed(() => {
   const cols = speedrundleColumns[internalConfig.value.theme].filter(
     ({ isIcon }) => !isIcon
   );
-  return cols;
+  return cols.map((col) => ({ ...col, name: t(`games.speedrundle.columns.${internalConfig.value.theme}.${col.key}`) || col.name })
+  );
 });
 
 const timer = ref();
@@ -202,7 +166,7 @@ onMounted(() => {
 .option-container {
   @apply border border-dark3 rounded p-2 flex flex-row items-center gap-2;
 
-  > label {
+  >label {
     @apply whitespace-nowrap font-semibold;
   }
 

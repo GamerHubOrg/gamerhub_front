@@ -5,7 +5,7 @@
                 <Popover class="relative inline-block px-4 text-left">
                     <PopoverButton
                         class="group inline-flex justify-center text-sm font-medium text-gray-200 hover:text-gray-400">
-                        <span>Games</span>
+                        <span>{{ capitalizeFirstLetter($t("shared.games", 2)) }}</span>
                         <span v-if="selectedOptions.length > 0"
                             class="ml-1.5 rounded bg-dark1 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-300">
                             {{ selectedOptions.length }}
@@ -52,6 +52,7 @@ import {
 } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import { IOption } from "./game-filters.types";
+import { capitalizeFirstLetter } from "@/utils/functions";
 
 const emit = defineEmits(["change"]);
 const props = defineProps<{ selectedOptions: IOption[] }>()
@@ -71,4 +72,4 @@ function handleFilterChange(selected: IOption) {
 
     emit("change", props.selectedOptions.filter((e) => e.value !== selected.value));
 }
-</script>import { IActiveFilter, IConfigFilter, IConfigFilterOption } from "./game-filters.types";
+</script>
