@@ -18,6 +18,7 @@ import {useAuthStore} from "../modules/auth/auth.store";
 import {useGamesStore} from "@/modules/games/games.store";
 import {useRoute, useRouter} from "vue-router";
 import GameRules from "@/components/GameRules.vue";
+import Typebot from '@typebot.io/js/dist/web'
 
 const store = useAuthStore();
 const gamesStore = useGamesStore();
@@ -44,6 +45,15 @@ async function handleSyncUserInfo() {
 
 onMounted(async () => {
     await handleSyncUserInfo();
+
+    Typebot.initBubble({
+        typebot: "customer-support",
+        apiHost: "https://typebot.lucashost.fr",
+        theme: {
+            button: { backgroundColor: "#0d9488" },
+            chatWindow: { backgroundColor: "#fff" },
+        },
+    });
 });
 
 watch(
