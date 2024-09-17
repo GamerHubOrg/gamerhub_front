@@ -142,12 +142,13 @@ const witchUser = computed(() => {
 
 const currentTurnWolvesVotes = computed(() => props.gameData.wolfVotes?.filter((w) => w.turn === props.turn) || [])
 const hasWolvesVoted = computed(() => currentTurnWolvesVotes.value.length > 0);
-const wolvesMostVotedPlayer = currentTurnWolvesVotes.value.reduce((acc: any, vote: IWerewolvesTarget) => {
-  const voteNumber = currentTurnWolvesVotes.value.filter((v) => v.target === vote.target).length;
-  if (!acc) return undefined
-  if (acc.count > 0 && acc.count === voteNumber && acc.target !== vote.target) return undefined;
-  return acc.count > voteNumber ? acc : { ...vote, count: voteNumber };
+const wolvesMostVotedPlayer = computed(() => currentTurnWolvesVotes.value.reduce((acc: any, vote: IWerewolvesTarget) => {
+    const voteNumber = currentTurnWolvesVotes.value.filter((v) => v.target === vote.target).length;
+    if (!acc) return undefined
+    if (acc.count > 0 && acc.count === voteNumber && acc.target !== vote.target) return undefined;
+    return acc.count > voteNumber ? acc : { ...vote, count: voteNumber };
   }, { count: 0 })
+);
 
 const currentTurnHunterKill = computed(() => props.gameData.hunterKills?.find((w) => w.turn === props.turn))
 const hasHunterKilled = computed(() => !!currentTurnHunterKill.value);
@@ -158,13 +159,13 @@ const hunterUser = computed(() => {
 
 const currentTurnVillagerVotes = computed(() => props.gameData.villageVotes?.filter((w) => w.turn === props.turn) || []);
 const hasVillageVoted = computed(() => currentTurnVillagerVotes.value.length > 0);
-const villageMostVotedPlayer = currentTurnVillagerVotes.value.reduce((acc: any, vote: IWerewolvesTarget) => {
-  const voteNumber = currentTurnVillagerVotes.value.filter((v) => v.target === vote.target).length;
-  if (!acc) return undefined
-  if (acc.count > 0 && acc.count === voteNumber && acc.target !== vote.target) return undefined;
-  return acc.count > voteNumber ? acc : { ...vote, count: voteNumber };
-}, { count: 0 })
-
+const villageMostVotedPlayer = computed(() => currentTurnVillagerVotes.value.reduce((acc: any, vote: IWerewolvesTarget) => {
+    const voteNumber = currentTurnVillagerVotes.value.filter((v) => v.target === vote.target).length;
+    if (!acc) return undefined
+    if (acc.count > 0 && acc.count === voteNumber && acc.target !== vote.target) return undefined;
+    return acc.count > voteNumber ? acc : { ...vote, count: voteNumber };
+  }, { count: 0 })
+);
 const hasCupidonPlayed = computed(() => (props.gameData.couple?.length || 0) > 0);
 const cupidonUser = computed(() => {
   const userId = Object.keys(gameRoles.value).find((userId) => gameRoles.value[userId]?.name === EWerewolvesRoleName.cupidon);
@@ -197,6 +198,7 @@ const isCoupleDead = computed(() => isCoupleDeadByDay.value || isCoupleDeadByNig
 
 const currentRoundTotalDeath = computed(() => {
   let count = 0;
+
   if (hasWitchKilled.value) count++;
   if (hasHunterKilled.value) count++;
   if (hasWolvesVoted.value && !!wolvesMostVotedPlayer.value) count++;

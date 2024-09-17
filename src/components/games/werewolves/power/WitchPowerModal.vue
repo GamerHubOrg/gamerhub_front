@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-2">
             <span class="w-full text-center bg-dark3 p-2 rounded font-bold">{{ $t('games.werewolves.game.witchPower.title') }}</span>
             <p class="w-full text-center bg-dark3 p-2 rounded">{{ $t('games.werewolves.game.witchPower.subtitle') }}</p>
-            {{ witchSkips }}
+
             <div class="players-grid mt-4">
                 <div
                     v-for="user in users" :key="user._id" 

@@ -1,6 +1,5 @@
 <template>
   <div class="w-full">
-    {{ currentRoleTurn }}
     <div v-if="gameState === 'night'" class="bg-blue-950 rounded-lg p-4 w-full flex flex-col gap-3 mb-10">
       <div class="flex flex-row items-center gap-3">
         <span class="font-bold text-2xl">{{ $t('games.werewolves.game.state.night') }}</span>
