@@ -16,9 +16,9 @@ const frNotificationsTranslations: INotificationsTranslations = {
     giveUp: "Vous avez abandonné ce tour, la réponse était {name} !",
   },
   undercover: {
-    playerEliminated: "",
-    youEliminated: "",
-    voteEqual: "",
+    playerEliminated: "{name} a été éliminé !",
+    youEliminated: "Vous avez été éliminé !",
+    voteEqual: "Le vote s'est soldé par une égalité.",
   },
 };
 

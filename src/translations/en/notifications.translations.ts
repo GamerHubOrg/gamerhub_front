@@ -12,13 +12,13 @@ const enNotificationsTranslations: INotificationsTranslations = {
   speedrundle: {
     selectTheme: "Please select a theme for the game.",
     selectClues: "Please select at least 1 clue.",
-    youGuessed: "You guessed {name}!",
-    giveUp: "You gave up this round, the answer was {name}!",
+    youGuessed: "You guessed {name} !",
+    giveUp: "You gave up this round, the answer was {name} !",
   },
   undercover: {
-    playerEliminated: "",
-    youEliminated: "",
-    voteEqual: "",
+    playerEliminated: "{name} have been eliminated !",
+    youEliminated: "You have been eliminated !",
+    voteEqual: "Vote ended up with a tie",
   },
 };
 

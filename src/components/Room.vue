@@ -99,19 +99,19 @@ if (socket) {
   socket.on("room:kicked", onRoomKicked);
   socket.on("room:deleted", onRoomDeleted);
   socket.on("room:notifications:success", (toastId: string, data?: Record<string, any>) => {
-    const message = t("notifications." + toastId, data || {});
+    const message = t(`notifications.${toastId}`, data || {});
     onRoomNotification(message, "success", toastId)
   });
   socket.on("room:notifications:info", (toastId: string, data?: Record<string, any>) => {
-    const message = t("notifications." + toastId, data || {});
+    const message = t(`notifications.${toastId}`, data || {});
     onRoomNotification(message, "info", toastId)
   });
   socket.on("room:notifications:error", (toastId: string, data?: Record<string, any>) => {
-    const message = t("notifications." + toastId, data || {});
+    const message = t(`notifications.${toastId}`, data || {});
     onRoomNotification(message, "error", toastId)
   });
   socket.on("room:notifications:warning", (toastId: string, data?: Record<string, any>) => {
-    const message = t("notifications." + toastId, data || {});
+    const message = t(`notifications.${toastId}`, data || {});
     onRoomNotification(message, "warning", toastId)
   });
 }
