@@ -39,7 +39,8 @@
                 <div 
                     class="flex flex-col gap-2 w-48 bg-dark5 text-white p-3 rounded-md h-full justify-between"
                     :class="{
-                        'outline outline-green-400': user._id === gameData?.playerTurn && gameData?.state !== 'vote'
+                        'outline outline-green-400': user._id === gameData?.playerTurn && gameData?.state !== 'vote',
+                        'brightness-50' : isCurrentUserEliminated
                     }"
                 >
                     <span v-if="user._id === currentUser._id && gameData?.undercoverPlayerIds?.includes(user._id) && !isAnonymouseMode">Tu es l'undercover</span>
