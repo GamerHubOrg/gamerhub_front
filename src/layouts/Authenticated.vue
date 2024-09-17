@@ -34,6 +34,15 @@ const isGameRulesCollapsed = computed(() => gamesStore.isGameRulesCollapsed);
 async function handleSyncUserInfo() {
     try {
         await store.getMe();
+
+        Typebot.initBubble({
+            typebot: "customer-support",
+            apiHost: "https://typebot.lucashost.fr",
+            theme: {
+                button: { backgroundColor: "#0d9488" },
+                chatWindow: { backgroundColor: "#fff" },
+            },
+        });
     } catch (err) {
         store.setCurrentUser(undefined);
 
@@ -45,15 +54,6 @@ async function handleSyncUserInfo() {
 
 onMounted(async () => {
     await handleSyncUserInfo();
-
-    Typebot.initBubble({
-        typebot: "customer-support",
-        apiHost: "https://typebot.lucashost.fr",
-        theme: {
-            button: { backgroundColor: "#0d9488" },
-            chatWindow: { backgroundColor: "#fff" },
-        },
-    });
 });
 
 watch(
