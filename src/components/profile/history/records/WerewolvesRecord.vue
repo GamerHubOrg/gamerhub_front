@@ -21,7 +21,7 @@
       <div class="flex flex-col justify-center items-center min-w-[100px]">
         <img :src="`/images/werewolves/icons/${originalRole?.picture}.png`" class="h-16 w-16" />
         <p class="font-bold">
-          {{ capitalizeFirstLetter($t(`games.werewolves.roles.${originalRole?.picture}`)) }}
+          {{ capitalizeFirstLetter($t(`games.werewolves.roles.${originalRole?.picture}.name`)) }}
         </p>
       </div>
       <span class="max-[550px]:hidden h-full min-w-[1px] w-[1px] bg-white opacity-30"></span>
