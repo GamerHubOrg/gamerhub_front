@@ -51,7 +51,6 @@ import Modal from '@/components/Modal.vue'
 import { IWerewolvesCouple, IWerewolvesPlayer, IWerewolvesRoomData } from './werewolves.types';
 import { useAuthStore } from "@/modules/auth/auth.store";
 import WerewolvesGameState from './WerewolvesGameState.vue';
-import { getCoupleFromUser } from "./werewolves.functions";
 
 const store = useAuthStore();
 const socketStore = useSocketStore();
@@ -64,10 +63,10 @@ const gameData = computed(() => roomData.value.gameData);
 const gameState = computed(() => gameData.value?.state || 'night');
 const gameRoles = computed(() => gameData.value?.roles || {});
 const users = computed(() => roomData.value?.users || []);
-const couples = computed(() => (gameData.value?.couple || {}) as IWerewolvesCouple);
+const couple = computed(() => (gameData.value?.couple || []) as IWerewolvesCouple);
 
 const currentUser = computed(() => store.getCurrentUser);
-const currentUserInCouple = computed(() => Object.values(couples.value).some((couple: string[]) => couple.includes(currentUser.value._id)));
+const currentUserInCouple = computed(() => couple.value.includes(currentUser.value?._id as string));
 const currentUserRole = computed(() => gameRoles.value[currentUser.value!._id]);
 
 const playersContainer = ref();
@@ -107,7 +106,7 @@ function handleSetPlayersPosition() {
 
 function getIsInCurrentUserCouple(userId: string) {
   if (!currentUserInCouple.value) return false;
-  return getCoupleFromUser(couples.value, currentUser.value!._id).includes(userId);
+  return couple.value.includes(userId);
 }
 
 socket.value?.on('game:werewolves:start', () => {

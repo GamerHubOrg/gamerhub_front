@@ -54,7 +54,7 @@ const frWerewolvesTranslations: IWerewolvesTranslations = {
     cupidonPower: {
       title: 'Cupidon',
       subtitle: 'Choisissez le couple de la partie',
-      choosePlay: 'Choisir un joueur',
+      choosePlayer: 'Choisir un joueur',
     },
     hunterPower: {
       title: 'Chasseur',

@@ -74,7 +74,7 @@
         </div>
 
         <!-- Night Hunter row -->
-        <div v-if="hasHunterKilled && villageMostVotedPlayer && villageMostVotedPlayer.target !== hunterUser?._id" class="flex flex-row items-center gap-1">
+        <div v-if="hasHunterKilled && !!wolvesMostVotedPlayer && wolvesMostVotedPlayer.target === hunterUser?._id" class="flex flex-row items-center gap-1">
           <span>{{ $t('games.werewolves.game.timeline.hunterDeadNight') }}</span>
           <WerewolvesPlayerName :user="hunterUser" :role="getPlayerRole(hunterUser?._id)" /> 
           <span>{{ $t('games.werewolves.game.timeline.shootOn') }}</span>

@@ -54,7 +54,7 @@ const enWerewolvesTranslations: IWerewolvesTranslations = {
     cupidonPower: {
       title: "Cupid",
       subtitle: "Choose the couple of the party",
-      choosePlay: "Choose a player"
+      choosePlayer: "Choose a player"
     },
     hunterPower: {
       title: "Hunter",
