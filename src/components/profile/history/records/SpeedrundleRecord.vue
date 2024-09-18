@@ -21,7 +21,7 @@
                         :class="{ 'text-green-400': currentUser?._id === user.playerId }">
                         <span>{{ user.rank }}</span>
                         -
-                        <img :src="user.picture" class="w-5 h-5 rounded-full" />
+                        <img :src="user.picture" class="w-5 h-5 rounded-full object-cover" />
                         <span class="truncate">{{ currentUser?._id === user.playerId ? $t('shared.me')
                             : user.username || $t('games.speedrundle.record.unknown') }}</span>
                     </div>
@@ -41,7 +41,7 @@
                 <p class="mb-1 whitespace-nowrap truncate">{{ $t("games.speedrundle.record.charactersToGuess") }} :</p>
                 <div class="flex flex-wrap gap-1 max-h-[34px] min-[801px]:max-h-[68px] overflow-hidden">
                     <div v-for="character in record.charactersData.slice(0, maxVisibleCharacters)">
-                        <img :src="character.data?.sprite" class="w-8 h-8 rounded-full" />
+                        <img :src="character.data?.sprite" class="w-8 h-8 rounded-full object-cover" />
                     </div>
                     <div v-if="record.charactersData.length > maxVisibleCharacters"
                         class="bg-white text-black font-bold w-8 h-8 rounded-full flex items-center justify-center">
