@@ -226,7 +226,7 @@ onMounted(() => {
           <div v-for="user in roomUsers"
             class="bg-white bg-opacity-[6%] rounded-lg p-4 flex flex-row items-center justify-between" :key="user._id">
             <div class="flex flex-row items-center gap-3">
-              <img :src="user.picture" class="w-10 h-10 rounded" />
+              <img :src="user.picture" class="w-10 h-10 rounded object-cover" />
               <div class="truncate text-white flex flex-row items-center gap-2">
                 <span :class="{'text-primary' : currentUser._id === user._id}">{{ user.username }} {{ currentUser._id === user._id ? `(${$t("shared.me")})` : "" }}</span>
                 <span v-if="user.isOwner">

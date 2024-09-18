@@ -79,7 +79,8 @@ const currentRole = computed(() => {
 });
 const currentCamp = computed(() => {
   if (!currentUser.value) return undefined;
-  if (record.value.couple?.includes(currentUser.value._id)) return "couple";
+  const couple = record.value.couple || [];
+  if (couple.includes(currentUser.value._id)) return "couple";
   return currentRole.value?.camp;
 });
 const campWin = computed(() => {

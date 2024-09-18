@@ -3,7 +3,7 @@
     <p class="mb-6 text-center">{{ $t("lobby.soonStart") }}</p>
     <div class="flex flex-wrap gap-5 justify-center">
         <div v-for="user in data.users" class="flex flex-col items-center gap-3 p-5 bg-white bg-opacity-[6%] rounded">
-            <img :src="user.picture" class="w-32 h-32 rounded" />
+            <img :src="user.picture" class="w-32 h-32 rounded object-cover" />
             <div class="text-white flex flex-row items-center gap-2">
                 <span :class="{'text-primary' : currentUser?._id === user._id}">{{ user.username }} {{ currentUser?._id === user._id ? `(${$t("shared.me")})` : "" }}</span>
                 <span v-if="user.isOwner">
