@@ -53,7 +53,7 @@
             {{ $t("premium.mostPopular") }}
           </p>
           <p class="mt-4 flex items-baseline">
-            <span class="text-5xl font-extrabold tracking-tight">99 €</span><span class="ml-1 text-xl font-semibold">/{{
+            <span class="text-5xl font-extrabold tracking-tight">3.99 €</span><span class="ml-1 text-xl font-semibold">/{{
               $t("premium.month") }}</span>
           </p>
           <p class="mt-6">{{ $t("premium.plans.premium.description") }}</p>
